@@ -1,0 +1,4 @@
+Title:	Automatic workout detection
+Start:  Karl has MyFitnessApp installed and permissions has been granted. 
+Action:	He leaves the house and is walking to the busstation.
+Result: MyFitnessApp detects movement (location, pace, steps, distance, duration, altitude) an (sport)activity is created for workout: walking/hiking and calculates kcal used and saves the activity in the database.
