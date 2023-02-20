@@ -1,0 +1,8 @@
+Title:
+Hans works out
+Start:
+Hans opens the app and is starting a workout with pushups.
+Action:
+Hans does 20 pushups in 1 min.
+Result:
+The app detects the pushup-movments and creats a pushup-activity with the amount of repeats and duration and saves the activity in the database.
