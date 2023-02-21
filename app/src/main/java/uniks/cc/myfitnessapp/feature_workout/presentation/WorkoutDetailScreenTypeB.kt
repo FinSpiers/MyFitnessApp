@@ -3,6 +3,7 @@ package uniks.cc.myfitnessapp.feature_workout.presentation
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.SportsGymnastics
 import androidx.compose.material3.MaterialTheme
@@ -10,7 +11,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -19,23 +19,21 @@ import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
 
 @Composable
 fun WorkoutDetailScreenTypeB(
-    image : ImageVector,
-    workoutName : String,
+    image: ImageVector,
+    workoutName: String,
     date: String,
     durationValue: Double,
     durationUnit: String,
-    repetitionsValue: Any,
-    kcalValue: Any,
+    repetitionsValue: Int,
+    kcalValue: Double,
     kcalUnit: String
 ) {
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.9f)
-            .padding(3.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceEvenly
+            .fillMaxHeight(0.9f),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
             modifier = Modifier
@@ -44,14 +42,16 @@ fun WorkoutDetailScreenTypeB(
                 .border(
                     width = 3.dp,
                     color = MaterialTheme.colorScheme.secondary,
-                    shape = RectangleShape
+                    shape = RoundedCornerShape(10.dp)
                 ),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
                 imageVector = image,
                 contentDescription = workoutName,
-                modifier = Modifier.size(35.dp).padding(3.dp)
+                modifier = Modifier
+                    .size(35.dp)
+                    .padding(3.dp)
             )
             Text(
                 text = workoutName,
@@ -68,6 +68,7 @@ fun WorkoutDetailScreenTypeB(
                 textAlign = TextAlign.Center,
             )
         }
+        Spacer(modifier = Modifier.height(20.dp))
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -93,7 +94,7 @@ fun WorkoutDetailScreenTypeB(
                 textAlign = TextAlign.Left
             )
             Text(
-                text = "${repetitionsValue.toString()}",
+                text = repetitionsValue.toString(),
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Right
             )
@@ -126,7 +127,7 @@ fun WorkoutDetailScreenTypeBPreview() {
             "20.02.2023, 10:30",
             23.0,
             "min",
-            14.0,
+            14,
             2345.0,
             "kcal",
         )

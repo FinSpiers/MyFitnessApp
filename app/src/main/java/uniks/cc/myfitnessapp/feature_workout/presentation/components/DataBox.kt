@@ -14,7 +14,10 @@ import androidx.compose.ui.unit.dp
 import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
 
 @Composable
-fun DataBox(title: String, data: Double, unit: String) {
+fun DataBox(
+    title: String,
+    data: Double,
+    unit: String) {
 
     Box(
         modifier = Modifier
@@ -30,11 +33,11 @@ fun DataBox(title: String, data: Double, unit: String) {
         Column(
             modifier = Modifier
                 .padding(10.dp),
-            verticalArrangement = Arrangement.SpaceEvenly,
+            verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "$title",
+                text = title,
                 modifier = Modifier
                     .padding(10.dp),
                 textAlign = TextAlign.Center
@@ -53,6 +56,10 @@ fun DataBox(title: String, data: Double, unit: String) {
 @Composable
 fun DataBoxPreview() {
     MyFitnessAppTheme {
-        DataBox(title = "Distance", data = 12234.5, unit = "km")
+        DataBox(
+            title = "Distance",
+            data = 12234.0,
+            unit = "km"
+        )
     }
 }

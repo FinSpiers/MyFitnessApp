@@ -11,7 +11,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,27 +20,23 @@ import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
 
 @Composable
 fun WorkoutScreenTypeA(
-    image : ImageVector,
-    workoutName : String,
-
+    image: ImageVector,
+    workoutName: String,
 ) {
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.9f)
-            .padding(3.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceEvenly
+            .fillMaxHeight(0.9f),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(3.dp)
                 .border(
-                    width = 5.dp,
+                    width = 3.dp,
                     color = MaterialTheme.colorScheme.secondary,
-                    shape = RectangleShape
+                    shape = RoundedCornerShape(10.dp)
                 ),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -59,9 +54,11 @@ fun WorkoutScreenTypeA(
                 style = MaterialTheme.typography.headlineLarge
             )
         }
+        Spacer(modifier = Modifier.height(30.dp))
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .fillMaxHeight(0.5f)
                 .padding(3.dp),
             horizontalArrangement = Arrangement.Center
         ) {
@@ -113,6 +110,9 @@ fun WorkoutScreenTypeA(
 @Composable
 fun WorkoutScreenTypeAPreview() {
     MyFitnessAppTheme {
-        WorkoutScreenTypeA(Icons.Default.NordicWalking, "Walking")
+        WorkoutScreenTypeA(
+            Icons.Default.NordicWalking,
+            "Walking"
+        )
     }
 }
