@@ -12,7 +12,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideTobias() : String {
-        return "Tobias"
+    fun provideBottomNavigationDestinations() : List<String> {
+        return listOf("dashboard", "settings")
     }
 }
