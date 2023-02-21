@@ -25,8 +25,8 @@ fun BodyMeasurements() {
     Column(
         modifier = Modifier
             .background(color = Color.LightGray, shape = MaterialTheme.shapes.medium)
-            .fillMaxWidth(0.7f)
-            .padding(all = 15.dp)
+            .fillMaxWidth(0.9f)
+            .padding(top = 15.dp)
             .clip(MaterialTheme.shapes.medium)
             .clickable(interactionSource = interactionSource, indication = null) {
                 focusManager.clearFocus()

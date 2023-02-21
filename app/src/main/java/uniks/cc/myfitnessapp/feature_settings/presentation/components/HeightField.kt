@@ -23,7 +23,7 @@ fun HealthField() {
     val height = remember { mutableStateOf("") }
 
     val isErrorHeight = remember { mutableStateOf(false) }
-    val maxChar = 3
+    val maxChar = 4
 
     fun validateHeight(value: Int) {
         isErrorHeight.value = value !in 0..300
@@ -33,7 +33,7 @@ fun HealthField() {
     TextField(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(5.dp)
+            .padding(12.dp)
             .clip(MaterialTheme.shapes.medium),
         textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
         value = height.value,
