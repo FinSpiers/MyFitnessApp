@@ -11,18 +11,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import dagger.hilt.android.AndroidEntryPoint
+import uniks.cc.myfitnessapp.core.presentation.navigation.NavigationHost
 import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @Inject lateinit var tobias : String
+    @Inject lateinit var bottomNavigationDestinations : List<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MyFitnessAppTheme {
-                print(tobias)
+                NavigationHost(bottomNavigationDestinations = bottomNavigationDestinations)
             }
         }
     }
