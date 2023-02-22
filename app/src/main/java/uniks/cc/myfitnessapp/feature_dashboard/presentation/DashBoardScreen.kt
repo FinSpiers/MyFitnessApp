@@ -60,7 +60,6 @@ fun DashBoardScreen(
                 CurrentStepsBox(steps = 9213)
                 RecentWorkouts()
             }
-            StartActivity()
         }
     }
 }
