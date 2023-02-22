@@ -1,4 +1,4 @@
-package uniks.cc.myfitnessapp.feature_settings.presentation
+package uniks.cc.myfitnessapp.feature_settings.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -11,10 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
-import uniks.cc.myfitnessapp.feature_settings.presentation.components.BirthdatePicker
-import uniks.cc.myfitnessapp.feature_settings.presentation.components.GenderPicker
-import uniks.cc.myfitnessapp.feature_settings.presentation.components.HealthField
-import uniks.cc.myfitnessapp.feature_settings.presentation.components.WeightField
+
 
 @Composable
 fun BodyMeasurements() {
