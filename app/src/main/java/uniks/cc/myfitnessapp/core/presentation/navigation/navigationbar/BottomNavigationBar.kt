@@ -7,8 +7,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import uniks.cc.myfitnessapp.core.domain.model.BottomNavItem
+import uniks.cc.myfitnessapp.core.domain.model.bottom_navigation.BottomNavItem
 import kotlin.reflect.KFunction1
 
 @Composable

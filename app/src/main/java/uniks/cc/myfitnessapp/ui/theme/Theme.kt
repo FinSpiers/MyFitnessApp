@@ -19,7 +19,7 @@ private val DarkColorScheme = darkColorScheme(
     onPrimaryContainer = Blue90,
     inversePrimary = Blue40,
 
-    secondary = DarkBlue80,
+    secondary = Red40, //DarkBlue80,
     onSecondary = DarkBlue20,
     secondaryContainer = DarkBlue30,
     onSecondaryContainer = DarkBlue90,
@@ -47,7 +47,7 @@ private val LightColorScheme = lightColorScheme(
     onPrimaryContainer = Blue10,
     inversePrimary = Blue80,
 
-    secondary = DarkBlue40,
+    secondary = Red40, //DarkBlue40,
     onSecondary = Color.White,
     secondaryContainer = DarkBlue90,
     onSecondaryContainer = DarkBlue10,

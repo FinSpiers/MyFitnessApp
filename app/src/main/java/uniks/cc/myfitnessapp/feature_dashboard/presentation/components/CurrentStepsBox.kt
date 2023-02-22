@@ -2,6 +2,8 @@ package uniks.cc.myfitnessapp.feature_dashboard.presentation.components
 
 import android.icu.number.NumberFormatter
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.IncompleteCircle
@@ -13,17 +15,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
+import java.util.*
 
 @Composable
 fun CurrentStepsBox(steps: Int) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxWidth()) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.secondary, MaterialTheme.shapes.large)
+            .border(3.dp, MaterialTheme.colorScheme.primary, MaterialTheme.shapes.large)
+    ) {
         Row(
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = "Daily steps", style = MaterialTheme.typography.titleMedium)
+            Text(
+                text = "Daily steps",
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(4.dp)
+            )
         }
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -36,7 +48,12 @@ fun CurrentStepsBox(steps: Int) {
                 modifier = Modifier.size(100.dp)
             )
         }
-        Text(text = "$steps / 10000 steps", modifier = Modifier.padding(bottom = 8.dp), style = MaterialTheme.typography.titleLarge)
+        val text = NumberFormatter.withLocale(Locale.GERMANY).format(steps).toString()
+        Text(
+            text = "$text / 10.000 steps",
+            modifier = Modifier.padding(bottom = 8.dp),
+            style = MaterialTheme.typography.titleLarge
+        )
     }
 }
 
