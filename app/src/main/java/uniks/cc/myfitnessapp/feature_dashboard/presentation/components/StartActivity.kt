@@ -2,6 +2,7 @@ package uniks.cc.myfitnessapp.feature_dashboard.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -15,12 +16,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import uniks.cc.myfitnessapp.core.domain.model.sport_activities.SportActivity
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationBarState
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StartActivity(navbarState: NavigationBarState) {
-
+fun StartActivity(
+    navbarState: NavigationBarState,
+    onWalkingClicked : () -> Unit = {},
+    onRunningClicked : () -> Unit = {},
+    onBicycleRidingClicked : () -> Unit = {},
+    onPushUpsClicked : () -> Unit = {},
+    onSitUpsClicked : () -> Unit = {},
+    onSquatsClicked : () -> Unit = {}
+) {
     val openDialog = remember { mutableStateOf(false) }
 
     if (openDialog.value) {
@@ -38,7 +46,7 @@ fun StartActivity(navbarState: NavigationBarState) {
                         .padding(8.dp)
                         .fillMaxWidth()
                 ) {
-                    Column() {
+                    Column {
                         Text(
                             text = "Chose your Workout",
                             fontSize = 25.sp,
@@ -60,7 +68,8 @@ fun StartActivity(navbarState: NavigationBarState) {
                                 color = MaterialTheme.colorScheme.secondary,
                                 shape = MaterialTheme.shapes.medium
                             )
-                            .padding(10.dp),
+                            .padding(10.dp)
+                            .clickable { onPushUpsClicked() },
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(text = "Push-Ups", fontSize = 25.sp, textAlign = TextAlign.Center)
@@ -77,7 +86,8 @@ fun StartActivity(navbarState: NavigationBarState) {
                                 color = MaterialTheme.colorScheme.secondary,
                                 shape = MaterialTheme.shapes.medium
                             )
-                            .padding(10.dp),
+                            .padding(10.dp)
+                            .clickable { onSitUpsClicked() },
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(text = "Sit-Ups", fontSize = 25.sp, textAlign = TextAlign.Center)
@@ -94,7 +104,8 @@ fun StartActivity(navbarState: NavigationBarState) {
                                 color = MaterialTheme.colorScheme.secondary,
                                 shape = MaterialTheme.shapes.medium
                             )
-                            .padding(10.dp),
+                            .padding(10.dp)
+                            .clickable { onSquatsClicked() },
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(text = "Squats", fontSize = 25.sp, textAlign = TextAlign.Center)
@@ -111,7 +122,8 @@ fun StartActivity(navbarState: NavigationBarState) {
                                 color = MaterialTheme.colorScheme.secondary,
                                 shape = MaterialTheme.shapes.medium
                             )
-                            .padding(10.dp),
+                            .padding(10.dp)
+                            .clickable { onRunningClicked() },
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(text = "Running", fontSize = 25.sp, textAlign = TextAlign.Center)
@@ -128,7 +140,8 @@ fun StartActivity(navbarState: NavigationBarState) {
                                 color = MaterialTheme.colorScheme.secondary,
                                 shape = MaterialTheme.shapes.medium
                             )
-                            .padding(10.dp),
+                            .padding(10.dp)
+                            .clickable { onWalkingClicked() },
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(text = "Hiking", fontSize = 25.sp, textAlign = TextAlign.Center)
@@ -145,7 +158,8 @@ fun StartActivity(navbarState: NavigationBarState) {
                                 color = MaterialTheme.colorScheme.secondary,
                                 shape = MaterialTheme.shapes.medium
                             )
-                            .padding(10.dp),
+                            .padding(10.dp)
+                            .clickable { onBicycleRidingClicked() },
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(text = "Cycling", fontSize = 25.sp, textAlign = TextAlign.Center)
@@ -158,7 +172,7 @@ fun StartActivity(navbarState: NavigationBarState) {
     if (navbarState.currentRoute == "dashboard") {
         ExtendedFloatingActionButton(
             text = { Text(text = "Start Workout") },
-            icon = { Icon(Icons.Filled.Add, "") },
+            icon = { Icon(Icons.Filled.Add, "Start workout") },
             onClick = {
                 openDialog.value = !openDialog.value
             }

@@ -1,26 +1,26 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package uniks.cc.myfitnessapp.feature_dashboard.presentation
 
+import android.Manifest
 import android.annotation.SuppressLint
-import androidx.compose.foundation.border
+import android.content.pm.PackageManager
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.WbSunny
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
+import androidx.core.content.PermissionChecker
 import uniks.cc.myfitnessapp.feature_dashboard.presentation.components.*
 import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
+import java.security.Permission
+import java.security.Permissions
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -30,7 +30,7 @@ fun DashBoardScreen(
     isWeatherGood: Boolean = false,
     borderStroke: Dp = 2.dp
 ) {
-    var hasPermission = false
+    val hasPermission = ContextCompat.checkSelfPermission(LocalContext.current, Manifest.permission_group.LOCATION) == PackageManager.PERMISSION_GRANTED
 
     MyFitnessAppTheme {
         Column(
@@ -45,8 +45,7 @@ fun DashBoardScreen(
                     imageVector = imageVector,
                     isWeatherGood = isWeatherGood
                 )
-            }
-            else {
+            } else {
                 NoPermissionBox(borderStroke)
             }
 
