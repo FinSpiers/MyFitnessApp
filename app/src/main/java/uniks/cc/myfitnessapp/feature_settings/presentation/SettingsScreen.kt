@@ -13,6 +13,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import uniks.cc.myfitnessapp.feature_settings.presentation.components.GoogleHealthConnect
+import uniks.cc.myfitnessapp.feature_settings.presentation.components.ResetAppData
 
 @Composable
 fun SettingsScreen() {

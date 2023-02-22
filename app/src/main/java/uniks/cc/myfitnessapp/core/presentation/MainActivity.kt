@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -20,7 +19,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity @Inject constructor() : ComponentActivity() {
     @Inject
-    lateinit var bottomNavigationDestinations: List<String>
+    lateinit var navigationDestinations: List<String>
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +37,7 @@ class MainActivity @Inject constructor() : ComponentActivity() {
                     NavigationHost(
                         navController = navController,
                         startDestination = navBarState.currentRoute,
-                        bottomNavigationDestinations = bottomNavigationDestinations
+                        bottomNavigationDestinations = navigationDestinations
                     )
                 }
             }

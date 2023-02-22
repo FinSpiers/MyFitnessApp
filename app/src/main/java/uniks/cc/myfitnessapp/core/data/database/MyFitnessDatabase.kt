@@ -12,7 +12,7 @@ import uniks.cc.myfitnessapp.core.domain.model.sport_activities.SportActivity
 )
 abstract class MyFitnessDatabase : RoomDatabase() {
 
-    //abstract val SportActivitiesDao : SportActivitiesDao
+    abstract val SportActivityDao : SportActivitiesDao
 
     //abstract val settingsDao : SettingsDao
 }

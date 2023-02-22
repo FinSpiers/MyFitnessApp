@@ -9,7 +9,7 @@ import java.time.LocalDateTime
 import java.util.*
 
 @Entity(tableName = "SportActivities")
-abstract class SportActivity(
+open class SportActivity(
     var workoutId: Int,
     @PrimaryKey(autoGenerate = false)
     var timeStamp: Long = Instant.now().epochSecond

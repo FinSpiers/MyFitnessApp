@@ -7,7 +7,7 @@ import uniks.cc.myfitnessapp.core.domain.model.sport_activities.SportActivity
 interface SportActivitiesDao {
     @Transaction
     @Query("SELECT * FROM SportActivities")
-    suspend fun getAllSportActivities(): SportActivity?
+    suspend fun getAllSportActivities(): List<SportActivity>
 
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
