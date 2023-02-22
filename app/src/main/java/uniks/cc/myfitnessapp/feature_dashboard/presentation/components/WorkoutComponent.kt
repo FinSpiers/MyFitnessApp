@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import uniks.cc.myfitnessapp.feature_dashboard.data.WorkoutInfoText
@@ -33,6 +34,7 @@ fun WorkoutComponent(workoutInfoText: WorkoutInfoText) {
     ) {
         Image(
             painter = painterResource(id = workoutInfoText.image),
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.inverseSurface),
             contentDescription = workoutInfoText.workoutName,
             modifier = Modifier.size(80.dp)
         )

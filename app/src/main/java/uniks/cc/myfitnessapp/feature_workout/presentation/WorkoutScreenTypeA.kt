@@ -25,7 +25,6 @@ fun WorkoutScreenTypeA(
     durationValue: Double,
     distanceValue: Double,
     paceValue: Double,
-    stepsValue: Int,
 ) {
     Column(
         modifier = Modifier
@@ -105,7 +104,6 @@ fun WorkoutScreenTypeA(
                     .padding(3.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                DataBox(title = "Steps", data = (stepsValue).toString(), unit = "")
             }
         }
     }
@@ -120,8 +118,7 @@ fun WorkoutScreenTypeAPreview() {
             "Walking",
             23.4,
             2.1,
-            4.3,
-            234
+            4.3
         )
     }
 }
