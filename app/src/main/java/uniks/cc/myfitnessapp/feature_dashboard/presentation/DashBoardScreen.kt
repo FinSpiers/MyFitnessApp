@@ -14,10 +14,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import uniks.cc.myfitnessapp.feature_dashboard.presentation.components.ActivityPlanner
-import uniks.cc.myfitnessapp.feature_dashboard.presentation.components.CurrentStepsBox
-import uniks.cc.myfitnessapp.feature_dashboard.presentation.components.CurrentWeatherBox
-import uniks.cc.myfitnessapp.feature_dashboard.presentation.components.RecentWorkouts
+import uniks.cc.myfitnessapp.feature_dashboard.presentation.components.*
 import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
 
 @Composable
@@ -63,6 +60,7 @@ fun DashBoardScreen(
                 CurrentStepsBox(steps = 9213)
                 RecentWorkouts()
             }
+            StartActivity()
         }
     }
 }
