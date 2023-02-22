@@ -1,12 +1,17 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package uniks.cc.myfitnessapp.feature_dashboard.presentation
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.WbSunny
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import uniks.cc.myfitnessapp.feature_dashboard.presentation.components.*
 import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun DashBoardScreen(
     currentTemp: Int = 10,
@@ -24,39 +30,31 @@ fun DashBoardScreen(
     isWeatherGood: Boolean = false,
     borderStroke: Dp = 2.dp
 ) {
+    var hasPermission = false
+
     MyFitnessAppTheme {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.9f)
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .border(
-                        borderStroke,
-                        MaterialTheme.colorScheme.primary,
-                        MaterialTheme.shapes.small
-                    )
-            ) {
-                Column(
-                    verticalArrangement = Arrangement.Top,
-                    modifier = Modifier
-                        .fillMaxWidth(0.4f)
-                        .border(
-                            borderStroke,
-                            MaterialTheme.colorScheme.secondary,
-                            MaterialTheme.shapes.small
-                        ),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    CurrentWeatherBox(temperature = currentTemp, imageVector = imageVector)
-                }
-                ActivityPlanner(isWeatherGood = isWeatherGood)
+            if (hasPermission) {
+                WeatherBox(
+                    borderStroke = borderStroke,
+                    currentTemp = currentTemp,
+                    imageVector = imageVector,
+                    isWeatherGood = isWeatherGood
+                )
             }
-            Column(modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())) {
+            else {
+                NoPermissionBox(borderStroke)
+            }
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+            ) {
                 CurrentStepsBox(steps = 9213)
                 RecentWorkouts()
             }

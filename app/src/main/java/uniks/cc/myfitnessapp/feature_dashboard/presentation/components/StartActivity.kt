@@ -6,12 +6,14 @@ import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationBarState
 
 @Composable
-fun StartActivity() {
-
-    ExtendedFloatingActionButton(
-        text = { Text(text = "Start Workout") },
-        icon = { Icon(Icons.Filled.Add, "") },
-        onClick = { /*TODO*/ })
+fun StartActivity(navBarState : NavigationBarState) {
+    if (navBarState.currentRoute == "dashboard") {
+        ExtendedFloatingActionButton(
+            text = { Text(text = "Start Workout") },
+            icon = { Icon(Icons.Filled.Add, "") },
+            onClick = { /*TODO*/ })
+    }
 }

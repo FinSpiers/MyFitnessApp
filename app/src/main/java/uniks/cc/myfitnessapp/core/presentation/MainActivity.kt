@@ -33,7 +33,7 @@ class MainActivity @Inject constructor() : ComponentActivity() {
             MyFitnessAppTheme {
                 Scaffold(
                     bottomBar = { BottomNavigationBar(navBarState = navBarState, onEvent = viewModel::onEvent) },
-                    floatingActionButton = { StartActivity() }
+                    floatingActionButton = { StartActivity(navBarState) }
                 ) {
                     NavigationHost(
                         navController = navController,
