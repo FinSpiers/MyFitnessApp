@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import uniks.cc.myfitnessapp.core.domain.model.sport_activities.SportActivity
 import uniks.cc.myfitnessapp.feature_dashboard.presentation.components.ActivityPlanner
 import uniks.cc.myfitnessapp.feature_dashboard.presentation.components.CurrentStepsBox
 import uniks.cc.myfitnessapp.feature_dashboard.presentation.components.CurrentWeatherBox
