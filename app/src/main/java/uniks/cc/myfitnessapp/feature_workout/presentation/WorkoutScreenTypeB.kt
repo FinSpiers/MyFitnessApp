@@ -4,24 +4,26 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.SportsGymnastics
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import uniks.cc.myfitnessapp.R
 import uniks.cc.myfitnessapp.feature_workout.presentation.components.DataBox
 import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
 
 @Composable
 fun WorkoutScreenTypeB(
-    image: ImageVector,
+    imageId: Int,
     workoutName: String,
+    durationValue: Double,
+    repetitionsValue: Int
 ) {
 
     Column(
@@ -42,7 +44,8 @@ fun WorkoutScreenTypeB(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                imageVector = image,
+                painterResource(id = imageId),
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.inverseSurface),
                 contentDescription = workoutName,
                 modifier = Modifier.size(40.dp)
             )
@@ -70,7 +73,7 @@ fun WorkoutScreenTypeB(
                     .padding(horizontal = 30.dp, vertical = 10.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                DataBox(title = "Duration", data = 2.3, unit = "min")
+                DataBox(title = "Duration", data = (durationValue).toString(), unit = "min")
             }
         }
         Row(
@@ -85,7 +88,7 @@ fun WorkoutScreenTypeB(
                     .padding(horizontal = 30.dp, vertical = 10.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                DataBox(title = "Repetitions", data = 34.0, unit = "")
+                DataBox(title = "Repetitions", data = repetitionsValue.toString(), unit = "")
             }
         }
     }
@@ -96,8 +99,10 @@ fun WorkoutScreenTypeB(
 fun WorkoutScreenTypeBPreview() {
     MyFitnessAppTheme {
         WorkoutScreenTypeB(
-            Icons.Default.SportsGymnastics,
-            "Pushups"
+            R.drawable.image_push_up,
+            "PushUps",
+            25.3,
+            34
         )
     }
 }

@@ -4,28 +4,28 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.SportsGymnastics
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import uniks.cc.myfitnessapp.R
 import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
 
 @Composable
 fun WorkoutDetailScreenTypeB(
-    image: ImageVector,
+    imageId: Int,
     workoutName: String,
     date: String,
     durationValue: Double,
     durationUnit: String,
     repetitionsValue: Int,
-    kcalValue: Double,
+    kcalValue: Int,
     kcalUnit: String
 ) {
 
@@ -47,7 +47,8 @@ fun WorkoutDetailScreenTypeB(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                imageVector = image,
+                painterResource(id = imageId),
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.inverseSurface),
                 contentDescription = workoutName,
                 modifier = Modifier
                     .size(35.dp)
@@ -79,7 +80,7 @@ fun WorkoutDetailScreenTypeB(
                 textAlign = TextAlign.Left
             )
             Text(
-                text = "${durationValue.toString()} $durationUnit",
+                text = "$durationValue $durationUnit",
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Right
             )
@@ -109,7 +110,7 @@ fun WorkoutDetailScreenTypeB(
                 textAlign = TextAlign.Left
             )
             Text(
-                text = "${kcalValue.toString()} $kcalUnit",
+                text = "$kcalValue $kcalUnit",
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Right
             )
@@ -122,13 +123,13 @@ fun WorkoutDetailScreenTypeB(
 fun WorkoutDetailScreenTypeBPreview() {
     MyFitnessAppTheme {
         WorkoutDetailScreenTypeB(
-            Icons.Default.SportsGymnastics,
-            "Pushups",
+            R.drawable.image_push_up,
+            "PushUps",
             "20.02.2023, 10:30",
             23.0,
             "min",
             14,
-            2345.0,
+            2345,
             "kcal",
         )
     }

@@ -4,24 +4,28 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.NordicWalking
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import uniks.cc.myfitnessapp.R
 import uniks.cc.myfitnessapp.feature_workout.presentation.components.DataBox
 import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
 
 @Composable
 fun WorkoutScreenTypeA(
-    image: ImageVector,
+    imageId: Int,
     workoutName: String,
+    durationValue: Double,
+    distanceValue: Double,
+    paceValue: Double,
+    stepsValue: Int,
 ) {
     Column(
         modifier = Modifier
@@ -41,7 +45,8 @@ fun WorkoutScreenTypeA(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                imageVector = image,
+                painterResource(id = imageId),
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.inverseSurface),
                 contentDescription = workoutName,
                 modifier = Modifier.size(40.dp),
             )
@@ -68,7 +73,7 @@ fun WorkoutScreenTypeA(
                     .padding(3.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                DataBox(title = "Duration", data = 48.5, unit = "min")
+                DataBox(title = "Duration", data = (durationValue).toString(), unit = "min")
             }
             Column(
                 modifier = Modifier
@@ -76,7 +81,7 @@ fun WorkoutScreenTypeA(
                     .padding(3.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                DataBox(title = "Distance", data = 10.2, unit = "km")
+                DataBox(title = "Distance", data = (distanceValue).toString(), unit = "km")
             }
         }
 
@@ -92,7 +97,7 @@ fun WorkoutScreenTypeA(
                     .padding(3.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                DataBox(title = "Pace", data = 5.3, unit = "km/h")
+                DataBox(title = "Pace", data = (paceValue).toString(), unit = "km/h")
             }
             Column(
                 modifier = Modifier
@@ -100,7 +105,7 @@ fun WorkoutScreenTypeA(
                     .padding(3.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                DataBox(title = "Steps", data = 5034.0, unit = "")
+                DataBox(title = "Steps", data = (stepsValue).toString(), unit = "")
             }
         }
     }
@@ -111,8 +116,12 @@ fun WorkoutScreenTypeA(
 fun WorkoutScreenTypeAPreview() {
     MyFitnessAppTheme {
         WorkoutScreenTypeA(
-            Icons.Default.NordicWalking,
-            "Walking"
+            R.drawable.image_walking,
+            "Walking",
+            23.4,
+            2.1,
+            4.3,
+            234
         )
     }
 }

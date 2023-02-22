@@ -4,22 +4,22 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.NordicWalking
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import uniks.cc.myfitnessapp.R
 import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
 
 @Composable
 fun WorkoutDetailScreenTypeA(
-    image: ImageVector,
+    imageId: Int,
     workoutName: String,
     date: String,
     durationValue: Double,
@@ -28,7 +28,7 @@ fun WorkoutDetailScreenTypeA(
     distanceUnit: String,
     avgPaceValue: Double,
     paceUnit: String,
-    kcalValue: Double,
+    kcalValue: Int,
     kcalUnit: String
 ) {
 
@@ -50,7 +50,8 @@ fun WorkoutDetailScreenTypeA(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                imageVector = image,
+                painterResource(id = imageId),
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.inverseSurface),
                 contentDescription = workoutName,
                 modifier = Modifier
                     .size(35.dp)
@@ -82,7 +83,7 @@ fun WorkoutDetailScreenTypeA(
                 textAlign = TextAlign.Left
             )
             Text(
-                text = "${durationValue.toString()} $durationUnit",
+                text = "$durationValue $durationUnit",
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Right
             )
@@ -97,7 +98,7 @@ fun WorkoutDetailScreenTypeA(
                 textAlign = TextAlign.Left
             )
             Text(
-                text = "${distanceValue.toString()} $distanceUnit",
+                text = "$distanceValue $distanceUnit",
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Right
             )
@@ -112,7 +113,7 @@ fun WorkoutDetailScreenTypeA(
                 textAlign = TextAlign.Left
             )
             Text(
-                text = "${avgPaceValue.toString()} $paceUnit",
+                text = "$avgPaceValue $paceUnit",
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Right
             )
@@ -127,7 +128,7 @@ fun WorkoutDetailScreenTypeA(
                 textAlign = TextAlign.Left
             )
             Text(
-                text = "${kcalValue.toString()} $kcalUnit",
+                text = "$kcalValue $kcalUnit",
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Right
             )
@@ -140,7 +141,7 @@ fun WorkoutDetailScreenTypeA(
 fun WorkoutDetailScreenTypeAPreview() {
     MyFitnessAppTheme {
         WorkoutDetailScreenTypeA(
-            Icons.Default.NordicWalking,
+            R.drawable.image_walking,
             "Walking",
             "20.02.2023, 10:30",
             23.0,
@@ -149,7 +150,7 @@ fun WorkoutDetailScreenTypeAPreview() {
             "km",
             5.0,
             "km/h",
-            2345.0,
+            2345,
             "kcal"
         )
     }

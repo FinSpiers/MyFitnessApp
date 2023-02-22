@@ -16,7 +16,7 @@ import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
 @Composable
 fun DataBox(
     title: String,
-    data: Double,
+    data: String,
     unit: String) {
 
     Box(
@@ -58,7 +58,7 @@ fun DataBoxPreview() {
     MyFitnessAppTheme {
         DataBox(
             title = "Distance",
-            data = 12234.0,
+            data = 12234.0.toString(),
             unit = "km"
         )
     }
