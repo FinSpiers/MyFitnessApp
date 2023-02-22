@@ -1,6 +1,5 @@
 package uniks.cc.myfitnessapp.feature_settings.presentation
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -9,7 +8,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.vanpra.composematerialdialogs.MaterialDialog
@@ -37,8 +35,7 @@ fun BirthdatePicker() {
     Text(
         text = "Birthdate: " + formattedDate.value,
         modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.LightGray),
+            .fillMaxWidth(),
         textAlign = TextAlign.Center,
         fontSize = 20.sp
     )

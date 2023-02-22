@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HealthField() {
+fun HeightField() {
 
     val height = remember { mutableStateOf("") }
 
@@ -27,7 +27,10 @@ fun HealthField() {
 
     fun validateHeight(value: Int) {
         isErrorHeight.value = value !in 0..300
-        println(isErrorHeight.value)
+    }
+
+    fun isNumeric(toCheck: String): Boolean {
+        return toCheck.toIntOrNull() != null
     }
 
     TextField(
@@ -37,10 +40,12 @@ fun HealthField() {
             .clip(MaterialTheme.shapes.medium),
         textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
         value = height.value,
-
         onValueChange = {
-            if (it.length <= maxChar) height.value = it
-            if (it != "") validateHeight(it.toInt())
+            if (it.length <= maxChar && isNumeric(it) && it != "") {
+                height.value = it
+                validateHeight(it.toInt())
+            }
+            if (it == "") height.value = it
         },
         placeholder = {
             Text(
