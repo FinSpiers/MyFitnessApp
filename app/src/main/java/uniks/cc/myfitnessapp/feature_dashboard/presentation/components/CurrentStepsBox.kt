@@ -23,8 +23,8 @@ fun CurrentStepsBox(steps: Int) {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.secondary, MaterialTheme.shapes.large)
-            .border(3.dp, MaterialTheme.colorScheme.primary, MaterialTheme.shapes.large)
+            .background(MaterialTheme.colorScheme.surface, MaterialTheme.shapes.large)
+            .border(2.dp, MaterialTheme.colorScheme.secondary, MaterialTheme.shapes.large)
     ) {
         Row(
             horizontalArrangement = Arrangement.Start,

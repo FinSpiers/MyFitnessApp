@@ -28,10 +28,7 @@ fun RecentWorkouts() {
         )
     )
 
-    Column(
-        modifier = Modifier
-            .verticalScroll(rememberScrollState())
-    ) {
+    Column {
         sportActivities.forEach {
             WorkoutComponent(getWorkoutInfo(it))
         }
