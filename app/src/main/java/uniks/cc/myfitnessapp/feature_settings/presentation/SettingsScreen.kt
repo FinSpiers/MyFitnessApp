@@ -8,8 +8,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,32 +22,20 @@ fun SettingsScreen() {
 
     Column(
         modifier = Modifier
-            .background(color = MaterialTheme.colorScheme.primary)
+            .background(color = MaterialTheme.colorScheme.surfaceVariant)
             .fillMaxWidth()
-            .fillMaxHeight(0.9f)
+            .fillMaxHeight(0.91f)
             .padding(top = 20.dp)
             .clickable(interactionSource = interactionSource, indication = null)
             { focusManager.clearFocus() },
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Column(
-            modifier = Modifier
-                .background(color = Color.Blue, shape = MaterialTheme.shapes.medium)
-                .fillMaxWidth(0.73f)
-                .padding(top = 22.dp, bottom = 22.dp)
-                .clip(MaterialTheme.shapes.medium)
-                .clickable(interactionSource = interactionSource, indication = null)
-                { focusManager.clearFocus() },
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            BodyMeasurements()
+        BodyMeasurements()
 
-            GoogleHealthConnect()
+        GoogleHealthConnect()
 
-            ResetAppData()
-        }
+        ResetAppData()
     }
 }
 

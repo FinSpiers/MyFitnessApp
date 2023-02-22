@@ -94,7 +94,7 @@ fun getWorkoutInfo(sportActivity: SportActivity): WorkoutInfoText {
                     Instant.ofEpochSecond(activity.timeStamp),
                     TimeZone.getDefault().toZoneId()
                 ),
-                (activity.distance.toString() + " Hiking")
+                (activity.distance.toString() + " km Hiking")
             )
         }
         1 -> {
@@ -106,7 +106,7 @@ fun getWorkoutInfo(sportActivity: SportActivity): WorkoutInfoText {
                     Instant.ofEpochSecond(activity.timeStamp),
                     TimeZone.getDefault().toZoneId()
                 ),
-                (activity.distance.toString() + " Running")
+                (activity.distance.toString() + " km Running")
             )
         }
         2 -> {
@@ -118,7 +118,7 @@ fun getWorkoutInfo(sportActivity: SportActivity): WorkoutInfoText {
                     Instant.ofEpochSecond(activity.timeStamp),
                     TimeZone.getDefault().toZoneId()
                 ),
-                (activity.distance.toString() + " Bicycle Riding")
+                (activity.distance.toString() + " km Bicycle Riding")
             )
         }
         3 -> {

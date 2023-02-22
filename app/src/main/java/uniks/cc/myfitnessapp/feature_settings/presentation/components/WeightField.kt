@@ -31,6 +31,10 @@ fun WeightField() {
         println(isErrorWeight.value)
     }
 
+    fun isNumeric(toCheck: String) : Boolean {
+        return toCheck.toIntOrNull() != null
+    }
+
     TextField(
         modifier = Modifier
             .fillMaxWidth()
@@ -39,8 +43,11 @@ fun WeightField() {
         textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
         value = weight.value,
         onValueChange = {
-            if (it.length <= maxChar) weight.value = it
-            if (it != "") validateWeight(it.toInt())
+            if (it.length <= maxChar && isNumeric(it) && it != "") {
+                weight.value = it
+                validateWeight(it.toInt())
+            }
+            if (it == "") weight.value = it
         },
         placeholder = {
             Text(
