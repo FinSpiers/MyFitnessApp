@@ -71,7 +71,9 @@ fun SettingsScreen(
 
         GoogleHealthConnect()
 
-        ResetAppData()
+        ResetAppData(){
+            viewModel.resetAllData()
+        }
     }
 
 

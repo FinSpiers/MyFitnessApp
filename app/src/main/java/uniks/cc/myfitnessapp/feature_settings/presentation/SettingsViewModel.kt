@@ -56,4 +56,20 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    fun resetAllData() {
+        _settingsState.value =
+            _settingsState.value.copy(
+                weight = 0,
+                height = 0,
+                isMale = true,
+                birthDateAsTimeStamp = 0,
+                settings = _settingsState.value.settings.apply {
+                    weight = 0
+                    height = 0
+                    isMale = true
+                    birthDateAsTimeStamp = 0
+                }
+            )
+    }
+
 }
