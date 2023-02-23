@@ -10,13 +10,16 @@ interface CoreRepository {
     var navigate : KFunction1<NavigationEvent, Unit>
     fun setLocationPermissionGranted()
 
-    suspend fun getAllSportActivitiesFromDatabase() : List<SportActivity>
+    suspend fun getAllSportActivitiesFromDatabase(): List<SportActivity>
 
     suspend fun addSportActivityToDatabase(sportActivity: SportActivity)
 
-    suspend fun getSportActivityById(id : Int) : SportActivity?
+    suspend fun getSportActivityById(id: Int): SportActivity?
 
-    suspend fun getCurrentWeather(lat : Double, lon : Double, unit : String, language : String) : CurrentWeatherData
-
-
+    suspend fun getCurrentWeather(
+        lat: Double,
+        lon: Double,
+        unit: String,
+        language: String
+    ): CurrentWeatherData
 }

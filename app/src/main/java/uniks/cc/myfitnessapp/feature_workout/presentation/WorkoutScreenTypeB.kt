@@ -14,6 +14,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import uniks.cc.myfitnessapp.R
 import uniks.cc.myfitnessapp.feature_workout.presentation.components.DataBox
 import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
@@ -23,7 +24,8 @@ fun WorkoutScreenTypeB(
     imageId: Int = R.drawable.image_walking,
     workoutName: String = "",
     durationValue: Double = 0.0,
-    repetitionsValue: Int = 0
+    repetitionsValue: Int = 0,
+    viewModel: WorkoutTypeBViewModel = hiltViewModel()
 ) {
 
     Column(
