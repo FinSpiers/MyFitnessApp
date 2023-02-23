@@ -16,6 +16,8 @@ import uniks.cc.myfitnessapp.core.domain.model.sensors.GyroscopeSensor
 import uniks.cc.myfitnessapp.core.domain.model.sensors.StepCounterSensor
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.domain.repository.SensorRepository
+import uniks.cc.myfitnessapp.feature_settings.data.repository.SettingsRepositoryImpl
+import uniks.cc.myfitnessapp.feature_settings.domain.repository.SettingsRepository
 import uniks.cc.myfitnessapp.feature_workout.data.repository.WorkoutRepositoryImpl
 import uniks.cc.myfitnessapp.feature_workout.domain.repository.WorkoutRepository
 import javax.inject.Singleton
@@ -25,7 +27,7 @@ import javax.inject.Singleton
 object AppModule {
     @Provides
     @Singleton
-    fun provideMyFitnessDatabase(app: Application) : MyFitnessDatabase {
+    fun provideMyFitnessDatabase(app: Application): MyFitnessDatabase {
         return Room.databaseBuilder(
             app,
             MyFitnessDatabase::class.java,
@@ -49,7 +51,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideWorkoutRepository(db : MyFitnessDatabase): WorkoutRepository {
+    fun provideWorkoutRepository(db: MyFitnessDatabase): WorkoutRepository {
         return WorkoutRepositoryImpl(db.sportActivitiesDao)
     }
 
@@ -78,4 +80,11 @@ object AppModule {
     fun provideGyroscopeSensor(app: Application): AndroidSensors {
         return GyroscopeSensor(app)
     }
+
+    @Provides
+    @Singleton
+    fun provideSettingsRepository(db: MyFitnessDatabase): SettingsRepository {
+        return SettingsRepositoryImpl(db.settingsDao)
+    }
+
 }

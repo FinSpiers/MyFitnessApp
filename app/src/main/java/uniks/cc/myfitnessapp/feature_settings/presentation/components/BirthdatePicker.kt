@@ -4,8 +4,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -13,13 +13,14 @@ import androidx.compose.ui.unit.sp
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
-import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun BirthdatePicker() {
-
-    val pickedDate = remember { mutableStateOf(LocalDate.now()) }
+fun BirthdatePicker(
+    pickedDate: MutableState<LocalDateTime>,
+) {
 
     val formattedDate = remember {
         derivedStateOf {
@@ -54,10 +55,10 @@ fun BirthdatePicker() {
         }
     ) {
         datepicker(
-            initialDate = LocalDate.now(),
+            initialDate = pickedDate.value.toLocalDate(),
             title = "Pick a date",
         ) {
-            pickedDate.value = it
+            pickedDate.value = LocalDateTime.of(it, LocalTime.now())
         }
     }
 }

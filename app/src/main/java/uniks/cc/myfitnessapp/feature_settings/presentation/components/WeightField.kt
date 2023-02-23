@@ -7,6 +7,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -18,9 +19,9 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WeightField() {
-
-    val weight = remember { mutableStateOf("") }
+fun WeightField(
+    weight: MutableState<String>
+) {
 
     val isErrorWeight = remember { mutableStateOf(false) }
 
@@ -28,10 +29,9 @@ fun WeightField() {
 
     fun validateWeight(value: Int) {
         isErrorWeight.value = value !in 0..400
-        println(isErrorWeight.value)
     }
 
-    fun isNumeric(toCheck: String) : Boolean {
+    fun isNumeric(toCheck: String): Boolean {
         return toCheck.toIntOrNull() != null
     }
 
@@ -41,13 +41,13 @@ fun WeightField() {
             .padding(12.dp)
             .clip(MaterialTheme.shapes.medium),
         textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
-        value = weight.value,
+        value = if (weight.value != "0") weight.value else "",
         onValueChange = {
             if (it.length <= maxChar && isNumeric(it) && it != "") {
                 weight.value = it
                 validateWeight(it.toInt())
             }
-            if (it == "") weight.value = it
+            if (it == "") weight.value = "0"
         },
         placeholder = {
             Text(
