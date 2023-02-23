@@ -68,7 +68,7 @@ fun StartActivity(
                             )
                             .padding(10.dp)
                             .clickable {
-                                onEvent(NavigationEvent.OnStartWorkOut(0))
+                                onEvent(NavigationEvent.OnStartWorkOut(3))
                                 openDialog.value = false
                             },
                         verticalAlignment = Alignment.CenterVertically
@@ -89,7 +89,7 @@ fun StartActivity(
                             )
                             .padding(10.dp)
                             .clickable {
-                                onEvent(NavigationEvent.OnStartWorkOut(1))
+                                onEvent(NavigationEvent.OnStartWorkOut(4))
                                 openDialog.value = false
                             },
                         verticalAlignment = Alignment.CenterVertically
@@ -110,7 +110,7 @@ fun StartActivity(
                             )
                             .padding(10.dp)
                             .clickable {
-                                onEvent(NavigationEvent.OnStartWorkOut(2))
+                                onEvent(NavigationEvent.OnStartWorkOut(5))
                                 openDialog.value = false
                             },
                         verticalAlignment = Alignment.CenterVertically
@@ -131,7 +131,7 @@ fun StartActivity(
                             )
                             .padding(10.dp)
                             .clickable {
-                                onEvent(NavigationEvent.OnStartWorkOut(3))
+                                onEvent(NavigationEvent.OnStartWorkOut(1))
                                 openDialog.value = false
                             },
                         verticalAlignment = Alignment.CenterVertically
@@ -152,7 +152,7 @@ fun StartActivity(
                             )
                             .padding(10.dp)
                             .clickable {
-                                onEvent(NavigationEvent.OnStartWorkOut(4))
+                                onEvent(NavigationEvent.OnStartWorkOut(0))
                                 openDialog.value = false
                             },
                         verticalAlignment = Alignment.CenterVertically
@@ -173,7 +173,7 @@ fun StartActivity(
                             )
                             .padding(10.dp)
                             .clickable {
-                                onEvent(NavigationEvent.OnStartWorkOut(5))
+                                onEvent(NavigationEvent.OnStartWorkOut(2))
                                 openDialog.value = false
                             },
                         verticalAlignment = Alignment.CenterVertically
