@@ -18,9 +18,5 @@ class WorkoutTypeBViewModel @Inject constructor(
         sensorRepository.startGyroscopeSensor()
         sensorRepository.stopStepCounterSensor()
 
-        println(gyroscopeSensorValueX)
-
-        println(stepSensorValue)
-
     }
 }

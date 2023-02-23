@@ -25,16 +25,12 @@ class SettingsViewModel @Inject constructor(
 
             // If not null update the state
             if (loadedSettings != null) {
-                println(loadedSettings.weight.toString() + "In der Datenbank")
-                println(loadedSettings.isMale.toString() + "In der Datenbank")
                 _settingsState.value = _settingsState.value.copy(
                     isMale = loadedSettings.isMale,
                     weight = loadedSettings.weight,
                     height = loadedSettings.height,
                     birthDateAsTimeStamp = loadedSettings.birthDateAsTimeStamp
                 )
-                println(_settingsState.value.weight.toString() + "im vm aufm state")
-                println(_settingsState.value.isMale.toString() + "im vm aufm state")
             } else {
                 _settingsState.value = _settingsState.value.copy(settings = Settings())
             }

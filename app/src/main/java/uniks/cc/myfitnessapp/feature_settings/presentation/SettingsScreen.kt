@@ -27,7 +27,6 @@ fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
     val state = viewModel.settingsState
-    println(state.value.weight.toString() + "Im SettingsScreen")
     val focusManager = LocalFocusManager.current
     val interactionSource = MutableInteractionSource()
 
