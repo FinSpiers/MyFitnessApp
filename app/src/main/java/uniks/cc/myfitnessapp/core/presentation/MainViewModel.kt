@@ -20,10 +20,10 @@ class MainViewModel @Inject constructor(
     private val navDestinations = listOf(
         Screen.DashBoardScreen.route,
         Screen.SettingsScreen.route,
-        Screen.DashBoardScreen.route + "/" + Screen.ActivityScreenTypeA.route,
-        Screen.DashBoardScreen.route + "/" + Screen.ActivityScreenTypeB.route,
-        Screen.DashBoardScreen.route + "/" + Screen.ActivityDetailScreenTypeA.route,
-        Screen.DashBoardScreen.route + "/" + Screen.ActivityDetailScreenTypeB.route
+        Screen.ActivityScreenTypeA.route,
+        Screen.ActivityScreenTypeB.route,
+        Screen.ActivityDetailScreenTypeA.route,
+        Screen.ActivityDetailScreenTypeB.route
     )
 
     private val bottomNavDestinations = listOf(

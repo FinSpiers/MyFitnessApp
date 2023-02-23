@@ -16,11 +16,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import androidx.core.content.PermissionChecker
+import androidx.hilt.navigation.compose.hiltViewModel
 import uniks.cc.myfitnessapp.feature_dashboard.presentation.components.*
 import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
-import java.security.Permission
-import java.security.Permissions
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -31,6 +29,7 @@ fun DashBoardScreen(
     borderStroke: Dp = 2.dp
 ) {
     val hasPermission = ContextCompat.checkSelfPermission(LocalContext.current, Manifest.permission_group.LOCATION) == PackageManager.PERMISSION_GRANTED
+    val viewModel : DashBoardViewModel = hiltViewModel()
 
     MyFitnessAppTheme {
         Column(
@@ -55,7 +54,7 @@ fun DashBoardScreen(
                     .verticalScroll(rememberScrollState())
             ) {
                 CurrentStepsBox(steps = 9213)
-                RecentWorkouts()
+                RecentWorkouts(viewModel::onSportActivityDetailClick)
             }
         }
     }

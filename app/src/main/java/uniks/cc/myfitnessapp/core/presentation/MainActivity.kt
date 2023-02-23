@@ -18,9 +18,9 @@ import javax.inject.Inject
 
 @OptIn(ExperimentalMaterial3Api::class)
 @AndroidEntryPoint
-class MainActivity @Inject constructor(
-    //private val coreRepository: CoreRepository
-) : ComponentActivity() {
+class MainActivity @Inject constructor() : ComponentActivity() {
+
+    @Inject lateinit var coreRepository: CoreRepository
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +38,7 @@ class MainActivity @Inject constructor(
                             onEvent = viewModel::onEvent
                         )
                     },
-                    floatingActionButton = { StartActivity(navBarState) }
+                    floatingActionButton = { StartActivity(navBarState, coreRepository::navigate.get()) }
                 ) {
                     NavigationHost(
                         navController = navController,

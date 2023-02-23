@@ -3,6 +3,7 @@ package uniks.cc.myfitnessapp.feature_dashboard.presentation.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -16,7 +17,7 @@ import uniks.cc.myfitnessapp.feature_dashboard.data.WorkoutInfoText
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun WorkoutComponent(workoutInfoText: WorkoutInfoText) {
+fun WorkoutComponent(workoutInfoText: WorkoutInfoText, onClick: () -> Unit) {
 
     val pattern = "dd-MM-yyyy HH:mm"
 
@@ -29,7 +30,8 @@ fun WorkoutComponent(workoutInfoText: WorkoutInfoText) {
                 color = MaterialTheme.colorScheme.secondary,
                 shape = MaterialTheme.shapes.medium
             )
-            .padding(5.dp),
+            .padding(5.dp)
+            .clickable { onClick() },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(

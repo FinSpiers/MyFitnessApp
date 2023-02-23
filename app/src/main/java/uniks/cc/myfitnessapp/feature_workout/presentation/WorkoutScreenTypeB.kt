@@ -20,7 +20,7 @@ import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
 
 @Composable
 fun WorkoutScreenTypeB(
-    imageId: Int = -1,
+    imageId: Int = R.drawable.image_walking,
     workoutName: String = "",
     durationValue: Double = 0.0,
     repetitionsValue: Int = 0

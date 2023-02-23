@@ -20,11 +20,11 @@ import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
 
 @Composable
 fun WorkoutScreenTypeA(
-    imageId: Int = -1,
-    workoutName: String = "",
-    durationValue: Double = 0.0,
-    distanceValue: Double = 0.0,
-    paceValue: Double = 0.0,
+    imageId: Int = R.drawable.image_walking,
+    workoutName: String = "Walking",
+    durationValue: Double = 23.4,
+    distanceValue: Double = 2.1,
+    paceValue: Double = 4.3,
 ) {
     Column(
         modifier = Modifier

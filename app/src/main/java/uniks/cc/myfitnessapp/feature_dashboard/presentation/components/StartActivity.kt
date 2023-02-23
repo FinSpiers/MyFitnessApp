@@ -16,19 +16,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import uniks.cc.myfitnessapp.core.domain.model.sport_activities.SportActivity
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationBarState
+import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationEvent
+import kotlin.reflect.KFunction1
+import kotlin.reflect.KMutableProperty0
 
 @Composable
 fun StartActivity(
     navbarState: NavigationBarState,
-    onWalkingClicked : () -> Unit = {},
-    onRunningClicked : () -> Unit = {},
-    onBicycleRidingClicked : () -> Unit = {},
-    onPushUpsClicked : () -> Unit = {},
-    onSitUpsClicked : () -> Unit = {},
-    onSquatsClicked : () -> Unit = {}
-) {
+    onEvent: KFunction1<NavigationEvent, Unit>,
+
+    ) {
     val openDialog = remember { mutableStateOf(false) }
 
     if (openDialog.value) {
@@ -69,7 +67,10 @@ fun StartActivity(
                                 shape = MaterialTheme.shapes.medium
                             )
                             .padding(10.dp)
-                            .clickable { onPushUpsClicked() },
+                            .clickable {
+                                onEvent(NavigationEvent.OnStartWorkOut(0))
+                                openDialog.value = false
+                            },
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(text = "Push-Ups", fontSize = 25.sp, textAlign = TextAlign.Center)
@@ -87,7 +88,10 @@ fun StartActivity(
                                 shape = MaterialTheme.shapes.medium
                             )
                             .padding(10.dp)
-                            .clickable { onSitUpsClicked() },
+                            .clickable {
+                                onEvent(NavigationEvent.OnStartWorkOut(1))
+                                openDialog.value = false
+                            },
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(text = "Sit-Ups", fontSize = 25.sp, textAlign = TextAlign.Center)
@@ -105,7 +109,10 @@ fun StartActivity(
                                 shape = MaterialTheme.shapes.medium
                             )
                             .padding(10.dp)
-                            .clickable { onSquatsClicked() },
+                            .clickable {
+                                onEvent(NavigationEvent.OnStartWorkOut(2))
+                                openDialog.value = false
+                            },
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(text = "Squats", fontSize = 25.sp, textAlign = TextAlign.Center)
@@ -123,7 +130,10 @@ fun StartActivity(
                                 shape = MaterialTheme.shapes.medium
                             )
                             .padding(10.dp)
-                            .clickable { onRunningClicked() },
+                            .clickable {
+                                onEvent(NavigationEvent.OnStartWorkOut(3))
+                                openDialog.value = false
+                            },
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(text = "Running", fontSize = 25.sp, textAlign = TextAlign.Center)
@@ -141,7 +151,10 @@ fun StartActivity(
                                 shape = MaterialTheme.shapes.medium
                             )
                             .padding(10.dp)
-                            .clickable { onWalkingClicked() },
+                            .clickable {
+                                onEvent(NavigationEvent.OnStartWorkOut(4))
+                                openDialog.value = false
+                            },
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(text = "Hiking", fontSize = 25.sp, textAlign = TextAlign.Center)
@@ -159,7 +172,10 @@ fun StartActivity(
                                 shape = MaterialTheme.shapes.medium
                             )
                             .padding(10.dp)
-                            .clickable { onBicycleRidingClicked() },
+                            .clickable {
+                                onEvent(NavigationEvent.OnStartWorkOut(5))
+                                openDialog.value = false
+                            },
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(text = "Cycling", fontSize = 25.sp, textAlign = TextAlign.Center)
