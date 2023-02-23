@@ -9,6 +9,7 @@ import androidx.compose.material3.Scaffold
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.presentation.navigation.NavigationHost
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.BottomNavigationBar
 import uniks.cc.myfitnessapp.feature_dashboard.presentation.components.StartActivity
@@ -17,9 +18,9 @@ import javax.inject.Inject
 
 @OptIn(ExperimentalMaterial3Api::class)
 @AndroidEntryPoint
-class MainActivity @Inject constructor() : ComponentActivity() {
-    @Inject
-    lateinit var navigationDestinations: List<String>
+class MainActivity @Inject constructor(
+    //private val coreRepository: CoreRepository
+) : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,13 +32,17 @@ class MainActivity @Inject constructor() : ComponentActivity() {
 
             MyFitnessAppTheme {
                 Scaffold(
-                    bottomBar = { BottomNavigationBar(navBarState = navBarState, onEvent = viewModel::onEvent) },
+                    bottomBar = {
+                        BottomNavigationBar(
+                            navBarState = navBarState,
+                            onEvent = viewModel::onEvent
+                        )
+                    },
                     floatingActionButton = { StartActivity(navBarState) }
                 ) {
                     NavigationHost(
                         navController = navController,
-                        startDestination = navBarState.currentRoute,
-                        bottomNavigationDestinations = navigationDestinations
+                        startDestination = navBarState.currentRoute
                     )
                 }
             }

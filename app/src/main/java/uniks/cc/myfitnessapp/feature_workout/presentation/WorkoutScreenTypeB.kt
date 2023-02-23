@@ -20,10 +20,10 @@ import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
 
 @Composable
 fun WorkoutScreenTypeB(
-    imageId: Int,
-    workoutName: String,
-    durationValue: Double,
-    repetitionsValue: Int
+    imageId: Int = -1,
+    workoutName: String = "",
+    durationValue: Double = 0.0,
+    repetitionsValue: Int = 0
 ) {
 
     Column(

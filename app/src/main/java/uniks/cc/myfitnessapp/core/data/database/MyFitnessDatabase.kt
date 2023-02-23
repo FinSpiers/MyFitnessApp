@@ -6,13 +6,19 @@ import uniks.cc.myfitnessapp.core.domain.model.sport_activities.SportActivity
 
 @Database(
     entities = [
-        SportActivity::class
+        SportActivity::class,
+        SportActivity.WalkingHiking::class,
+        SportActivity.BicycleRiding::class,
+        SportActivity.Running::class,
+        SportActivity.PushUp::class,
+        SportActivity.SitUp::class,
+        SportActivity.Squat::class
     ],
     version = 1
 )
 abstract class MyFitnessDatabase : RoomDatabase() {
 
-    abstract val SportActivityDao : SportActivitiesDao
+    abstract val sportActivitiesDao: SportActivitiesDao
 
     //abstract val settingsDao : SettingsDao
 }

@@ -1,26 +1,31 @@
 package uniks.cc.myfitnessapp.core.data.repository
 
-import androidx.navigation.NavHostController
 import uniks.cc.myfitnessapp.core.data.network.response.toCurrentWeatherData
 import uniks.cc.myfitnessapp.core.data.database.SportActivitiesDao
 import uniks.cc.myfitnessapp.core.data.network.OpenWeatherApiService
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.domain.model.sport_activities.SportActivity
+import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationEvent
 import uniks.cc.myfitnessapp.feature_dashboard.domain.model.CurrentWeatherData
+import kotlin.reflect.KFunction1
 
 class CoreRepositoryImpl(
     private val sportActivitiesDao: SportActivitiesDao,
     private val weatherApiService: OpenWeatherApiService
 ) : CoreRepository {
-    override var navController: NavHostController? = null
     override var isLocationPermissionGranted: Boolean = false
-    override val navDestinations: List<String> = emptyList()
+    override lateinit var navigate: KFunction1<NavigationEvent, Unit>
 
-    override suspend fun setNavController(navController : NavHostController) {
-        this.navController = navController
+    fun setNavigation(function : KFunction1<NavigationEvent, Unit>) {
+        navigate = function
     }
+
+    override fun setLocationPermissionGranted() {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun getAllSportActivitiesFromDatabase(): List<SportActivity> {
-        return emptyList()
+        TODO("Not yet implemented")
     }
 
     override suspend fun addSportActivityToDatabase(sportActivity: SportActivity) {
@@ -28,16 +33,9 @@ class CoreRepositoryImpl(
     }
 
     override suspend fun getSportActivityById(id: Int): SportActivity? {
-        return null
-    }
-
-    override fun navigate(destination: String) {
         TODO("Not yet implemented")
     }
 
-    override fun setLocationPermissionGranted() {
-        TODO("Not yet implemented")
-    }
 
     override suspend fun getCurrentWeather(
         lat: Double,

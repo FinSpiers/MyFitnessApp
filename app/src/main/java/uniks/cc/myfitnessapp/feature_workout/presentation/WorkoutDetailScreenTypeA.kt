@@ -19,17 +19,17 @@ import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
 
 @Composable
 fun WorkoutDetailScreenTypeA(
-    imageId: Int,
-    workoutName: String,
-    date: String,
-    durationValue: Double,
-    durationUnit: String,
-    distanceValue: Double,
-    distanceUnit: String,
-    avgPaceValue: Double,
-    paceUnit: String,
-    kcalValue: Int,
-    kcalUnit: String
+    imageId: Int = -1,
+    workoutName: String = "",
+    date: String = "",
+    durationValue: Double = 0.0,
+    durationUnit: String = "",
+    distanceValue: Double = 0.0,
+    distanceUnit: String = "",
+    avgPaceValue: Double = 0.0,
+    paceUnit: String = "",
+    kcalValue: Int = 0,
+    kcalUnit: String = ""
 ) {
 
     Column(

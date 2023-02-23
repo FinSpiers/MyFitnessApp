@@ -1,20 +1,13 @@
 package uniks.cc.myfitnessapp.core.domain.repository
 
-import androidx.navigation.NavHostController
 import uniks.cc.myfitnessapp.core.domain.model.sport_activities.SportActivity
+import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationEvent
 import uniks.cc.myfitnessapp.feature_dashboard.domain.model.CurrentWeatherData
+import kotlin.reflect.KFunction1
 
 interface CoreRepository {
-    var navController : NavHostController?
-    val navDestinations : List<String>
     var isLocationPermissionGranted : Boolean
-
-    suspend fun setNavController(navController : NavHostController) {
-        this.navController = navController
-    }
-
-    fun navigate(destination : String)
-
+    var navigate : KFunction1<NavigationEvent, Unit>
     fun setLocationPermissionGranted()
 
     suspend fun getAllSportActivitiesFromDatabase() : List<SportActivity>

@@ -1,7 +1,6 @@
 package uniks.cc.myfitnessapp.di
 
 import android.app.Application
-import android.content.Context
 import androidx.room.Room
 import dagger.Module
 import dagger.Provides
@@ -16,11 +15,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-    @Provides
-    @Singleton
-    fun provideNavigationDestinations() : List<String> {
-        return listOf("dashboard", "settings", "activity_detail_A", "activity_detail_B, activity_A, activity_B")
-    }
     @Provides
     @Singleton
     fun provideMyFitnessDatabase(app: Application) : MyFitnessDatabase {
@@ -43,7 +37,7 @@ object AppModule {
         db: MyFitnessDatabase,
         apiService: OpenWeatherApiService
     ): CoreRepository {
-        return CoreRepositoryImpl(db.SportActivityDao, apiService)
+        return CoreRepositoryImpl(db.sportActivitiesDao, apiService)
     }
 
 }

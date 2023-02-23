@@ -39,8 +39,8 @@ fun BottomNavigationBar(
                     ),
                     onClick = {
                         when (item.route) {
-                            dashboard -> onEvent(NavigationEvent.OnDashBoardPressed)
-                            settings -> onEvent(NavigationEvent.OnSettingsPressed)
+                            dashboard -> onEvent(NavigationEvent.OnDashBoardClicked)
+                            settings -> onEvent(NavigationEvent.OnSettingsClick)
                         }
                     },
                 )

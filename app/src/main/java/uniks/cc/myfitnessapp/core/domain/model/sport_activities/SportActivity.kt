@@ -11,11 +11,13 @@ import java.util.*
 @Entity(tableName = "SportActivities")
 open class SportActivity(
     var workoutId: Int,
-    @PrimaryKey(autoGenerate = false)
     var timeStamp: Long = Instant.now().epochSecond
 ) {
+    @PrimaryKey(autoGenerate = true)
+    var id : Int = 0
+
     // TODO: Add traveled route (list of locations?) and pace per km (list of doubles?) to parameters
-    @Entity(tableName = "SportActivities")
+    @Entity(tableName = "WalkingActivities")
     data class WalkingHiking(
         var duration: Double = 0.0,
         var distance: Double = 0.0,
@@ -23,11 +25,11 @@ open class SportActivity(
         var avgPace: Double = 0.0,
         var kcal: Int = 0
     ) : SportActivity(0) {
-        val workoutName: String = "Walking"
-        val imageId: Int = R.drawable.image_walking
+        var workoutName: String = "Walking"
+        var imageId: Int = R.drawable.image_walking
     }
 
-    @Entity(tableName = "SportActivities")
+    @Entity(tableName = "RunningActivities")
     data class Running(
         var duration: Double = 0.0,
         var distance: Double = 0.0,
@@ -35,11 +37,11 @@ open class SportActivity(
         var avgPace: Double = 0.0,
         var kcal: Int = 0
     ) : SportActivity(1) {
-        val workoutName: String = "Running"
-        val imageId: Int = R.drawable.image_jogging
+        var workoutName: String = "Running"
+        var imageId: Int = R.drawable.image_jogging
     }
 
-    @Entity(tableName = "SportActivities")
+    @Entity(tableName = "BicycleRidingActivities")
     data class BicycleRiding(
         var duration: Double = 0.0,
         var distance: Double = 0.0,
@@ -47,38 +49,39 @@ open class SportActivity(
         var avgPace: Double = 0.0,
         var kcal: Int = 0
     ) : SportActivity(2) {
-        val workoutName: String = "BicycleRiding"
-        val imageId: Int = R.drawable.image_bicycling
+        var workoutName: String = "BicycleRiding"
+        var imageId: Int = R.drawable.image_bicycling
     }
 
-    @Entity(tableName = "SportActivities")
+
+    @Entity(tableName = "PushUpActivities")
     data class PushUp(
         var duration: Double = 0.0,
         var repeats: Int = 0,
         var kcal: Int = 0
     ) : SportActivity(3) {
-        val workoutName: String = "PushUps"
-        val imageId: Int = R.drawable.image_push_up
+        var workoutName: String = "PushUps"
+        var imageId: Int = R.drawable.image_push_up
     }
 
-    @Entity(tableName = "SportActivities")
+    @Entity(tableName = "SquatActivities")
     data class Squat(
         var duration: Double = 0.0,
         var repeats: Int = 0,
         var kcal: Int = 0
     ) : SportActivity(4) {
-        val workoutName: String = "Squats"
-        val imageId: Int = R.drawable.image_squat
+        var workoutName: String = "Squats"
+        var imageId: Int = R.drawable.image_squat
     }
 
-    @Entity(tableName = "SportActivities")
+    @Entity(tableName = "SitUpActivities")
     data class SitUp(
         var duration: Double = 0.0,
         var repeats: Int = 0,
         var kcal: Int = 0
     ) : SportActivity(5) {
-        val workoutName: String = "SitUps"
-        val imageId: Int = R.drawable.image_sit_up
+        var workoutName: String = "SitUps"
+        var imageId: Int = R.drawable.image_sit_up
     }
 
 }
