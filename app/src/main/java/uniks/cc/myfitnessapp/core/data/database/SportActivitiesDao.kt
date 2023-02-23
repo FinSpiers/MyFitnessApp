@@ -5,18 +5,6 @@ import uniks.cc.myfitnessapp.core.domain.model.sport_activities.SportActivity
 
 @Dao
 interface SportActivitiesDao {
-    //@Transaction
-    //@Query("SELECT * FROM SportActivities")
-    //suspend fun getAllSportActivities(): List<SportActivity>
-
-    //@Transaction
-    //@Query("SELECT * FROM SportsActivities WHERE Id={id}")
-    //suspend fun getSportActivityById(id : Int) : SportActivity?
-
-    //@Transaction
-    //@Insert(onConflict = OnConflictStrategy.REPLACE)
-    //suspend fun addSportActivity(sportActivity: SportActivity)
-
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addWalkingActivity(walkingHiking: SportActivity.WalkingHiking)
@@ -40,4 +28,32 @@ interface SportActivitiesDao {
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addSquatsActivity(squat: SportActivity.Squat)
+
+    //@Transaction
+    //@Query("SELECT * FROM WalkingActivities, RunningActivities, BicycleRidingActivities, PushUpActivities, SquatActivities, SitUpActivities")
+    //suspend fun getAllSportActivities(): List<SportActivity>
+
+    @Transaction
+    @Query("SELECT * FROM WalkingActivities")
+    suspend fun getAllWalkingActivities() : List<SportActivity.WalkingHiking>
+
+    @Transaction
+    @Query("SELECT * FROM RunningActivities")
+    suspend fun getAllRunningActivities() : List<SportActivity.Running>
+
+    @Transaction
+    @Query("SELECT * FROM BicycleRidingActivities")
+    suspend fun getAllBicycleActivities() : List<SportActivity.BicycleRiding>
+
+    @Transaction
+    @Query("SELECT * FROM PushUpActivities")
+    suspend fun getAllPushUpsActivities() : List<SportActivity.PushUp>
+
+    @Transaction
+    @Query("SELECT * FROM SquatActivities")
+    suspend fun getAllSquatsActivities() : List<SportActivity.Squat>
+
+    @Transaction
+    @Query("SELECT * FROM SitUpActivities")
+    suspend fun getAllSitUpActivities() : List<SportActivity.SitUp>
 }
