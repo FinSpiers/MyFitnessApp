@@ -12,12 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import uniks.cc.myfitnessapp.R
 import uniks.cc.myfitnessapp.core.domain.util.TimestampConverter
-import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
 
 @Composable
 fun WorkoutDetailScreen(
@@ -45,97 +42,110 @@ fun WorkoutDetailScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painterResource(id = viewModel.model.imageId),
+                painterResource(id = viewModel.selectedWorkout.imageId),
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
-                contentDescription = viewModel.model.workoutName,
+                contentDescription = viewModel.selectedWorkout.workoutName,
                 modifier = Modifier
                     .size(35.dp)
                     .padding(3.dp)
             )
             Text(
-                text = viewModel.model.workoutName,
+                text = viewModel.selectedWorkout.workoutName,
                 modifier = Modifier
                     .fillMaxWidth(0.4f)
                     .padding(3.dp),
                 textAlign = TextAlign.Center,
             )
 
-        Text(
-            text = TimestampConverter.convertToDate(viewModel.model.timeStamp),
+            Text(
+                text = TimestampConverter.convertToDate(viewModel.selectedWorkout.timeStamp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(3.dp),
+                textAlign = TextAlign.Center,
+            )
+        }
+        Spacer(modifier = Modifier.height(20.dp))
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(3.dp),
-            textAlign = TextAlign.Center,
-        )
-    }
-    Spacer(modifier = Modifier.height(20.dp))
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(3.dp)
-    ) {
-        Text(
-            text = "Duration",
-            textAlign = TextAlign.Left
-        )
-        Text(
-            text = "${viewModel.model.duration} $durationUnit",
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Right
-        )
-    }
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(3.dp)
-    ) {
-        Text(
-            text = "Distance",
-            textAlign = TextAlign.Left
-        )
-        Text(
-            text = "${viewModel.model.distance} $distanceUnit",
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Right
-        )
-    }
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(3.dp)
-    ) {
-        Text(
-            text = "avg Pace",
-            textAlign = TextAlign.Left
-        )
-        Text(
-            text = "${viewModel.model.avgPace} $paceUnit",
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Right
-        )
-    }
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(3.dp)
-    ) {
-        Text(
-            text = "kcal",
-            textAlign = TextAlign.Left
-        )
-        Text(
-            text = "${viewModel.model.kcal} $kcalUnit",
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Right
-        )
-    }
-}
-}
-
-@Preview(showBackground = true)
-@Composable
-fun WorkoutDetailScreenTypeAPreview() {
-    MyFitnessAppTheme {
-        WorkoutDetailScreen()
+                .padding(3.dp)
+        ) {
+            Text(
+                text = "Duration",
+                textAlign = TextAlign.Left
+            )
+            Text(
+                text = "${viewModel.selectedWorkout.duration} $durationUnit",
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Right
+            )
+        }
+        if (viewModel.selectedWorkout.distance != null) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(3.dp)
+            ) {
+                Text(
+                    text = "Distance",
+                    textAlign = TextAlign.Left
+                )
+                Text(
+                    text = "${viewModel.selectedWorkout.distance} $distanceUnit",
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Right
+                )
+            }
+        }
+        if (viewModel.selectedWorkout.avgPace != null) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(3.dp)
+            ) {
+                Text(
+                    text = "avg Pace",
+                    textAlign = TextAlign.Left
+                )
+                Text(
+                    text = "${viewModel.selectedWorkout.avgPace} $paceUnit",
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Right
+                )
+            }
+        }
+        if (viewModel.selectedWorkout.repetitions != null) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(3.dp)
+            ) {
+                Text(
+                    text = "Repetitions",
+                    textAlign = TextAlign.Left
+                )
+                Text(
+                    text = "${viewModel.selectedWorkout.repetitions}",
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Right
+                )
+            }
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(3.dp)
+        ) {
+            Text(
+                text = "kcal",
+                textAlign = TextAlign.Left
+            )
+            Text(
+                text = "${viewModel.selectedWorkout.kcal} $kcalUnit",
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Right
+            )
+        }
     }
 }

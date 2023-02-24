@@ -11,7 +11,7 @@ class WorkoutDetailViewModel @Inject constructor(
     private val workoutRepository: WorkoutRepository
 ) : ViewModel() {
     private var currentSportActivity = workoutRepository.currentWorkout
-    var model : Workout = workoutRepository.selectedWorkoutDetail
+    var selectedWorkout: Workout = workoutRepository.selectedWorkoutDetail
         ?: throw NullPointerException("Expression 'workoutRepository.selectedWorkoutDetail' must not be null")
 
 

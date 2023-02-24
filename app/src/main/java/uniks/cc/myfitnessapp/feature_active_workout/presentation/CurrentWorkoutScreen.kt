@@ -3,29 +3,23 @@ package uniks.cc.myfitnessapp.feature_active_workout.presentation
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import uniks.cc.myfitnessapp.R
 import uniks.cc.myfitnessapp.feature_active_workout.domain.util.WorkoutMap
 import uniks.cc.myfitnessapp.feature_core.presentation.components.DataBox
-import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
 
 @Composable
 fun CurrentWorkoutScreen(viewModel: CurrentWorkoutViewModel = hiltViewModel()) {
-    val currentWorkoutState = viewModel.currentWorkout.value
-
+    val currentWorkout = viewModel.currentWorkout
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -43,17 +37,18 @@ fun CurrentWorkoutScreen(viewModel: CurrentWorkoutViewModel = hiltViewModel()) {
                 ),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            val imageId = WorkoutMap.map[currentWorkoutState.workoutName]
-            if(imageId != null) {
+            val imageId = WorkoutMap.map[currentWorkout.workoutName]
+            if (imageId != null) {
                 Image(
                     painterResource(id = imageId),
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.inverseSurface),
-                    contentDescription = currentWorkoutState.workoutName,
-                    modifier = Modifier.size(40.dp).clip(CircleShape).border(2.dp, MaterialTheme.colorScheme.outline, CircleShape),
+                    contentDescription = currentWorkout.workoutName,
+                    modifier = Modifier
+                        .size(40.dp)
                 )
             }
             Text(
-                text = currentWorkoutState.workoutName,
+                text = currentWorkout.workoutName,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(3.dp),
@@ -69,13 +64,19 @@ fun CurrentWorkoutScreen(viewModel: CurrentWorkoutViewModel = hiltViewModel()) {
                 .padding(3.dp),
             horizontalArrangement = Arrangement.Center
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth(0.5f)
-                    .padding(3.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                DataBox(title = "Duration", data = (currentWorkoutState.durationValue).toString(), unit = "min")
+            if (currentWorkout.distance != null) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth(0.5f)
+                        .padding(3.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    DataBox(
+                        title = "Distance",
+                        data = (currentWorkout.distance).toString(),
+                        unit = "km"
+                    )
+                }
             }
             Column(
                 modifier = Modifier
@@ -83,39 +84,47 @@ fun CurrentWorkoutScreen(viewModel: CurrentWorkoutViewModel = hiltViewModel()) {
                     .padding(3.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                DataBox(title = "Distance", data = (currentWorkoutState.distanceValue).toString(), unit = "km")
+                DataBox(
+                    title = "Duration",
+                    data = (currentWorkout.duration).toString(),
+                    unit = "min"
+                )
             }
         }
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(3.dp),
             horizontalArrangement = Arrangement.Center
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth(0.5f)
-                    .padding(3.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                DataBox(title = "Pace", data = (currentWorkoutState.paceValue).toString(), unit = "km/h")
+            if (currentWorkout.repetitions != null) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(3.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    DataBox(
+                        title = "Repetitions",
+                        data = (currentWorkout.repetitions).toString(),
+                        unit = ""
+                    )
+                }
             }
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(3.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+            if (currentWorkout.pace != null) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth(0.5f)
+                        .padding(3.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    DataBox(
+                        title = "Pace",
+                        data = (currentWorkout.pace).toString(),
+                        unit = "km/h"
+                    )
+                }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun WorkoutScreenTypeAPreview() {
-    MyFitnessAppTheme {
-        CurrentWorkoutScreen()
     }
 }
