@@ -35,10 +35,10 @@ class MainActivity @Inject constructor() : ComponentActivity() {
                     bottomBar = {
                         BottomNavigationBar(
                             navBarState = navBarState,
-                            onEvent = viewModel::onEvent
+                            onEvent = viewModel::onNavigationEvent
                         )
                     },
-                    floatingActionButton = { StartActivity(navBarState, coreRepository::navigate.get()) }
+                    floatingActionButton = { StartActivity(navBarState, coreRepository::onNavigationAction.get(), coreRepository::onWorkoutAction.get()) }
                 ) {it.calculateBottomPadding()
                     NavigationHost(
                         navController = navController,

@@ -20,8 +20,7 @@ import uniks.cc.myfitnessapp.core.domain.model.sensors.GyroscopeSensor
 import uniks.cc.myfitnessapp.core.domain.model.sensors.StepCounterSensor
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.domain.repository.SensorRepository
-import uniks.cc.myfitnessapp.feature_active_workout.data.repository.WorkoutRepositoryImpl
-import uniks.cc.myfitnessapp.feature_active_workout.domain.repository.WorkoutRepository
+import uniks.cc.myfitnessapp.feature_dashboard.presentation.DashBoardState
 import javax.inject.Singleton
 
 @Module
@@ -45,17 +44,19 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideCoreRepository(
-        apiService: OpenWeatherApiService
-    ): CoreRepository {
-        return CoreRepositoryImpl(apiService)
+    fun provideDashboardState(): DashBoardState {
+        return DashBoardState()
     }
 
     @Provides
     @Singleton
-    fun provideWorkoutRepository(db : MyFitnessDatabase): WorkoutRepository {
-        return WorkoutRepositoryImpl(db.workoutDao)
+    fun provideCoreRepository(
+        apiService: OpenWeatherApiService,
+        db : MyFitnessDatabase
+    ): CoreRepository {
+        return CoreRepositoryImpl(apiService, db.workoutDao)
     }
+
 
     @Provides
     @Singleton

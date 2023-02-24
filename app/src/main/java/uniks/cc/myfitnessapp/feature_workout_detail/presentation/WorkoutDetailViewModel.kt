@@ -3,15 +3,14 @@ package uniks.cc.myfitnessapp.feature_workout_detail.presentation
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import uniks.cc.myfitnessapp.core.domain.model.Workout
-import uniks.cc.myfitnessapp.feature_active_workout.domain.repository.WorkoutRepository
+import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class WorkoutDetailViewModel @Inject constructor(
-    private val workoutRepository: WorkoutRepository
+    coreRepository: CoreRepository
 ) : ViewModel() {
-    private var currentSportActivity = workoutRepository.currentWorkout
-    var selectedWorkout: Workout = workoutRepository.selectedWorkoutDetail
+    var selectedWorkout: Workout = coreRepository.selectedWorkoutDetail
         ?: throw NullPointerException("Expression 'workoutRepository.selectedWorkoutDetail' must not be null")
 
 

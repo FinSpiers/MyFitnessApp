@@ -2,12 +2,16 @@ package uniks.cc.myfitnessapp.core.presentation
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.domain.util.Screen
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationEvent
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationBarState
+import java.time.Instant
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,15 +35,45 @@ class MainViewModel @Inject constructor(
     var navBarState = mutableStateOf(NavigationBarState())
 
     init {
-        coreRepository.navigate = this::onEvent
+        coreRepository.onNavigationAction = this::onNavigationEvent
+        coreRepository.onWorkoutAction = this::onWorkoutEvent
     }
 
-    fun onEvent(event: NavigationEvent) {
+    fun onNavigationEvent(event: NavigationEvent) {
         when (event) {
             is NavigationEvent.OnDashBoardClick -> navigate(Screen.DashBoardScreen.route)
             is NavigationEvent.OnSettingsClick -> navigate(Screen.SettingsScreen.route)
             is NavigationEvent.OnStartWorkoutClick -> navigate(Screen.CurrentActivityScreen.route)
             is NavigationEvent.OnWorkoutDetailClick -> navigate(Screen.ActivityDetailScreen.route)
+            is NavigationEvent.onStopWorkoutClick -> navigate(Screen.DashBoardScreen.route)
+        }
+    }
+
+    private fun onWorkoutEvent(event : WorkoutEvent) {
+        when(event) {
+            is WorkoutEvent.StartWorkout -> {
+                val currentWorkout = Workout(
+                    workoutName = event.workoutName,
+                    timeStamp = Instant.now().epochSecond,
+                    duration = 0.0,
+                    kcal = 0
+                ).apply {
+                    if(workoutName in listOf("Walking", "Running", "Bicycling")) {
+                        distance = 0.0
+                        pace = 0.0
+                        avgPace = 0.0
+                    }
+                    else {
+                        repetitions = 0
+                    }
+                }
+                coreRepository.currentWorkout = currentWorkout
+                viewModelScope.launch {
+                    coreRepository.addWorkoutToDatabase(currentWorkout)
+                }
+
+            }
+            is WorkoutEvent.StopWorkout -> { /* TODO */ }
         }
     }
 

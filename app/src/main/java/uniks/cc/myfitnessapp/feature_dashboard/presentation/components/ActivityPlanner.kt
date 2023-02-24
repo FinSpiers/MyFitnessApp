@@ -1,21 +1,20 @@
 package uniks.cc.myfitnessapp.feature_dashboard.presentation.components
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.WbCloudy
-import androidx.compose.material.icons.filled.WbSunny
+import uniks.cc.myfitnessapp.R
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun ActivityPlanner(isWeatherGood: Boolean) {
-    val icon = if (isWeatherGood) Icons.Default.WbSunny else Icons.Default.WbCloudy
+    val resId = if (isWeatherGood) R.drawable.icon_weather_outside else R.drawable.icon_weather_inside
     Row(
         modifier = Modifier
             .padding(4.dp)
@@ -25,7 +24,7 @@ fun ActivityPlanner(isWeatherGood: Boolean) {
     ) {
         val motivationText =
             if (isWeatherGood) "Good weather,\nyou might wanna go outside!" else "Better train inside,\nnot looking too good outside!"
-        Column(modifier = Modifier.fillMaxWidth(0.85f)) {
+        Column(modifier = Modifier.fillMaxWidth(0.85f), verticalArrangement = Arrangement.SpaceEvenly) {
             Text(text = "Activity planner", style = MaterialTheme.typography.titleMedium, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
             Text(
                 text = motivationText,
@@ -37,7 +36,7 @@ fun ActivityPlanner(isWeatherGood: Boolean) {
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            Icon(imageVector = icon, contentDescription = null, modifier = Modifier.size(32.dp))
+            Icon(painter = painterResource(id = resId), contentDescription = null, modifier = Modifier.size(32.dp).padding(end = 4.dp))
         }
     }
 }

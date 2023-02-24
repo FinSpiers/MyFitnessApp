@@ -8,6 +8,8 @@ sealed class NavigationEvent {
 
     class OnStartWorkoutClick(val workoutName: String) : NavigationEvent()
 
+    object onStopWorkoutClick : NavigationEvent()
+
     class OnWorkoutDetailClick(val workout: Workout) : NavigationEvent()
 
 

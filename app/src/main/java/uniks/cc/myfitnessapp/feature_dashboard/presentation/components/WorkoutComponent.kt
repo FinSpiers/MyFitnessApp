@@ -28,7 +28,6 @@ fun WorkoutComponent(
     onClick: KFunction1<Workout, Unit>,
     isCurrentWorkout: Boolean = false
 ) {
-    val pattern = "dd-MM-yyyy HH:mm"
     Row(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.background, shape = MaterialTheme.shapes.medium)
@@ -43,7 +42,7 @@ fun WorkoutComponent(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(0.5f),
+            modifier = Modifier.fillMaxWidth(0.45f),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
@@ -80,10 +79,11 @@ fun WorkoutComponent(
                 }
             }
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
+                horizontalAlignment = Alignment.End,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = TimestampConverter.convertToDatetime(model.timeStamp).dropLast(3))
+                Text(text = TimestampConverter.convertToDate(model.timeStamp), modifier = Modifier.padding(end = 8.dp))
+                Text(text = TimestampConverter.convertToTime(model.timeStamp), modifier = Modifier.padding(end = 8.dp))
             }
         }
 

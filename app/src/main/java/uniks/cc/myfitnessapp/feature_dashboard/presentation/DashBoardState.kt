@@ -7,5 +7,6 @@ data class DashBoardState(
     var currentWeatherData : CurrentWeatherData = CurrentWeatherData(),
     val workouts : MutableList<Workout> = mutableListOf(),
     var selectedWorkoutDetail : Workout? = null,
-    var currentWorkout : Workout? = null
+    var currentWorkout : Workout? = null,
+    var steps : Int = 0
 )

@@ -24,9 +24,9 @@ import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
 @Composable
 fun DashBoardScreen(
     currentTemp: Int = 10,
-    imageVector: ImageVector = Icons.Default.WbSunny,
     isWeatherGood: Boolean = false,
-    borderStroke: Dp = 2.dp
+    borderStroke: Dp = 2.dp,
+    currentWeatherMain : String = "Drizzle"
 ) {
     val hasGpsPermission = ContextCompat.checkSelfPermission(LocalContext.current, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
     val viewModel : DashBoardViewModel = hiltViewModel()
@@ -41,8 +41,8 @@ fun DashBoardScreen(
                 WeatherBox(
                     borderStroke = borderStroke,
                     currentTemp = currentTemp,
-                    imageVector = imageVector,
-                    isWeatherGood = isWeatherGood
+                    isWeatherGood = isWeatherGood,
+                    currentWeatherMain = currentWeatherMain
                 )
             } else {
                 NoPermissionBox(borderStroke)
@@ -54,7 +54,7 @@ fun DashBoardScreen(
                     .verticalScroll(rememberScrollState())
             ) {
                 CurrentStepsBox(steps = 9213)
-                RecentWorkouts(viewModel.dashBoardState.value, viewModel::onSportActivityDetailClick)
+                RecentWorkouts(viewModel.dashBoardState, viewModel::onSportActivityDetailClick)
             }
         }
     }

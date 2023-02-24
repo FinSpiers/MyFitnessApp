@@ -3,14 +3,12 @@ package uniks.cc.myfitnessapp.feature_active_workout.presentation
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import uniks.cc.myfitnessapp.core.domain.model.Workout
-import uniks.cc.myfitnessapp.feature_active_workout.domain.repository.WorkoutRepository
 import java.time.Instant
 import javax.inject.Inject
 
 
 @HiltViewModel
 class CurrentWorkoutViewModel @Inject constructor(
-    private val workoutRepository: WorkoutRepository
 ) : ViewModel() {
     /* original code:
     val currentWorkout: Workout = workoutRepository.currentWorkout

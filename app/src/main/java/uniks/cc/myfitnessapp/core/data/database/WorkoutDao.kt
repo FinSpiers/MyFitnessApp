@@ -1,8 +1,8 @@
 package uniks.cc.myfitnessapp.core.data.database
 
 import androidx.room.*
-import uniks.cc.myfitnessapp.core.domain.model.Waypoint
 import uniks.cc.myfitnessapp.core.domain.model.Workout
+import uniks.cc.myfitnessapp.core.domain.model.sensors.Waypoint
 
 @Dao
 interface WorkoutDao {
