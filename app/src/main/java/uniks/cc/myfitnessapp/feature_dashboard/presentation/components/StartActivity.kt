@@ -19,8 +19,13 @@ import androidx.compose.ui.window.Dialog
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationBarState
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationEvent
 import kotlin.reflect.KFunction1
-import kotlin.reflect.KMutableProperty0
 
+const val WORKOUT_WALKING = "Walking"
+const val WORKOUT_RUNNING = "Running"
+const val WORKOUT_BICYCLING = "Bicycling"
+const val WORKOUT_PUSHUPS = "PushUps"
+const val WORKOUT_SITUPS = "SitUps"
+const val WORKOUT_SQUATS = "Squats"
 @Composable
 fun StartActivity(
     navbarState: NavigationBarState,
@@ -68,7 +73,7 @@ fun StartActivity(
                             )
                             .padding(10.dp)
                             .clickable {
-                                onEvent(NavigationEvent.OnStartWorkOut(3))
+                                onEvent(NavigationEvent.OnStartWorkoutClick(WORKOUT_PUSHUPS))
                                 openDialog.value = false
                             },
                         verticalAlignment = Alignment.CenterVertically
@@ -89,7 +94,7 @@ fun StartActivity(
                             )
                             .padding(10.dp)
                             .clickable {
-                                onEvent(NavigationEvent.OnStartWorkOut(4))
+                                onEvent(NavigationEvent.OnStartWorkoutClick(WORKOUT_SITUPS))
                                 openDialog.value = false
                             },
                         verticalAlignment = Alignment.CenterVertically
@@ -110,7 +115,7 @@ fun StartActivity(
                             )
                             .padding(10.dp)
                             .clickable {
-                                onEvent(NavigationEvent.OnStartWorkOut(5))
+                                onEvent(NavigationEvent.OnStartWorkoutClick(WORKOUT_SQUATS))
                                 openDialog.value = false
                             },
                         verticalAlignment = Alignment.CenterVertically
@@ -131,7 +136,7 @@ fun StartActivity(
                             )
                             .padding(10.dp)
                             .clickable {
-                                onEvent(NavigationEvent.OnStartWorkOut(1))
+                                onEvent(NavigationEvent.OnStartWorkoutClick(WORKOUT_RUNNING))
                                 openDialog.value = false
                             },
                         verticalAlignment = Alignment.CenterVertically
@@ -152,7 +157,7 @@ fun StartActivity(
                             )
                             .padding(10.dp)
                             .clickable {
-                                onEvent(NavigationEvent.OnStartWorkOut(0))
+                                onEvent(NavigationEvent.OnStartWorkoutClick(WORKOUT_WALKING))
                                 openDialog.value = false
                             },
                         verticalAlignment = Alignment.CenterVertically
@@ -173,7 +178,7 @@ fun StartActivity(
                             )
                             .padding(10.dp)
                             .clickable {
-                                onEvent(NavigationEvent.OnStartWorkOut(2))
+                                onEvent(NavigationEvent.OnStartWorkoutClick(WORKOUT_BICYCLING))
                                 openDialog.value = false
                             },
                         verticalAlignment = Alignment.CenterVertically

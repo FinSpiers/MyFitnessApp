@@ -39,7 +39,7 @@ class MainActivity @Inject constructor() : ComponentActivity() {
                         )
                     },
                     floatingActionButton = { StartActivity(navBarState, coreRepository::navigate.get()) }
-                ) {
+                ) {it.calculateBottomPadding()
                     NavigationHost(
                         navController = navController,
                         startDestination = navBarState.currentRoute

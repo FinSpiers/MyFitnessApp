@@ -11,9 +11,7 @@ interface CoreRepository {
 
     suspend fun getCurrentWeather(
         lat: Double,
-        lon: Double,
-        unit: String,
-        language: String
+        lon: Double
     ): CurrentWeatherData
 
 

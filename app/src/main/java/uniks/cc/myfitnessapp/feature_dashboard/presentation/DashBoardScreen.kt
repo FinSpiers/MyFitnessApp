@@ -3,14 +3,12 @@ package uniks.cc.myfitnessapp.feature_dashboard.presentation
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.WbSunny
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -30,8 +28,7 @@ fun DashBoardScreen(
     isWeatherGood: Boolean = false,
     borderStroke: Dp = 2.dp
 ) {
-    val hasPermission = ContextCompat.checkSelfPermission(LocalContext.current, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-
+    val hasGpsPermission = ContextCompat.checkSelfPermission(LocalContext.current, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
     val viewModel : DashBoardViewModel = hiltViewModel()
 
     MyFitnessAppTheme {
@@ -40,7 +37,7 @@ fun DashBoardScreen(
                 .fillMaxWidth()
                 .fillMaxHeight(0.9f)
         ) {
-            if (hasPermission) {
+            if (hasGpsPermission) {
                 WeatherBox(
                     borderStroke = borderStroke,
                     currentTemp = currentTemp,
@@ -57,7 +54,7 @@ fun DashBoardScreen(
                     .verticalScroll(rememberScrollState())
             ) {
                 CurrentStepsBox(steps = 9213)
-                RecentWorkouts(viewModel::onSportActivityDetailClick)
+                RecentWorkouts(viewModel.dashBoardState.value, viewModel::onSportActivityDetailClick)
             }
         }
     }

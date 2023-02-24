@@ -19,12 +19,9 @@ class CoreRepositoryImpl(
 
     override suspend fun getCurrentWeather(
         lat: Double,
-        lon: Double,
-        unit: String,
-        language: String
+        lon: Double
     ): CurrentWeatherData {
-        return weatherApiService.getCurrentWeatherAsync(lat, lon, unit, language).await()
+        return weatherApiService.getCurrentWeatherAsync(lat, lon, "metric", "en").await()
             .toCurrentWeatherData()
     }
-
 }
