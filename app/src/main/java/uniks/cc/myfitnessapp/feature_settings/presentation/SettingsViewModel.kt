@@ -8,6 +8,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import uniks.cc.myfitnessapp.feature_settings.domain.model.Settings
 import uniks.cc.myfitnessapp.feature_settings.domain.repository.SettingsRepository
+import java.time.LocalDateTime
+import java.time.ZoneOffset
 import javax.inject.Inject
 
 @HiltViewModel
@@ -62,14 +64,20 @@ class SettingsViewModel @Inject constructor(
                 weight = 0,
                 height = 0,
                 isMale = true,
-                birthDateAsTimeStamp = 0,
+                birthDateAsTimeStamp = LocalDateTime.now().toInstant(ZoneOffset.UTC).epochSecond,
                 settings = _settingsState.value.settings.apply {
                     weight = 0
                     height = 0
                     isMale = true
-                    birthDateAsTimeStamp = 0
+                    birthDateAsTimeStamp = LocalDateTime.now().toInstant(ZoneOffset.UTC).epochSecond
                 }
             )
+        setBodyInfo(
+            _weight = _settingsState.value.weight,
+            _height = _settingsState.value.height,
+            _isMale = _settingsState.value.isMale,
+            _birthDateAsTimeStamp = _settingsState.value.birthDateAsTimeStamp
+        )
     }
 
 }
