@@ -27,13 +27,14 @@ fun WorkoutDetailScreen(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.9f),
+            .fillMaxHeight(0.9f)
+            .padding(start = 4.dp, end = 4.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(3.dp)
+                .padding(4.dp)
                 .border(
                     width = 3.dp,
                     color = MaterialTheme.colorScheme.secondary,
@@ -46,22 +47,24 @@ fun WorkoutDetailScreen(
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
                 contentDescription = viewModel.selectedWorkout.workoutName,
                 modifier = Modifier
-                    .size(35.dp)
-                    .padding(3.dp)
+                    .size(50.dp)
+                    .padding(8.dp)
             )
             Text(
                 text = viewModel.selectedWorkout.workoutName,
+                style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier
                     .fillMaxWidth(0.4f)
-                    .padding(3.dp),
-                textAlign = TextAlign.Center,
+                    .padding(4.dp),
+                textAlign = TextAlign.Center
             )
 
             Text(
                 text = TimestampConverter.convertToDate(viewModel.selectedWorkout.timeStamp),
+                style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(3.dp),
+                    .padding(4.dp),
                 textAlign = TextAlign.Center,
             )
         }
@@ -69,7 +72,7 @@ fun WorkoutDetailScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(3.dp)
+                .padding(4.dp)
         ) {
             Text(
                 text = "Duration",
@@ -85,7 +88,7 @@ fun WorkoutDetailScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(3.dp)
+                    .padding(4.dp)
             ) {
                 Text(
                     text = "Distance",
@@ -102,7 +105,7 @@ fun WorkoutDetailScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(3.dp)
+                    .padding(4.dp)
             ) {
                 Text(
                     text = "avg Pace",
@@ -119,7 +122,7 @@ fun WorkoutDetailScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(3.dp)
+                    .padding(4.dp)
             ) {
                 Text(
                     text = "Repetitions",
@@ -135,7 +138,7 @@ fun WorkoutDetailScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(3.dp)
+                .padding(4.dp)
         ) {
             Text(
                 text = "kcal",

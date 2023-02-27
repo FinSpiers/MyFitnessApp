@@ -23,7 +23,8 @@ fun CurrentWorkoutScreen(viewModel: CurrentWorkoutViewModel = hiltViewModel()) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.9f),
+            .fillMaxHeight(0.9f)
+            .padding(start = 4.dp, end = 4.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
