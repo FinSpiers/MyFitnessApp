@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -24,8 +25,11 @@ import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
 fun DashBoardScreen(
     borderStroke: Dp = 2.dp,
 ) {
-    val hasGpsPermission = ContextCompat.checkSelfPermission(LocalContext.current, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-    val viewModel : DashBoardViewModel = hiltViewModel()
+    val hasGpsPermission = ContextCompat.checkSelfPermission(
+        LocalContext.current,
+        Manifest.permission.ACCESS_FINE_LOCATION
+    ) == PackageManager.PERMISSION_GRANTED
+    val viewModel: DashBoardViewModel = hiltViewModel()
 
     MyFitnessAppTheme {
         Column(
@@ -46,14 +50,14 @@ fun DashBoardScreen(
                             isWeatherGood = viewModel.dashBoardState.value.currentWeatherData.isWeatherGood,
                             currentWeatherMain = viewModel.dashBoardState.value.currentWeatherData.currentWeatherMain
                         )
-                    }
-                    else {
-                        errorTitle = stringResource(id = R.string.warning_no_internet_connection_title)
-                        errorText = stringResource(id = R.string.warning_no_internet_connection_text)
+                    } else {
+                        errorTitle =
+                            stringResource(id = R.string.warning_no_internet_connection_title)
+                        errorText =
+                            stringResource(id = R.string.warning_no_internet_connection_text)
                         hasError = true
                     }
-                }
-                else {
+                } else {
                     errorTitle = stringResource(id = R.string.warning_no_gps_signal_title)
                     errorText = stringResource(id = R.string.warning_no_gps_signal_text)
                     hasError = true
@@ -67,14 +71,14 @@ fun DashBoardScreen(
                 WarningBox(errorTitle, errorText)
             }
 
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-            ) {
+            Column(modifier = Modifier.fillMaxSize()) {
+                CurrentStepsBox(steps = viewModel.dashBoardState.value.steps)
+                RecentWorkouts(
+                    viewModel.workouts,
+                    viewModel::onSportActivityDetailClick,
+                    viewModel.dashBoardState.value.currentWorkout
+                )
 
-                CurrentStepsBox(steps = 9213)
-                RecentWorkouts(viewModel.dashBoardState.value.workouts, viewModel::onSportActivityDetailClick, viewModel.dashBoardState.value.currentWorkout)
             }
         }
     }

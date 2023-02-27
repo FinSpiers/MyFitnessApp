@@ -1,12 +1,12 @@
 package uniks.cc.myfitnessapp.feature_dashboard.presentation.components
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import uniks.cc.myfitnessapp.core.domain.model.Workout
@@ -20,13 +20,15 @@ fun RecentWorkouts(
     currentWorkout: Workout?
 ) {
     if (workouts.isNotEmpty()) {
-        Column {
+        LazyColumn {
             workouts.forEach {
-                WorkoutComponent(
-                    model = it,
-                    onClick = onClick,
-                    isCurrentWorkout = it.id == currentWorkout?.id
-                )
+                item {
+                    WorkoutComponent(
+                        model = it,
+                        onClick = onClick,
+                        isCurrentWorkout = it.id == currentWorkout?.id
+                    )
+                }
             }
         }
     } else {

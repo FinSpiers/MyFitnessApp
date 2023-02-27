@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun WarningBox(title : String, text : String) {
+fun WarningBox(title : String, text : String, onClick : () -> Unit = {}) {
     Row(
         modifier = Modifier
             .fillMaxWidth()

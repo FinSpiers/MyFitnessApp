@@ -11,6 +11,7 @@ import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.domain.util.Screen
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationEvent
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationBarState
+import uniks.cc.myfitnessapp.feature_dashboard.presentation.DashBoardState
 import java.time.Instant
 import javax.inject.Inject
 
@@ -37,16 +38,6 @@ class MainViewModel @Inject constructor(
     init {
         coreRepository.onNavigationAction = this::onNavigationEvent
         coreRepository.onWorkoutAction = this::onWorkoutEvent
-    }
-
-    fun onNavigationEvent(event: NavigationEvent) {
-        when (event) {
-            is NavigationEvent.OnDashBoardClick -> navigate(Screen.DashBoardScreen.route)
-            is NavigationEvent.OnSettingsClick -> navigate(Screen.SettingsScreen.route)
-            is NavigationEvent.OnStartWorkoutClick -> navigate(Screen.CurrentActivityScreen.route)
-            is NavigationEvent.OnWorkoutDetailClick -> navigate(Screen.ActivityDetailScreen.route)
-            is NavigationEvent.OnStopWorkoutClick -> navigate(Screen.DashBoardScreen.route)
-        }
     }
 
     private fun onWorkoutEvent(event : WorkoutEvent) {
@@ -81,6 +72,16 @@ class MainViewModel @Inject constructor(
                 coreRepository.currentWorkout = null
                 /* TODO */
             }
+        }
+    }
+
+    fun onNavigationEvent(event: NavigationEvent) {
+        when (event) {
+            is NavigationEvent.OnDashBoardClick -> navigate(Screen.DashBoardScreen.route)
+            is NavigationEvent.OnSettingsClick -> navigate(Screen.SettingsScreen.route)
+            is NavigationEvent.OnStartWorkoutClick -> navigate(Screen.CurrentActivityScreen.route)
+            is NavigationEvent.OnWorkoutDetailClick -> navigate(Screen.ActivityDetailScreen.route)
+            is NavigationEvent.OnStopWorkoutClick -> navigate(Screen.DashBoardScreen.route)
         }
     }
 

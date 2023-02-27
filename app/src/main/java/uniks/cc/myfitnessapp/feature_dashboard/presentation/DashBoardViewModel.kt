@@ -3,6 +3,8 @@ package uniks.cc.myfitnessapp.feature_dashboard.presentation
 import android.annotation.SuppressLint
 import android.location.LocationManager
 import android.net.ConnectivityManager
+import android.util.Log
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -15,6 +17,7 @@ import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.presentation.WorkoutEvent
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationEvent
+import java.time.Instant
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,21 +25,26 @@ class DashBoardViewModel @Inject constructor(
     private val coreRepository: CoreRepository,
     private val locationManager: LocationManager,
     private val connectivityManager: ConnectivityManager,
-    private val fusedLocationProviderClient: FusedLocationProviderClient
+    private val fusedLocationProviderClient: FusedLocationProviderClient,
+
 ) : ViewModel() {
-    val dashBoardState = mutableStateOf(DashBoardState())
+    private val _dashBoardState: DashBoardState = DashBoardState()
+    val dashBoardState = mutableStateOf(_dashBoardState)
+
+    var workouts : List<Workout> = mutableStateListOf()
 
     init {
         dashBoardState.value.selectedWorkoutDetail = null
+        refreshWorkouts()
         dashBoardState.value = dashBoardState.value.copy(
-            workouts = getAllWorkoutsFromDatabase(),
-            currentWorkout = coreRepository.currentWorkout,
-            selectedWorkoutDetail = coreRepository.selectedWorkoutDetail,
-            )
+            workouts = workouts,
+            currentWorkout = coreRepository.currentWorkout
+        )
+
     }
 
-    fun onEvent(workoutEvent: WorkoutEvent) {
-
+    fun refreshWorkouts() {
+        workouts = getAllWorkoutsFromDatabase()
     }
 
     private fun getAllWorkoutsFromDatabase(): List<Workout> {
@@ -64,7 +72,10 @@ class DashBoardViewModel @Inject constructor(
 
         fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
             viewModelScope.launch {
-                location?.let { dashBoardState.value.currentWeatherData = coreRepository.getCurrentWeather(location.latitude, location.longitude) }
+                location?.let {
+                    dashBoardState.value.currentWeatherData =
+                        coreRepository.getCurrentWeather(location.latitude, location.longitude)
+                }
             }
         }
     }

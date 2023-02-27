@@ -25,7 +25,7 @@ data class CurrentWeatherResponse(
 fun CurrentWeatherResponse.toCurrentWeatherData() : CurrentWeatherData {
     return CurrentWeatherData(
         currentTemperature = main.temp.roundToInt(),
-        isWeatherGood = (weather[0].main == "Sun" || weather[0].main == "Clear") && main.temp.roundToInt() in 0..30,
+        isWeatherGood = (weather[0].main != "Rain" && weather[0].main != "Snow") && main.temp.roundToInt() in 0..30,
         iconId = WeatherIcon.valueOf(weather[0].main)
     )
 }

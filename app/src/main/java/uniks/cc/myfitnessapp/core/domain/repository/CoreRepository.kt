@@ -10,6 +10,7 @@ interface CoreRepository {
     var isLocationPermissionGranted : Boolean
     var onNavigationAction : KFunction1<NavigationEvent, Unit>
     var onWorkoutAction : KFunction1<WorkoutEvent, Unit>
+    var workouts : MutableList<Workout>
     var currentWorkout: Workout?
     var selectedWorkoutDetail : Workout?
     fun setLocationPermissionGranted()

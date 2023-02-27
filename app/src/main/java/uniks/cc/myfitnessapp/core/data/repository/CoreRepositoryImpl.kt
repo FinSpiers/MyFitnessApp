@@ -17,6 +17,7 @@ class CoreRepositoryImpl(
     override var isLocationPermissionGranted: Boolean = false
     override lateinit var onNavigationAction: KFunction1<NavigationEvent, Unit>
     override lateinit var onWorkoutAction: KFunction1<WorkoutEvent, Unit>
+    override var workouts: MutableList<Workout> = mutableListOf()
 
     override var currentWorkout: Workout? = null
     override var selectedWorkoutDetail: Workout? = null

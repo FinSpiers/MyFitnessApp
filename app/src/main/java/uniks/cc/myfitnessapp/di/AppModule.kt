@@ -34,6 +34,7 @@ object AppModule {
         return listOf("Walking", "Running", "Bicycling", "PushUps", "SitUps", "Squats")
     }
 
+
     @Provides
     @Singleton
     fun provideMyFitnessDatabase(app: Application) : MyFitnessDatabase {
