@@ -13,5 +13,4 @@ class CurrentWorkoutViewModel @Inject constructor(
 ) : ViewModel() {
     val currentWorkout: Workout = coreRepository.currentWorkout
         ?: throw NullPointerException("Expression 'workoutRepository.selectedWorkoutDetail' must not be null")
-
 }

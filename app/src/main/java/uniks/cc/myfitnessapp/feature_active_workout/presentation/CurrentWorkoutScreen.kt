@@ -30,7 +30,7 @@ fun CurrentWorkoutScreen(viewModel: CurrentWorkoutViewModel = hiltViewModel()) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(3.dp)
+                .padding(4.dp)
                 .border(
                     width = 3.dp,
                     color = MaterialTheme.colorScheme.secondary,
@@ -45,14 +45,15 @@ fun CurrentWorkoutScreen(viewModel: CurrentWorkoutViewModel = hiltViewModel()) {
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.inverseSurface),
                     contentDescription = currentWorkout.workoutName,
                     modifier = Modifier
-                        .size(40.dp)
+                        .size(50.dp)
+                        .padding(8.dp)
                 )
             }
             Text(
                 text = currentWorkout.workoutName,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(3.dp),
+                    .padding(4.dp),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.headlineLarge
             )
@@ -62,14 +63,14 @@ fun CurrentWorkoutScreen(viewModel: CurrentWorkoutViewModel = hiltViewModel()) {
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.5f)
-                .padding(3.dp),
+                .padding(4.dp),
             horizontalArrangement = Arrangement.Center
         ) {
             if (currentWorkout.distance != null) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth(0.5f)
-                        .padding(3.dp),
+                        .padding(4.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     DataBox(
@@ -82,7 +83,7 @@ fun CurrentWorkoutScreen(viewModel: CurrentWorkoutViewModel = hiltViewModel()) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(3.dp),
+                    .padding(4.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 DataBox(
@@ -95,14 +96,14 @@ fun CurrentWorkoutScreen(viewModel: CurrentWorkoutViewModel = hiltViewModel()) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(3.dp),
+                .padding(4.dp),
             horizontalArrangement = Arrangement.Center
         ) {
             if (currentWorkout.repetitions != null) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(3.dp),
+                        .padding(4.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     DataBox(
@@ -116,7 +117,7 @@ fun CurrentWorkoutScreen(viewModel: CurrentWorkoutViewModel = hiltViewModel()) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth(0.5f)
-                        .padding(3.dp),
+                        .padding(4.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     DataBox(
