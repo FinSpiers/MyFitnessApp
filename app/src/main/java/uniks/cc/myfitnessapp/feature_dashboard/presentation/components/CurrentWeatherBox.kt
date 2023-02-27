@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.dp
 fun CurrentWeatherBox(temperature: Int, resId: Int) {
     Column(modifier = Modifier.padding(4.dp)) {
         Text(text = "Current weather", style = MaterialTheme.typography.titleMedium)
-        Spacer(modifier = Modifier.height(8.dp))
         Row(
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically

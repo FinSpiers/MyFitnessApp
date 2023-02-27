@@ -24,7 +24,7 @@ fun ActivityPlanner(isWeatherGood: Boolean) {
     ) {
         val motivationText =
             if (isWeatherGood) "Good weather,\nyou might wanna go outside!" else "Better train inside,\nnot looking too good outside!"
-        Column(modifier = Modifier.fillMaxWidth(0.85f), verticalArrangement = Arrangement.SpaceEvenly) {
+        Column(modifier = Modifier.fillMaxWidth(0.85f), verticalArrangement = Arrangement.Center) {
             Text(text = "Activity planner", style = MaterialTheme.typography.titleMedium, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
             Text(
                 text = motivationText,

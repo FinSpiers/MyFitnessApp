@@ -23,5 +23,6 @@ interface CoreRepository {
         lon: Double
     ): CurrentWeatherData
 
+    fun hasCurrentWorkout() : Boolean
 
 }

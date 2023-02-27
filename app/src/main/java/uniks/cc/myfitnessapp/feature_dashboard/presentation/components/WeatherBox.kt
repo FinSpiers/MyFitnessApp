@@ -9,7 +9,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import uniks.cc.myfitnessapp.R
 
 @Composable
@@ -33,11 +35,7 @@ fun WeatherBox(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .border(
-                borderStroke,
-                MaterialTheme.colorScheme.outline,
-                MaterialTheme.shapes.small
-            )
+            .shadow(1.dp, MaterialTheme.shapes.small)
     ) {
         Column(
             verticalArrangement = Arrangement.Top,

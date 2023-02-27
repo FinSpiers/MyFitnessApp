@@ -40,4 +40,8 @@ class CoreRepositoryImpl(
         return weatherApiService.getCurrentWeatherAsync(lat, lon, "metric", "en").await()
             .toCurrentWeatherData()
     }
+
+    override fun hasCurrentWorkout(): Boolean {
+        return currentWorkout != null
+    }
 }

@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.location.LocationManager
 import android.net.ConnectivityManager
+import androidx.compose.material3.SnackbarHostState
 import androidx.room.Room
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -26,6 +27,13 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
+    @Provides
+    @Singleton
+    fun provideWorkoutNames() : List<String> {
+        return listOf("Walking", "Running", "Bicycling", "PushUps", "SitUps", "Squats")
+    }
+
     @Provides
     @Singleton
     fun provideMyFitnessDatabase(app: Application) : MyFitnessDatabase {
@@ -42,10 +50,11 @@ object AppModule {
         return OpenWeatherApiService()
     }
 
+
     @Provides
     @Singleton
-    fun provideDashboardState(): DashBoardState {
-        return DashBoardState()
+    fun provideSnackbarHostState(): SnackbarHostState {
+        return SnackbarHostState()
     }
 
     @Provides

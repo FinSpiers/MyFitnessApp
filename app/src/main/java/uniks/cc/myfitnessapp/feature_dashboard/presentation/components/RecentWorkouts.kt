@@ -1,23 +1,53 @@
 package uniks.cc.myfitnessapp.feature_dashboard.presentation.components
 
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import uniks.cc.myfitnessapp.core.domain.model.Workout
-import uniks.cc.myfitnessapp.feature_dashboard.presentation.DashBoardState
 import kotlin.reflect.*
 
 
 @Composable
-fun RecentWorkouts(dashBoardState: DashBoardState, onClick: KFunction1<Workout, Unit>) {
-    /* TODO: Delete if statement after testing */
-    Column {
-        dashBoardState.workouts.forEach {
-            if (it.workoutName=="Walking") {
-                WorkoutComponent(model = it, onClick = onClick, isCurrentWorkout = it.id == dashBoardState.currentWorkout?.id)
+fun RecentWorkouts(
+    workouts: List<Workout>,
+    onClick: KFunction1<Workout, Unit>,
+    currentWorkout: Workout?
+) {
+    if (workouts.isNotEmpty()) {
+        Column {
+            workouts.forEach {
+                WorkoutComponent(
+                    model = it,
+                    onClick = onClick,
+                    isCurrentWorkout = it.id == currentWorkout?.id
+                )
             }
-            else {
-                WorkoutComponent(it, onClick)
-            }
+        }
+    } else {
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .padding(top = 32.dp, start = 8.dp, end = 8.dp)
+        ) {
+
+            Text(
+                text = "No workout yet!",
+                style = MaterialTheme.typography.headlineMedium
+            )
+            Text(
+                text = "You can start a workout manually by clicking on the \n'Start Workout' Button.",
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center
+            )
         }
     }
 }

@@ -45,7 +45,7 @@ class MainViewModel @Inject constructor(
             is NavigationEvent.OnSettingsClick -> navigate(Screen.SettingsScreen.route)
             is NavigationEvent.OnStartWorkoutClick -> navigate(Screen.CurrentActivityScreen.route)
             is NavigationEvent.OnWorkoutDetailClick -> navigate(Screen.ActivityDetailScreen.route)
-            is NavigationEvent.onStopWorkoutClick -> navigate(Screen.DashBoardScreen.route)
+            is NavigationEvent.OnStopWorkoutClick -> navigate(Screen.DashBoardScreen.route)
         }
     }
 
@@ -62,9 +62,12 @@ class MainViewModel @Inject constructor(
                         distance = 0.0
                         pace = 0.0
                         avgPace = 0.0
+                        // TODO: use activity recognition api and a backgroundService to
+                        // TODO: track users activities,time spend, calculate distance, pace, burned kcal, etc..
                     }
                     else {
                         repetitions = 0
+                        // TODO: Use backgroundService that tracks the time and repetitions for the activity
                     }
                 }
                 coreRepository.currentWorkout = currentWorkout
@@ -72,8 +75,12 @@ class MainViewModel @Inject constructor(
                     coreRepository.addWorkoutToDatabase(currentWorkout)
                 }
 
+
             }
-            is WorkoutEvent.StopWorkout -> { /* TODO */ }
+            is WorkoutEvent.StopWorkout -> {
+                coreRepository.currentWorkout = null
+                /* TODO */
+            }
         }
     }
 
