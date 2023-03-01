@@ -7,6 +7,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -18,9 +19,9 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HeightField() {
-
-    val height = remember { mutableStateOf("") }
+fun HeightField(
+    height: MutableState<String>
+) {
 
     val isErrorHeight = remember { mutableStateOf(false) }
     val maxChar = 4
@@ -39,13 +40,13 @@ fun HeightField() {
             .padding(12.dp)
             .clip(MaterialTheme.shapes.medium),
         textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
-        value = height.value,
+        value = if (height.value != "0") height.value else "",
         onValueChange = {
             if (it.length <= maxChar && isNumeric(it) && it != "") {
                 height.value = it
                 validateHeight(it.toInt())
             }
-            if (it == "") height.value = it
+            if (it == "") height.value = "0"
         },
         placeholder = {
             Text(

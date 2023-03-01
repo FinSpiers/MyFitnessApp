@@ -38,7 +38,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideMyFitnessDatabase(app: Application) : MyFitnessDatabase {
+    fun provideMyFitnessDatabase(app: Application): MyFitnessDatabase {
         return Room.databaseBuilder(
             app,
             MyFitnessDatabase::class.java,
@@ -71,7 +71,6 @@ object AppModule {
     @Singleton
     fun provideWorkoutRepository(db : MyFitnessDatabase) : WorkoutRepository {
         return WorkoutRepositoryImpl(db.workoutDao)
-    }
 
 
 

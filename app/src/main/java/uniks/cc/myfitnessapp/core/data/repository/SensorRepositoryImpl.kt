@@ -30,7 +30,6 @@ class SensorRepositoryImpl(
             gyroscopeSensorValueX.value = values[0].toDouble()
             gyroscopeSensorValueY.value = values[1].toDouble()
             gyroscopeSensorValueZ.value = values[2].toDouble()
-            println("hier gy " + values[0].toInt())
         }
 
         if (!getGyroscopeSensor().isListening()) {
@@ -45,7 +44,6 @@ class SensorRepositoryImpl(
     override fun startStepCounterSensor() {
         getStepCounterSensor().setOnSensorValuesChangedListener { values ->
             stepCounterSensorValue.value = values[0].toInt()
-            println("hier steps " + values[0].toInt())
         }
 
         if (!getStepCounterSensor().isListening()) {
