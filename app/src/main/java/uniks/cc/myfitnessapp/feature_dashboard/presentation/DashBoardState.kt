@@ -5,8 +5,12 @@ import uniks.cc.myfitnessapp.feature_dashboard.domain.model.CurrentWeatherData
 
 data class DashBoardState(
     var currentWeatherData : CurrentWeatherData = CurrentWeatherData(),
-    var workouts : List<Workout> = mutableListOf(),
-    var selectedWorkoutDetail : Workout? = null,
-    var currentWorkout : Workout? = null,
-    var steps : Int = 0
+    var workouts : List<Workout> = emptyList(),
+    val selectedWorkoutDetail : Workout? = null,
+    val currentWorkout : Workout? = null,
+    val steps : Int = 0,
+    val hasLocationPermission : Boolean = false,
+    val hasGpsConnection : Boolean = false,
+    val hasInternetConnection : Boolean = false
+
 )

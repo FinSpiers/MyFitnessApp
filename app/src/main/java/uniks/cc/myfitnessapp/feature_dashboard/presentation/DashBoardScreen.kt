@@ -1,12 +1,13 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package uniks.cc.myfitnessapp.feature_dashboard.presentation
 
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -17,6 +18,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import uniks.cc.myfitnessapp.R
+import uniks.cc.myfitnessapp.core.presentation.components.WorkoutFab
+import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationEvent
 import uniks.cc.myfitnessapp.feature_dashboard.presentation.components.*
 import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
 
@@ -25,62 +28,71 @@ import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
 fun DashBoardScreen(
     borderStroke: Dp = 2.dp,
 ) {
-    val hasGpsPermission = ContextCompat.checkSelfPermission(
-        LocalContext.current,
-        Manifest.permission.ACCESS_FINE_LOCATION
-    ) == PackageManager.PERMISSION_GRANTED
     val viewModel: DashBoardViewModel = hiltViewModel()
+    val hasGpsPermission = ContextCompat
+        .checkSelfPermission(LocalContext.current, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
 
     MyFitnessAppTheme {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.9f)
+        Scaffold(
+            floatingActionButton = { WorkoutFab(viewModel::onNavigationAction, viewModel::onWorkoutAction, viewModel.hasCurrentWorkout()) },
         ) {
-            var hasError = false
-            var errorTitle = ""
-            var errorText = ""
-            if (hasGpsPermission) {
-                if (viewModel.hasGpsSignal()) {
-                    if (viewModel.hasInternetConnection()) {
-                        viewModel.setWeatherData()
-                        WeatherBox(
-                            borderStroke = borderStroke,
-                            currentTemp = viewModel.dashBoardState.value.currentWeatherData.currentTemperature,
-                            isWeatherGood = viewModel.dashBoardState.value.currentWeatherData.isWeatherGood,
-                            currentWeatherMain = viewModel.dashBoardState.value.currentWeatherData.currentWeatherMain
-                        )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.9f)
+            ) {
+                var hasError = false
+                var errorTitle = ""
+                var errorText = ""
+                val dashBoardState = viewModel.dashBoardState
+                if (hasGpsPermission) {
+                    viewModel.checkGpsState()
+                    if (dashBoardState.value.hasGpsConnection) {
+                        if (viewModel.hasInternetConnection()) {
+                            viewModel.setWeatherData()
+                            WeatherBox(
+                                borderStroke = borderStroke,
+                                currentTemp = dashBoardState.value.currentWeatherData.currentTemperature,
+                                isWeatherGood = dashBoardState.value.currentWeatherData.isWeatherGood,
+                                currentWeatherMain = dashBoardState.value.currentWeatherData.currentWeatherMain
+                            )
+                        } else {
+                            errorTitle = stringResource(id = R.string.warning_no_internet_connection_title)
+                            errorText = stringResource(id = R.string.warning_no_internet_connection_text)
+                            hasError = true
+                        }
                     } else {
-                        errorTitle =
-                            stringResource(id = R.string.warning_no_internet_connection_title)
-                        errorText =
-                            stringResource(id = R.string.warning_no_internet_connection_text)
+                        errorTitle = stringResource(id = R.string.warning_no_gps_signal_title)
+                        errorText = stringResource(id = R.string.warning_no_gps_signal_text)
                         hasError = true
                     }
                 } else {
-                    errorTitle = stringResource(id = R.string.warning_no_gps_signal_title)
-                    errorText = stringResource(id = R.string.warning_no_gps_signal_text)
+                    errorTitle = stringResource(id = R.string.warning_no_gps_permission_title)
+                    errorText = stringResource(id = R.string.warning_no_gps_permission_text)
                     hasError = true
                 }
-            } else {
-                errorTitle = stringResource(id = R.string.warning_no_gps_permission_title)
-                errorText = stringResource(id = R.string.warning_no_gps_permission_text)
-                hasError = true
-            }
-            if (hasError) {
-                WarningBox(errorTitle, errorText)
-            }
+                if (hasError) {
+                    if (errorTitle == stringResource(id = R.string.warning_no_gps_permission_title)) {
+                        WarningBox(errorTitle, errorText) {
+                            viewModel.onNavigationAction(NavigationEvent.OnOpenAppSettingsClick)
+                        }
+                    } else {
+                        WarningBox(errorTitle, errorText)
+                    }
+                }
 
-            Column(modifier = Modifier.fillMaxSize()) {
-                CurrentStepsBox(steps = viewModel.dashBoardState.value.steps)
-                RecentWorkouts(
-                    viewModel.workouts,
-                    viewModel::onSportActivityDetailClick,
-                    viewModel.dashBoardState.value.currentWorkout
-                )
+                Column(modifier = Modifier.fillMaxSize()) {
+                    CurrentStepsBox(steps = dashBoardState.value.steps)
+                    RecentWorkouts(
+                        viewModel.getAllWorkouts(),
+                        viewModel::onWorkoutDetailClick,
+                        viewModel.getCurrentWorkout()
+                    )
 
+                }
             }
         }
+
     }
 }
 

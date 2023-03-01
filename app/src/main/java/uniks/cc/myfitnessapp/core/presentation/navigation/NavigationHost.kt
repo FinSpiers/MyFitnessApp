@@ -8,7 +8,7 @@ import uniks.cc.myfitnessapp.core.domain.util.Screen
 import uniks.cc.myfitnessapp.feature_dashboard.presentation.DashBoardScreen
 import uniks.cc.myfitnessapp.feature_settings.presentation.SettingsScreen
 import uniks.cc.myfitnessapp.feature_workout_detail.presentation.WorkoutDetailScreen
-import uniks.cc.myfitnessapp.feature_active_workout.presentation.CurrentWorkoutScreen
+import uniks.cc.myfitnessapp.feature_current_workout.presentation.CurrentWorkoutScreen
 
 @Composable
 fun NavigationHost(navController : NavHostController, startDestination : String) {

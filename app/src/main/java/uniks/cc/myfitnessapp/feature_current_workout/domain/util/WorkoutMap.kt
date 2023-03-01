@@ -1,4 +1,4 @@
-package uniks.cc.myfitnessapp.feature_active_workout.domain.util
+package uniks.cc.myfitnessapp.feature_current_workout.domain.util
 
 import uniks.cc.myfitnessapp.R
 

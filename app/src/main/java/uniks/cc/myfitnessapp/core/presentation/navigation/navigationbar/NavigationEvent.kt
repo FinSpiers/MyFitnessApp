@@ -12,5 +12,7 @@ sealed class NavigationEvent {
 
     class OnWorkoutDetailClick(val workout: Workout) : NavigationEvent()
 
+    object OnOpenAppSettingsClick : NavigationEvent()
+
 
 }

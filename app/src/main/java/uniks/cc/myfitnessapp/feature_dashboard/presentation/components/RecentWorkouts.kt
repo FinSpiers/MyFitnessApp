@@ -1,5 +1,6 @@
 package uniks.cc.myfitnessapp.feature_dashboard.presentation.components
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
@@ -22,6 +23,7 @@ fun RecentWorkouts(
     if (workouts.isNotEmpty()) {
         LazyColumn {
             workouts.forEach {
+                Log.e("CW", "${it.id} == ${currentWorkout?.id}")
                 item {
                     WorkoutComponent(
                         model = it,

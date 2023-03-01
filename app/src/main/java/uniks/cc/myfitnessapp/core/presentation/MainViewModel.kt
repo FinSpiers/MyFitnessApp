@@ -1,5 +1,10 @@
 package uniks.cc.myfitnessapp.core.presentation
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,7 +16,6 @@ import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.domain.util.Screen
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationEvent
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationBarState
-import uniks.cc.myfitnessapp.feature_dashboard.presentation.DashBoardState
 import java.time.Instant
 import javax.inject.Inject
 
@@ -37,42 +41,10 @@ class MainViewModel @Inject constructor(
 
     init {
         coreRepository.onNavigationAction = this::onNavigationEvent
-        coreRepository.onWorkoutAction = this::onWorkoutEvent
+        coreRepository.navBarState = navBarState.value
     }
-
-    private fun onWorkoutEvent(event : WorkoutEvent) {
-        when(event) {
-            is WorkoutEvent.StartWorkout -> {
-                val currentWorkout = Workout(
-                    workoutName = event.workoutName,
-                    timeStamp = Instant.now().epochSecond,
-                    duration = 0.0,
-                    kcal = 0
-                ).apply {
-                    if(workoutName in listOf("Walking", "Running", "Bicycling")) {
-                        distance = 0.0
-                        pace = 0.0
-                        avgPace = 0.0
-                        // TODO: use activity recognition api and a backgroundService to
-                        // TODO: track users activities,time spend, calculate distance, pace, burned kcal, etc..
-                    }
-                    else {
-                        repetitions = 0
-                        // TODO: Use backgroundService that tracks the time and repetitions for the activity
-                    }
-                }
-                coreRepository.currentWorkout = currentWorkout
-                viewModelScope.launch {
-                    coreRepository.addWorkoutToDatabase(currentWorkout)
-                }
-
-
-            }
-            is WorkoutEvent.StopWorkout -> {
-                coreRepository.currentWorkout = null
-                /* TODO */
-            }
-        }
+    fun setRepoContext(context : Context) {
+        coreRepository.context = context
     }
 
     fun onNavigationEvent(event: NavigationEvent) {
@@ -82,6 +54,14 @@ class MainViewModel @Inject constructor(
             is NavigationEvent.OnStartWorkoutClick -> navigate(Screen.CurrentActivityScreen.route)
             is NavigationEvent.OnWorkoutDetailClick -> navigate(Screen.ActivityDetailScreen.route)
             is NavigationEvent.OnStopWorkoutClick -> navigate(Screen.DashBoardScreen.route)
+            is NavigationEvent.OnOpenAppSettingsClick -> {
+                Log.e("Context", coreRepository.context.toString())
+                val openAppSettingsIntent = Intent().apply {
+                    action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                    data = Uri.fromParts("package", coreRepository.context.packageName, null)
+                }
+                coreRepository.context.startActivity(openAppSettingsIntent)
+            }
         }
     }
 

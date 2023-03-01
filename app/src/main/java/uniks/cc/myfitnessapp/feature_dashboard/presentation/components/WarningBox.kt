@@ -2,6 +2,7 @@ package uniks.cc.myfitnessapp.feature_dashboard.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -14,7 +15,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun WarningBox(title : String, text : String, onClick : () -> Unit = {}) {
+fun WarningBox(title: String, text: String, onClick: () -> Unit = {}) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -25,7 +26,9 @@ fun WarningBox(title : String, text : String, onClick : () -> Unit = {}) {
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onClick() }
         ) {
             Text(
                 text = title,

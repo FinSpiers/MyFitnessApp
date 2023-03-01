@@ -1,4 +1,4 @@
-package uniks.cc.myfitnessapp.feature_workout_detail.presentation
+package uniks.cc.myfitnessapp.feature_current_workout.presentation
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -9,12 +9,13 @@ import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.Navigati
 import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.WorkoutRepository
 import javax.inject.Inject
 
+
 @HiltViewModel
-class WorkoutDetailViewModel @Inject constructor(
+class CurrentWorkoutViewModel @Inject constructor(
     private val coreRepository: CoreRepository,
     private val workoutRepository: WorkoutRepository
 ) : ViewModel() {
-    var selectedWorkout: Workout = workoutRepository.selectedWorkoutDetail
+    val currentWorkout: Workout = workoutRepository.currentWorkout
         ?: throw NullPointerException("Expression 'workoutRepository.selectedWorkoutDetail' must not be null")
 
     fun onNavigationAction(navigationEvent: NavigationEvent) {
@@ -23,9 +24,5 @@ class WorkoutDetailViewModel @Inject constructor(
 
     fun onWorkoutAction(workoutEvent: WorkoutEvent) {
         workoutRepository.onWorkoutAction(workoutEvent)
-    }
-
-    fun hasCurrentWorkout() : Boolean {
-        return workoutRepository.currentWorkout != null
     }
 }
