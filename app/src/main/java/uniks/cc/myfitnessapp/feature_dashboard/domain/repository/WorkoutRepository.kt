@@ -14,5 +14,7 @@ interface WorkoutRepository {
 
     suspend fun addWorkoutToDatabase(workout: Workout)
 
+    suspend fun deleteWorkoutFromDatabase(workout: Workout)
+
 
 }

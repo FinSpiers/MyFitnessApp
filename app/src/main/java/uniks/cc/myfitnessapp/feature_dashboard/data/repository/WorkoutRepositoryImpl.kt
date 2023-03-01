@@ -19,6 +19,10 @@ class WorkoutRepositoryImpl(private val workoutDao: WorkoutDao) : WorkoutReposit
         workoutDao.addWorkout(workout)
     }
 
+    override suspend fun deleteWorkoutFromDatabase(workout: Workout) {
+        return workoutDao.deleteWorkout(workout)
+    }
+
     init {
         suspend {
             workouts = workoutDao.getAllWorkouts()

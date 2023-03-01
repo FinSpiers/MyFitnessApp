@@ -23,6 +23,8 @@ import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.domain.repository.SensorRepository
 import uniks.cc.myfitnessapp.feature_dashboard.data.repository.WorkoutRepositoryImpl
 import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.WorkoutRepository
+import uniks.cc.myfitnessapp.feature_settings.data.repository.SettingsRepositoryImpl
+import uniks.cc.myfitnessapp.feature_settings.domain.repository.SettingsRepository
 import javax.inject.Singleton
 
 @Module
@@ -71,7 +73,13 @@ object AppModule {
     @Singleton
     fun provideWorkoutRepository(db : MyFitnessDatabase) : WorkoutRepository {
         return WorkoutRepositoryImpl(db.workoutDao)
+    }
 
+    @Provides
+    @Singleton
+    fun provideSettingsRepository(db : MyFitnessDatabase) : SettingsRepository {
+        return SettingsRepositoryImpl(db.settingsDao)
+    }
 
 
     @Provides
