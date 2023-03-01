@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">MyFitnessApp</string>
+
+    <string name="warning_no_gps_permission_title">No location permission granted!</string>
+    <string name="warning_no_gps_permission_text">"Enable it via App settings to ensure the full functionality of this app. Click here to enable it.</string>
+
+    <string name="warning_no_gps_signal_title">No GPS Signal detected!</string>
+    <string name="warning_no_gps_signal_text">Make sure to enable gps to ensure location tracking for your activities. </string>
+
+    <string name="warning_no_internet_connection_title">No internet connection detected!</string>
+    <string name="warning_no_internet_connection_text">Get online to ensure get current weather data and ensure activity tracking. </string>
 </resources>

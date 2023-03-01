@@ -7,13 +7,18 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.IncompleteCircle
+import androidx.compose.material.icons.filled.SquareFoot
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import uniks.cc.myfitnessapp.R
 import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
 import java.util.*
 
@@ -24,7 +29,7 @@ fun CurrentStepsBox(steps: Int) {
         modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surface, MaterialTheme.shapes.large)
-            .border(2.dp, MaterialTheme.colorScheme.secondary, MaterialTheme.shapes.large)
+            .border(2.dp, MaterialTheme.colorScheme.outlineVariant, MaterialTheme.shapes.large)
     ) {
         Row(
             horizontalArrangement = Arrangement.Start,
@@ -34,7 +39,8 @@ fun CurrentStepsBox(steps: Int) {
             Text(
                 text = "Daily steps",
                 style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(4.dp)
+                fontFamily = FontFamily.Serif,
+                modifier = Modifier.padding(top = 4.dp, start = 8.dp)
             )
         }
         Row(
@@ -49,11 +55,19 @@ fun CurrentStepsBox(steps: Int) {
             )
         }
         val text = NumberFormatter.withLocale(Locale.GERMANY).format(steps).toString()
-        Text(
-            text = "$text / 10.000 steps",
-            modifier = Modifier.padding(bottom = 8.dp),
-            style = MaterialTheme.typography.titleLarge
-        )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                painter = painterResource(id = R.drawable.icon_steps),
+                contentDescription = null,
+                modifier = Modifier.padding(bottom = 16.dp, end = 4.dp).size(32.dp)
+            )
+            Text(
+                text = "$text / 10.000 steps",
+                modifier = Modifier.padding(bottom = 8.dp),
+                style = MaterialTheme.typography.titleLarge
+            )
+        }
+
     }
 }
 

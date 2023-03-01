@@ -1,4 +1,4 @@
-package uniks.cc.myfitnessapp.feature_workout.presentation.components
+package uniks.cc.myfitnessapp.feature_core.presentation.components
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*

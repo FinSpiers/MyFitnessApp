@@ -1,12 +1,18 @@
 package uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar
 
-import uniks.cc.myfitnessapp.core.domain.model.sport_activities.SportActivity
+import uniks.cc.myfitnessapp.core.domain.model.Workout
 
 sealed class NavigationEvent {
-    object OnDashBoardClicked : NavigationEvent()
+    object OnDashBoardClick : NavigationEvent()
     object OnSettingsClick : NavigationEvent()
 
-    class OnStartWorkOut(val workoutId : Int) : NavigationEvent()
+    class OnStartWorkoutClick(val workoutName: String) : NavigationEvent()
 
-    class OnWorkoutDetailClick(val sportActivity: SportActivity) : NavigationEvent()
+    object OnStopWorkoutClick : NavigationEvent()
+
+    class OnWorkoutDetailClick(val workout: Workout) : NavigationEvent()
+
+    object OnOpenAppSettingsClick : NavigationEvent()
+
+
 }

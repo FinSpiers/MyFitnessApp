@@ -1,32 +1,57 @@
 package uniks.cc.myfitnessapp.feature_dashboard.presentation.components
 
-import androidx.compose.foundation.layout.Column
+import android.util.Log
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import uniks.cc.myfitnessapp.core.domain.model.sport_activities.SportActivity
-import uniks.cc.myfitnessapp.core.domain.model.sport_activities.getWorkoutInfo
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import uniks.cc.myfitnessapp.core.domain.model.Workout
+import kotlin.reflect.*
+
 
 @Composable
-fun RecentWorkouts(onClick: () -> Unit) {
+fun RecentWorkouts(
+    workouts: List<Workout>,
+    onClick: KFunction1<Workout, Unit>,
+    currentWorkout: Workout?
+) {
+    if (workouts.isNotEmpty()) {
+        LazyColumn {
+            workouts.forEach {
+                Log.e("CW", "${it.id} == ${currentWorkout?.id}")
+                item {
+                    WorkoutComponent(
+                        model = it,
+                        onClick = onClick,
+                        isCurrentWorkout = it.id == currentWorkout?.id
+                    )
+                }
+            }
+        }
+    } else {
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .padding(top = 32.dp, start = 8.dp, end = 8.dp)
+        ) {
 
-    val sportActivities: List<SportActivity> = listOf(
-        SportActivity.Running(
-            20.0, 20.0, 4.0, 4.0, 1000
-        ), SportActivity.PushUp(
-            5.0, 20, 400
-        ), SportActivity.BicycleRiding(
-            11.0, 20.2, 1.0, 14.0, 1000
-        ), SportActivity.Squat(
-            20.0, 30, 3
-        ), SportActivity.WalkingHiking(
-            5.0, 1.0, 5.0, 5.0, 100
-        ), SportActivity.Running(
-            20.0, 20.0, 4.0, 4.0, 1000
-        )
-    )
-
-    Column {
-        sportActivities.forEach {
-            WorkoutComponent(getWorkoutInfo(it), onClick)
+            Text(
+                text = "No workout yet!",
+                style = MaterialTheme.typography.headlineMedium
+            )
+            Text(
+                text = "You can start a workout manually by clicking on the \n'Start Workout' Button.",
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center
+            )
         }
     }
 }

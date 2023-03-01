@@ -1,58 +1,66 @@
 package uniks.cc.myfitnessapp.core.presentation
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import dagger.hilt.android.lifecycle.HiltViewModel
-import uniks.cc.myfitnessapp.core.domain.model.sport_activities.SportActivity
+import kotlinx.coroutines.launch
+import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.domain.util.Screen
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationEvent
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationBarState
+import java.time.Instant
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    coreRepository: CoreRepository
+    private val coreRepository: CoreRepository
 ) : ViewModel() {
     private lateinit var navController: NavHostController
 
     private val navDestinations = listOf(
         Screen.DashBoardScreen.route,
         Screen.SettingsScreen.route,
-        Screen.ActivityScreenTypeA.route,
-        Screen.ActivityScreenTypeB.route,
-        Screen.ActivityDetailScreenTypeA.route,
-        Screen.ActivityDetailScreenTypeB.route
+        Screen.CurrentActivityScreen.route,
+        Screen.ActivityDetailScreen.route
     )
 
     private val bottomNavDestinations = listOf(
         Screen.DashBoardScreen.route,
-        Screen.SettingsScreen.route,
+        Screen.SettingsScreen.route
     )
 
     var navBarState = mutableStateOf(NavigationBarState())
 
     init {
-        coreRepository.navigate = this::onEvent
+        coreRepository.onNavigationAction = this::onNavigationEvent
+        coreRepository.navBarState = navBarState.value
+    }
+    fun setRepoContext(context : Context) {
+        coreRepository.context = context
     }
 
-    fun onEvent(event: NavigationEvent) {
+    fun onNavigationEvent(event: NavigationEvent) {
         when (event) {
-            is NavigationEvent.OnDashBoardClicked -> navigate(Screen.DashBoardScreen.route)
+            is NavigationEvent.OnDashBoardClick -> navigate(Screen.DashBoardScreen.route)
             is NavigationEvent.OnSettingsClick -> navigate(Screen.SettingsScreen.route)
-
-            is NavigationEvent.OnStartWorkOut -> {
-                when (event.workoutId) {
-                    in 0..2 -> navigate(Screen.ActivityScreenTypeA.route)
-                    in 3..5 -> navigate(Screen.ActivityScreenTypeB.route)
+            is NavigationEvent.OnStartWorkoutClick -> navigate(Screen.CurrentActivityScreen.route)
+            is NavigationEvent.OnWorkoutDetailClick -> navigate(Screen.ActivityDetailScreen.route)
+            is NavigationEvent.OnStopWorkoutClick -> navigate(Screen.DashBoardScreen.route)
+            is NavigationEvent.OnOpenAppSettingsClick -> {
+                Log.e("Context", coreRepository.context.toString())
+                val openAppSettingsIntent = Intent().apply {
+                    action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                    data = Uri.fromParts("package", coreRepository.context.packageName, null)
                 }
-            }
-            is NavigationEvent.OnWorkoutDetailClick -> {
-                when (event.sportActivity.workoutId) {
-                    in 0..2 -> navigate(Screen.ActivityDetailScreenTypeA.route)
-                    in 3..5 -> navigate(Screen.ActivityDetailScreenTypeB.route)
-                }
+                coreRepository.context.startActivity(openAppSettingsIntent)
             }
         }
     }
@@ -74,11 +82,12 @@ class MainViewModel @Inject constructor(
                 navBarState.value = navBarState.value.copy(subRoute = destination)
             }
         }
-
     }
 
     fun setNavController(navController: NavHostController) {
         this.navController = navController
     }
-    
+
+
+
 }
