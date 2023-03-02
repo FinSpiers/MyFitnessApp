@@ -20,8 +20,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import uniks.cc.myfitnessapp.core.presentation.components.WorkoutFab
-import uniks.cc.myfitnessapp.feature_current_workout.domain.util.WorkoutMap
 import uniks.cc.myfitnessapp.feature_core.presentation.components.DataBox
+import uniks.cc.myfitnessapp.feature_current_workout.domain.util.WorkoutMap
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -102,11 +102,7 @@ fun CurrentWorkoutScreen(viewModel: CurrentWorkoutViewModel = hiltViewModel()) {
                         .padding(4.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    DataBox(
-                        title = "Duration",
-                        data = (currentWorkout.duration).toString(),
-                        unit = "min"
-                    )
+                    WorkoutTimer()
                 }
             }
             Row(
