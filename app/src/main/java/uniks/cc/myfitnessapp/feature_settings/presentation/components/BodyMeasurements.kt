@@ -28,32 +28,23 @@ fun BodyMeasurements(
     pickedDate: MutableState<LocalDateTime>,
     saveBodyInfo: () -> Unit
 ) {
-
     val focusManager = LocalFocusManager.current
     val interactionSource = MutableInteractionSource()
-
-
     Column(
         modifier = Modifier
-            .background(
-                color = MaterialTheme.colorScheme.secondary,
-                shape = MaterialTheme.shapes.medium
-            )
-            .fillMaxWidth(0.9f)
-            .fillMaxHeight(0.7f)
-            .padding(top = 15.dp)
+            //.background(color = MaterialTheme.colorScheme.primaryContainer, shape = MaterialTheme.shapes.large)
+            .fillMaxWidth()
+            .padding(24.dp)
             .clip(MaterialTheme.shapes.medium)
             .clickable(interactionSource = interactionSource, indication = null) {
                 focusManager.clearFocus()
             },
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         HeightField(height)
 
         WeightField(weight)
 
-        Spacer(modifier = Modifier.height(15.dp))
 
         Column(
             modifier = Modifier
@@ -61,8 +52,7 @@ fun BodyMeasurements(
                     color = MaterialTheme.colorScheme.surfaceVariant,
                     shape = MaterialTheme.shapes.medium
                 )
-                .fillMaxWidth(.75f)
-                .fillMaxHeight(.8f),
+                .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
@@ -73,7 +63,6 @@ fun BodyMeasurements(
         val context: Context = LocalContext.current
         Button(
             onClick = {
-
                 if (weight.value.toInt() in 1..400 && height.value.toInt() in 1..300) {
                     saveBodyInfo()
                     Toast.makeText(
@@ -84,12 +73,12 @@ fun BodyMeasurements(
                 } else {
                     Toast.makeText(
                         context,
-                        "Cant Save Wrong Data",
+                        "Cant Save, Wrong Data",
                         Toast.LENGTH_LONG
                     ).show()
                 }
 
-            },
+            }, modifier = Modifier.padding(top = 4.dp)
         ) {
             Text(text = "Save Settings")
         }

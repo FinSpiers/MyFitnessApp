@@ -15,7 +15,7 @@ fun NavigationHost(navController : NavHostController, startDestination : String)
     NavHost(navController = navController, startDestination = startDestination) {
         composable(Screen.DashBoardScreen.route) { DashBoardScreen() }
         composable(Screen.SettingsScreen.route) { SettingsScreen() }
-        composable(Screen.CurrentActivityScreen.route) { CurrentWorkoutScreen() }
+        composable(Screen.CurrentWorkoutScreen.route) { CurrentWorkoutScreen() }
         composable(Screen.ActivityDetailScreen.route) { WorkoutDetailScreen() }
 
     }

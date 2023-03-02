@@ -3,6 +3,7 @@ package uniks.cc.myfitnessapp.feature_dashboard.presentation
 import android.annotation.SuppressLint
 import android.location.LocationManager
 import android.net.ConnectivityManager
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -12,7 +13,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
-import uniks.cc.myfitnessapp.core.presentation.WorkoutEvent
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationEvent
 import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.WorkoutRepository
 import java.time.Instant
@@ -39,15 +39,6 @@ class DashBoardViewModel @Inject constructor(
 
     fun getCurrentWorkout() : Workout? {
         return workoutRepository.currentWorkout
-    }
-
-    fun addCurrentWorkoutToWorkouts(workout: Workout) {
-        val workouts = dashBoardState.value.workouts.toMutableList()
-        workouts.add(0, workout)
-        _dashBoardState = _dashBoardState.copy(
-            workouts = workouts,
-            currentWorkout = workout
-        )
     }
 
     fun hasCurrentWorkout() : Boolean {
@@ -97,7 +88,9 @@ class DashBoardViewModel @Inject constructor(
                 }
                 workoutRepository.workouts = _dashBoardState.workouts.toMutableList().apply { add(0, currentWorkout) }
 
-                _dashBoardState.workouts = _dashBoardState.workouts.toMutableList().apply { add(0, currentWorkout) }
+                _dashBoardState = _dashBoardState.copy(
+                    workouts = _dashBoardState.workouts.toMutableList().apply { add(0, currentWorkout) }
+                )
             }
             is WorkoutEvent.StopWorkout -> {
                 workoutRepository.currentWorkout = null
@@ -116,17 +109,8 @@ class DashBoardViewModel @Inject constructor(
     }
 
     @SuppressLint("MissingPermission")
-    fun checkGpsState() {
-        fusedLocationProviderClient.locationAvailability.addOnSuccessListener {
-            _dashBoardState = _dashBoardState.copy(
-                hasGpsConnection = true
-            )
-        }
-        fusedLocationProviderClient.locationAvailability.addOnFailureListener {
-            _dashBoardState = _dashBoardState.copy(
-                hasGpsConnection = false
-            )
-        }
+    fun hasGpsSignal() : Boolean {
+        return locationManager.isLocationEnabled
     }
 
     fun hasInternetConnection(): Boolean {
@@ -138,10 +122,12 @@ class DashBoardViewModel @Inject constructor(
         fusedLocationProviderClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null)
 
         fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
+
             viewModelScope.launch {
                 location?.let {
-                    dashBoardState.value.currentWeatherData =
-                        coreRepository.getCurrentWeather(location.latitude, location.longitude)
+                    _dashBoardState = _dashBoardState.copy(
+                        currentWeatherData = coreRepository.getCurrentWeather(location.latitude, location.longitude)
+                    )
                 }
             }
         }

@@ -5,6 +5,7 @@ package uniks.cc.myfitnessapp.feature_dashboard.presentation
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -44,18 +45,16 @@ fun DashBoardScreen(
                 var hasError = false
                 var errorTitle = ""
                 var errorText = ""
-                val dashBoardState = viewModel.dashBoardState
                 if (hasGpsPermission) {
-                    viewModel.checkGpsState()
-                    if (dashBoardState.value.hasGpsConnection) {
+                    if (viewModel.hasGpsSignal()) {
                         if (viewModel.hasInternetConnection()) {
-                            viewModel.setWeatherData()
                             WeatherBox(
                                 borderStroke = borderStroke,
-                                currentTemp = dashBoardState.value.currentWeatherData.currentTemperature,
-                                isWeatherGood = dashBoardState.value.currentWeatherData.isWeatherGood,
-                                currentWeatherMain = dashBoardState.value.currentWeatherData.currentWeatherMain
+                                currentTemp = viewModel.dashBoardState.value.currentWeatherData.currentTemperature,
+                                isWeatherGood = viewModel.dashBoardState.value.currentWeatherData.isWeatherGood,
+                                currentWeatherMain = viewModel.dashBoardState.value.currentWeatherData.currentWeatherMain
                             )
+                            viewModel.setWeatherData()
                         } else {
                             errorTitle = stringResource(id = R.string.warning_no_internet_connection_title)
                             errorText = stringResource(id = R.string.warning_no_internet_connection_text)
@@ -81,8 +80,11 @@ fun DashBoardScreen(
                     }
                 }
 
-                Column(modifier = Modifier.fillMaxSize()) {
-                    CurrentStepsBox(steps = dashBoardState.value.steps)
+                Column(modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 4.dp)) {
+                    CurrentStepsBox(steps = viewModel.dashBoardState.value.steps)
+                    Spacer(modifier = Modifier.height(4.dp))
                     RecentWorkouts(
                         viewModel.getAllWorkouts(),
                         viewModel::onWorkoutDetailClick,

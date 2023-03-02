@@ -2,7 +2,7 @@ package uniks.cc.myfitnessapp.feature_dashboard.data.repository
 
 import uniks.cc.myfitnessapp.core.data.database.WorkoutDao
 import uniks.cc.myfitnessapp.core.domain.model.Workout
-import uniks.cc.myfitnessapp.core.presentation.WorkoutEvent
+import uniks.cc.myfitnessapp.feature_dashboard.presentation.WorkoutEvent
 import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.WorkoutRepository
 import kotlin.reflect.KFunction1
 

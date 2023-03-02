@@ -1,16 +1,18 @@
 package uniks.cc.myfitnessapp.feature_settings.presentation
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -56,31 +58,71 @@ fun SettingsScreen(
 
     Column(
         modifier = Modifier
-            .background(color = MaterialTheme.colorScheme.surfaceVariant)
+            //.background(color = MaterialTheme.colorScheme.surface)
             .fillMaxWidth()
             .fillMaxHeight(0.91f)
-            .padding(top = 20.dp)
             .clickable(interactionSource = interactionSource, indication = null)
             { focusManager.clearFocus() },
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
     ) {
-        BodyMeasurements(weight, height, isMale, pickedDate) {
-            saveBodyInfo()
+        Card(
+            shape = MaterialTheme.shapes.large,
+            modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp),
+            elevation = CardDefaults.cardElevation(),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+            ),
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = "User Settings",
+                    style = MaterialTheme.typography.headlineMedium,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth(),
+                    color = MaterialTheme.colorScheme.onSecondaryContainer
+                )
+                BodyMeasurements(weight, height, isMale, pickedDate) {
+                    saveBodyInfo()
+                }
+            }
         }
+        Card(
+            shape = MaterialTheme.shapes.large,
+            modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp),
+            elevation = CardDefaults.cardElevation(),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+            ),
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp)
+            ) {
+                Text(
+                    text = "App Settings",
+                    style = MaterialTheme.typography.headlineMedium,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth(),
+                    color = MaterialTheme.colorScheme.onSecondaryContainer
+                )
+                GoogleHealthConnect()
 
-        GoogleHealthConnect()
-
-        ResetAppData(){
-            viewModel.resetAllData()
+                ResetAppData() {
+                    viewModel.resetAllData()
+                }
+            }
         }
     }
-
-
-}
-
-@Preview(showBackground = true)
-@Composable
-fun SetPreview() {
-    SettingsScreen()
+    Spacer(modifier = Modifier.height(16.dp))
 }
