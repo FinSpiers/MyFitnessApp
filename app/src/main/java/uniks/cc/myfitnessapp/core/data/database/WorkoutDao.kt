@@ -11,6 +11,10 @@ interface WorkoutDao {
     suspend fun getAllWorkouts(): List<Workout>
 
     @Transaction
+    @Query("SELECT * FROM Workouts WHERE id=:workoutId")
+    suspend fun getWorkoutById(workoutId : Int) : Workout?
+
+    @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addWorkout(workout: Workout)
 

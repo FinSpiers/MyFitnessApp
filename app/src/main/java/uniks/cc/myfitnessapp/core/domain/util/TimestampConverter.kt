@@ -5,33 +5,22 @@ import java.time.ZoneId
 
 object TimestampConverter {
     fun convertToDatetime(timestamp: Long): String {
-        var dateTime = ""
-
         val dt = Instant.ofEpochSecond(timestamp)
             .atZone(ZoneId.systemDefault())
             .toLocalDateTime()
-
-        dt.toLocalDate()
-            .toString()
-            .split('-')
-            .asReversed()
-            .forEach { str -> dateTime += "$str." }
-
-        dateTime = dateTime.dropLast(1)
-        dateTime += ", ${dt.toLocalTime()}"
-        return dateTime
+        return "${dt.dayOfMonth}.${dt.monthValue}.${dt.year}, ${dt.hour}:${dt.minute}"
     }
 
     fun convertToDate(timestamp: Long): String {
-        return Instant.ofEpochSecond(timestamp)
+        val dt = Instant.ofEpochSecond(timestamp)
             .atZone(ZoneId.systemDefault())
-            .toLocalDate().toString()
-
+            .toLocalDate()
+        return "${dt.dayOfMonth}.${dt.monthValue}.${dt.year}"
     }
 
     fun convertToTime(timestamp: Long): String {
         return Instant.ofEpochSecond(timestamp)
             .atZone(ZoneId.systemDefault())
-            .toLocalTime().toString()
+            .toLocalTime().toString().dropLast(3)
     }
 }

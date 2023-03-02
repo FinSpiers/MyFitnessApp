@@ -62,7 +62,8 @@ fun WorkoutComponent(
             if (isCurrentWorkout) {
                 Column(
                     verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.padding(start = 8.dp)
                 ) {
                     Box(
                         modifier = Modifier

@@ -15,6 +15,10 @@ class WorkoutRepositoryImpl(private val workoutDao: WorkoutDao) : WorkoutReposit
         return workoutDao.getAllWorkouts()
     }
 
+    override suspend fun getWorkoutById(workoutId: Int): Workout? {
+        return workoutDao.getWorkoutById(workoutId)
+    }
+
     override suspend fun addWorkoutToDatabase(workout: Workout) {
         workoutDao.addWorkout(workout)
     }

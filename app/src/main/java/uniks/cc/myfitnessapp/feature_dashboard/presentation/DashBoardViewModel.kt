@@ -27,10 +27,7 @@ class DashBoardViewModel @Inject constructor(
     private val fusedLocationProviderClient: FusedLocationProviderClient,
 
     ) : ViewModel() {
-    private var _dashBoardState: DashBoardState = DashBoardState()
-    val dashBoardState = mutableStateOf(_dashBoardState)
-
-
+    val dashBoardState = mutableStateOf(DashBoardState())
 
     init {
         workoutRepository.onWorkoutAction = this::onWorkoutAction
@@ -83,14 +80,17 @@ class DashBoardViewModel @Inject constructor(
                     }
                 }
                 workoutRepository.currentWorkout = currentWorkout
+
                 viewModelScope.launch {
                     workoutRepository.addWorkoutToDatabase(currentWorkout)
                 }
-                workoutRepository.workouts = _dashBoardState.workouts.toMutableList().apply { add(0, currentWorkout) }
 
-                _dashBoardState = _dashBoardState.copy(
-                    workouts = _dashBoardState.workouts.toMutableList().apply { add(0, currentWorkout) }
+                dashBoardState.value = dashBoardState.value.copy(
+                    workouts = dashBoardState.value.workouts.toMutableList().apply { add(0, currentWorkout) }
                 )
+
+                workoutRepository.workouts = dashBoardState.value.workouts
+
             }
             is WorkoutEvent.StopWorkout -> {
                 workoutRepository.currentWorkout = null
@@ -99,8 +99,12 @@ class DashBoardViewModel @Inject constructor(
         }
     }
 
-    fun syncRepoWorkouts() {
-        workoutRepository.workouts = getAllWorkoutsFromDatabase()
+    private fun syncRepoWorkouts() {
+        val workouts = getAllWorkoutsFromDatabase()
+        workoutRepository.workouts = workouts
+        dashBoardState.value = dashBoardState.value.copy(
+            workouts = workouts
+        )
     }
 
     fun getAllWorkouts() : List<Workout> {
@@ -125,7 +129,7 @@ class DashBoardViewModel @Inject constructor(
 
             viewModelScope.launch {
                 location?.let {
-                    _dashBoardState = _dashBoardState.copy(
+                    dashBoardState.value = dashBoardState.value.copy(
                         currentWeatherData = coreRepository.getCurrentWeather(location.latitude, location.longitude)
                     )
                 }

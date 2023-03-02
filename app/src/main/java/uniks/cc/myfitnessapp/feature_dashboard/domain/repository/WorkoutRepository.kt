@@ -12,6 +12,8 @@ interface WorkoutRepository {
 
     suspend fun getAllWorkoutsFromDatabase() : List<Workout>
 
+    suspend fun getWorkoutById(workoutId : Int) : Workout?
+
     suspend fun addWorkoutToDatabase(workout: Workout)
 
     suspend fun deleteWorkoutFromDatabase(workout: Workout)
