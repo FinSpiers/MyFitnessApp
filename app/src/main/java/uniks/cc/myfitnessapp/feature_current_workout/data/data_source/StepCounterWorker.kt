@@ -8,35 +8,59 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import uniks.cc.myfitnessapp.core.domain.model.Steps
 import uniks.cc.myfitnessapp.core.domain.repository.SensorRepository
+import uniks.cc.myfitnessapp.core.domain.util.TimestampConverter
 import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.WorkoutRepository
+import java.time.Instant
 import javax.inject.Inject
 
 @HiltWorker
 class StepCounterWorker @AssistedInject constructor(
     @Assisted context: Context,
-    @Assisted workerParams: WorkerParameters
+    @Assisted workerParams: WorkerParameters,
+    val workoutRepository: WorkoutRepository,
+    val sensorRepository: SensorRepository
 ) : CoroutineWorker(context, workerParams) {
+
+
     private var oldValue = 0
     private var newValue = 0
     val count = mutableStateOf(newValue - oldValue)
 
     init {
-        //println(sensorRepository.stepCounterSensorValue.value)
+        syncStepCounter()
+        saveDailyCount()
+        sensorRepository.startStepCounterSensor()
+        println(sensorRepository.stepCounterSensorValue)
     }
 
     private fun resetStepCounter() {
+        saveDailyCount()
         oldValue = newValue
     }
 
-    private fun setStepCounter(value: Int) {
-        if (value > newValue) {
-            newValue = value
-        }
+    private fun saveDailyCount() {
+        println(Steps(count.value))
+        //suspend {
+        //    workoutRepository.saveDailySteps(Steps(count.value))
+        //}
     }
 
+
+    private fun syncStepCounter() {
+        newValue = sensorRepository.stepCounterSensorValue
+    }
+
+
+
     override suspend fun doWork(): Result {
-        Log.e("WM", "Working...")
+        Log.e(
+            "WM",
+            "${TimestampConverter.convertToDatetime(Instant.now().epochSecond)}, Counting ${count.value}}"
+        )
         return Result.success()
     }
+
+
 }

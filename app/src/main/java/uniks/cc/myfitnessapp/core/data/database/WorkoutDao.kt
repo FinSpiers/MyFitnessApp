@@ -1,6 +1,7 @@
 package uniks.cc.myfitnessapp.core.data.database
 
 import androidx.room.*
+import uniks.cc.myfitnessapp.core.domain.model.Steps
 import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.core.domain.model.sensors.Waypoint
 
@@ -28,6 +29,14 @@ interface WorkoutDao {
     @Transaction
     @Query("SELECT * FROM TraveledRoute")
     suspend fun getAllWaypoints() : List<Waypoint>
+
+    @Transaction
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun saveDailySteps(steps: Steps)
+
+    @Transaction
+    @Query("SELECT * FROM DailySteps")
+    suspend fun getAllDailySteps() : List<Steps>
 
 
 }

@@ -1,6 +1,7 @@
 package uniks.cc.myfitnessapp.feature_dashboard.data.repository
 
 import uniks.cc.myfitnessapp.core.data.database.WorkoutDao
+import uniks.cc.myfitnessapp.core.domain.model.Steps
 import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.feature_dashboard.presentation.WorkoutEvent
 import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.WorkoutRepository
@@ -25,6 +26,14 @@ class WorkoutRepositoryImpl(private val workoutDao: WorkoutDao) : WorkoutReposit
 
     override suspend fun deleteWorkoutFromDatabase(workout: Workout) {
         return workoutDao.deleteWorkout(workout)
+    }
+
+    override suspend fun saveDailySteps(steps: Steps) {
+        workoutDao.saveDailySteps(steps)
+    }
+
+    override suspend fun getAllDailySteps(): List<Steps> {
+        return workoutDao.getAllDailySteps()
     }
 
     init {

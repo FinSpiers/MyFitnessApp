@@ -1,5 +1,6 @@
 package uniks.cc.myfitnessapp.feature_dashboard.domain.repository
 
+import uniks.cc.myfitnessapp.core.domain.model.Steps
 import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.feature_dashboard.presentation.WorkoutEvent
 import kotlin.reflect.KFunction1
@@ -17,6 +18,10 @@ interface WorkoutRepository {
     suspend fun addWorkoutToDatabase(workout: Workout)
 
     suspend fun deleteWorkoutFromDatabase(workout: Workout)
+
+    suspend fun saveDailySteps(steps: Steps)
+
+    suspend fun getAllDailySteps() : List<Steps>
 
 
 }
