@@ -17,7 +17,7 @@ import uniks.cc.myfitnessapp.core.data.network.OpenWeatherApiService
 import uniks.cc.myfitnessapp.core.data.repository.CoreRepositoryImpl
 import uniks.cc.myfitnessapp.core.data.repository.SensorRepositoryImpl
 import uniks.cc.myfitnessapp.core.domain.model.sensors.AndroidSensors
-import uniks.cc.myfitnessapp.core.domain.model.sensors.GyroscopeSensor
+import uniks.cc.myfitnessapp.core.domain.model.sensors.AccelerometerSensor
 import uniks.cc.myfitnessapp.core.domain.model.sensors.StepCounterSensor
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.domain.repository.SensorRepository
@@ -104,8 +104,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideGyroscopeSensor(app: Application): AndroidSensors {
-        return GyroscopeSensor(app)
+    fun provideAccelerometerSensor(app: Application): AndroidSensors {
+        return AccelerometerSensor(app)
     }
 
     @Provides
