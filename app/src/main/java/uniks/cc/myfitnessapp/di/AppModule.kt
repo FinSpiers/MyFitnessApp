@@ -16,7 +16,6 @@ import uniks.cc.myfitnessapp.core.data.database.MyFitnessDatabase
 import uniks.cc.myfitnessapp.core.data.network.OpenWeatherApiService
 import uniks.cc.myfitnessapp.core.data.repository.CoreRepositoryImpl
 import uniks.cc.myfitnessapp.core.data.repository.SensorRepositoryImpl
-import uniks.cc.myfitnessapp.core.domain.model.sensors.AndroidSensors
 import uniks.cc.myfitnessapp.core.domain.model.sensors.AccelerometerSensor
 import uniks.cc.myfitnessapp.core.domain.model.sensors.StepCounterSensor
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
@@ -85,9 +84,10 @@ object AppModule {
     @Provides
     @Singleton
     fun provideSensorRepository(
-        app: Application
+        stepCounterSensor: StepCounterSensor,
+        accelerometerSensor: AccelerometerSensor
     ): SensorRepository {
-        return SensorRepositoryImpl(app)
+        return SensorRepositoryImpl(stepCounterSensor, accelerometerSensor)
     }
 
     @Provides
@@ -98,13 +98,13 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideStepCounterSensor(app: Application): AndroidSensors {
+    fun provideStepCounterSensor(app: Application): StepCounterSensor {
         return StepCounterSensor(app)
     }
 
     @Provides
     @Singleton
-    fun provideAccelerometerSensor(app: Application): AndroidSensors {
+    fun provideAccelerometerSensor(app: Application): AccelerometerSensor {
         return AccelerometerSensor(app)
     }
 

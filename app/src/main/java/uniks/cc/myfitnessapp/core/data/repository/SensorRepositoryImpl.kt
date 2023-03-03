@@ -1,58 +1,55 @@
 package uniks.cc.myfitnessapp.core.data.repository
 
-import android.content.Context
-import androidx.compose.runtime.mutableStateOf
-import uniks.cc.myfitnessapp.core.domain.model.sensors.AndroidSensors
 import uniks.cc.myfitnessapp.core.domain.model.sensors.AccelerometerSensor
 import uniks.cc.myfitnessapp.core.domain.model.sensors.StepCounterSensor
 import uniks.cc.myfitnessapp.core.domain.repository.SensorRepository
 
 class SensorRepositoryImpl(
-    private val context: Context
+    private val stepCounterSensor: StepCounterSensor,
+    private val accelerometerSensor: AccelerometerSensor
 ) : SensorRepository {
 
-
-    override val stepCounterSensorValue = mutableStateOf(0)
-    override val accelerometerSensorValueX = mutableStateOf(0.0)
-    override val accelerometerSensorValueY = mutableStateOf(0.0)
-    override val accelerometerSensorValueZ = mutableStateOf(0.0)
-
-    override fun getStepCounterSensor(): AndroidSensors {
-        return StepCounterSensor(context = context)
+    override var stepCounterSensorValue: Int = 0
+    override var accelerometerSensorValueX: Double = 0.0
+    override var accelerometerSensorValueY: Double = 0.0
+    override var accelerometerSensorValueZ: Double = 0.0
+    override fun getStepCounterSensor(): StepCounterSensor {
+        return stepCounterSensor
     }
 
-    override fun getAccelerometerSensor(): AndroidSensors {
-        return AccelerometerSensor(context = context)
+    override fun getAccelerometerSensor(): AccelerometerSensor {
+        return accelerometerSensor
     }
 
     override fun startAccelerometerSensor() {
-        getAccelerometerSensor().setOnSensorValuesChangedListener { values ->
-            accelerometerSensorValueX.value = values[0].toDouble()
-            accelerometerSensorValueY.value = values[1].toDouble()
-            accelerometerSensorValueZ.value = values[2].toDouble()
+        accelerometerSensor.setOnSensorValuesChangedListener { values ->
+            accelerometerSensorValueX = values[0].toDouble()
+            accelerometerSensorValueY = values[1].toDouble()
+            accelerometerSensorValueZ = values[2].toDouble()
+
         }
 
-        if (!getAccelerometerSensor().isListening()) {
-            getAccelerometerSensor().startListening()
+        if (!accelerometerSensor.isListening()) {
+            accelerometerSensor.startListening()
         }
     }
 
     override fun stopAccelerometerSensor() {
-        getAccelerometerSensor().stopListening()
+        accelerometerSensor.stopListening()
     }
 
     override fun startStepCounterSensor() {
-        getStepCounterSensor().setOnSensorValuesChangedListener { values ->
-            stepCounterSensorValue.value = values[0].toInt()
+        stepCounterSensor.setOnSensorValuesChangedListener { values ->
+            stepCounterSensorValue = values[0].toInt()
         }
 
-        if (!getStepCounterSensor().isListening()) {
-            getStepCounterSensor().startListening()
+        if (!stepCounterSensor.isListening()) {
+            stepCounterSensor.startListening()
         }
     }
 
     override fun stopStepCounterSensor() {
-        getStepCounterSensor().stopListening()
+        stepCounterSensor.stopListening()
     }
 
 }
