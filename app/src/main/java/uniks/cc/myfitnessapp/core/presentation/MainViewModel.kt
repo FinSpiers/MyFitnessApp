@@ -8,11 +8,16 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
+import androidx.work.Configuration
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
+import androidx.work.WorkRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.domain.util.Screen
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationEvent
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationBarState
+import uniks.cc.myfitnessapp.feature_current_workout.data.data_source.StepCounterWorker
 import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.WorkoutRepository
 import javax.inject.Inject
 
@@ -91,6 +96,7 @@ class MainViewModel @Inject constructor(
     fun setNavController(navController: NavHostController) {
         this.navController = navController
     }
+
 
 
 

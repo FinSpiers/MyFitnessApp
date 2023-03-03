@@ -19,8 +19,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import uniks.cc.myfitnessapp.core.domain.model.sensors.Waypoint
 import uniks.cc.myfitnessapp.core.domain.util.TimestampConverter
 import uniks.cc.myfitnessapp.core.presentation.components.WorkoutFab
+import uniks.cc.myfitnessapp.feature_workout_detail.presentation.components.MapBox
+import uniks.cc.myfitnessapp.feature_workout_detail.presentation.components.WorkoutDetailListItem
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -83,88 +86,48 @@ fun WorkoutDetailScreen(
                 )
             }
             Spacer(modifier = Modifier.height(20.dp))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(4.dp)
-            ) {
-                Text(
-                    text = "Duration",
-                    textAlign = TextAlign.Left
-                )
-                Text(
-                    text = "${viewModel.selectedWorkout.duration} $durationUnit",
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Right
-                )
-            }
+            WorkoutDetailListItem(
+                title = "Duration",
+                value = "${viewModel.selectedWorkout.duration}",
+                unit = durationUnit
+            )
             if (viewModel.selectedWorkout.distance != null) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(4.dp)
-                ) {
-                    Text(
-                        text = "Distance",
-                        textAlign = TextAlign.Left
-                    )
-                    Text(
-                        text = "${viewModel.selectedWorkout.distance} $distanceUnit",
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Right
-                    )
-                }
+                WorkoutDetailListItem(
+                    title = "Distance",
+                    value = "${viewModel.selectedWorkout.distance}",
+                    unit = distanceUnit
+                )
             }
             if (viewModel.selectedWorkout.avgPace != null) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(4.dp)
-                ) {
-                    Text(
-                        text = "avg Pace",
-                        textAlign = TextAlign.Left
-                    )
-                    Text(
-                        text = "${viewModel.selectedWorkout.avgPace} $paceUnit",
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Right
-                    )
-                }
+                WorkoutDetailListItem(
+                    title = "avg Pace",
+                    value = "${viewModel.selectedWorkout.avgPace}",
+                    unit = paceUnit
+                )
             }
             if (viewModel.selectedWorkout.repetitions != null) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(4.dp)
-                ) {
-                    Text(
-                        text = "Repetitions",
-                        textAlign = TextAlign.Left
-                    )
-                    Text(
-                        text = "${viewModel.selectedWorkout.repetitions}",
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Right
-                    )
-                }
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(4.dp)
-            ) {
-                Text(
-                    text = "kcal",
-                    textAlign = TextAlign.Left
-                )
-                Text(
-                    text = "${viewModel.selectedWorkout.kcal} $kcalUnit",
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Right
+                WorkoutDetailListItem(
+                    title = "Repetitions",
+                    value = "${viewModel.selectedWorkout.repetitions}",
+                    unit = null
                 )
             }
-        }
+            WorkoutDetailListItem(
+                title = "kcal",
+                value = "${viewModel.selectedWorkout.kcal}",
+                unit = kcalUnit
+            )
 
+            val exampleRoute = listOf(
+                Waypoint(1, 1, 51.546109235121925, 9.401057125476921),
+                Waypoint(1, 12, 51.54551062095242, 9.401252428123303),
+                Waypoint(1, 123, 51.544721964433144, 9.402062357757353),
+                Waypoint(1, 1234, 51.54473609118497, 9.403702405617599),
+                Waypoint(1, 12345, 51.54547350154158, 9.40395227440517),
+                Waypoint(1, 123456, 51.546109235121925, 9.401057125476921),
+            )
+
+            MapBox(true, exampleRoute)
+        }
     }
 }

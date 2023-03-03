@@ -6,6 +6,7 @@ import android.net.ConnectivityManager
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
+import androidx.work.*
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.Priority
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,8 +15,10 @@ import kotlinx.coroutines.runBlocking
 import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationEvent
+import uniks.cc.myfitnessapp.feature_current_workout.data.data_source.StepCounterWorker
 import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.WorkoutRepository
 import java.time.Instant
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,6 +35,10 @@ class DashBoardViewModel @Inject constructor(
     init {
         workoutRepository.onWorkoutAction = this::onWorkoutAction
         syncRepoWorkouts()
+        val workManager : WorkManager = WorkManager.getInstance(coreRepository.context)
+        val workRequest : PeriodicWorkRequest = PeriodicWorkRequestBuilder<StepCounterWorker>(15, TimeUnit.MINUTES).build()
+
+        workManager.enqueueUniquePeriodicWork("stepCounterWork", ExistingPeriodicWorkPolicy.KEEP, workRequest)
     }
 
     fun getCurrentWorkout() : Workout? {

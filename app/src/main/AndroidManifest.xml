@@ -19,10 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyFitnessApp"
         tools:targetApi="31">
-        <service
-            android:name=".StepsService"
-            android:enabled="true"
-            android:exported="true"></service>
+    <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyBtILGjUfGxrjnDjVM2NKCpNk4zE67Ikt0"/>
 
         <activity
             android:name=".core.presentation.MainActivity"
