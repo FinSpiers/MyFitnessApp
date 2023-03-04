@@ -38,5 +38,8 @@ interface WorkoutDao {
     @Query("SELECT * FROM DailySteps")
     suspend fun getAllDailySteps() : List<Steps>
 
+    @Transaction
+    @Query("SELECT * FROM DailySteps WHERE date=:pDate")
+    suspend fun getDailyStepsByDate(pDate : String) : Steps?
 
 }

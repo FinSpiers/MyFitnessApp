@@ -10,6 +10,7 @@ interface WorkoutRepository {
     var workouts : List<Workout>
     var currentWorkout: Workout?
     var selectedWorkoutDetail : Workout?
+    var oldStepsValue : Int
 
     suspend fun getAllWorkoutsFromDatabase() : List<Workout>
 
@@ -21,6 +22,7 @@ interface WorkoutRepository {
 
     suspend fun saveDailySteps(steps: Steps)
 
+    suspend fun getDailyStepsByDate(date : String) : Steps?
     suspend fun getAllDailySteps() : List<Steps>
 
 

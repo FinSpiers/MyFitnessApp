@@ -1,5 +1,9 @@
 package uniks.cc.myfitnessapp.core.data.repository
 
+import android.util.Log
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import uniks.cc.myfitnessapp.core.domain.model.sensors.AccelerometerSensor
 import uniks.cc.myfitnessapp.core.domain.model.sensors.StepCounterSensor
 import uniks.cc.myfitnessapp.core.domain.repository.SensorRepository
@@ -9,7 +13,7 @@ class SensorRepositoryImpl(
     private val accelerometerSensor: AccelerometerSensor
 ) : SensorRepository {
 
-    override var stepCounterSensorValue: Int = 0
+    override var stepCounterSensorValueStateFlow = MutableStateFlow<Int>(0)
     override var accelerometerSensorValueX: Double = 0.0
     override var accelerometerSensorValueY: Double = 0.0
     override var accelerometerSensorValueZ: Double = 0.0
@@ -40,7 +44,8 @@ class SensorRepositoryImpl(
 
     override fun startStepCounterSensor() {
         stepCounterSensor.setOnSensorValuesChangedListener { values ->
-            stepCounterSensorValue = values[0].toInt()
+            stepCounterSensorValueStateFlow.tryEmit(values[0].toInt())
+
         }
 
         if (!stepCounterSensor.isListening()) {

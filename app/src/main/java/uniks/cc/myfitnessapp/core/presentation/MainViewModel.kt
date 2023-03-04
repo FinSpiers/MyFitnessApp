@@ -4,20 +4,14 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
-import androidx.work.Configuration
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
-import androidx.work.WorkRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.domain.util.Screen
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationEvent
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationBarState
-import uniks.cc.myfitnessapp.feature_current_workout.data.data_source.StepCounterWorker
 import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.WorkoutRepository
 import javax.inject.Inject
 
@@ -64,7 +58,6 @@ class MainViewModel @Inject constructor(
             }
             is NavigationEvent.OnStopWorkoutClick -> navigate(Screen.DashBoardScreen.route)
             is NavigationEvent.OnOpenAppSettingsClick -> {
-                Log.e("Context", coreRepository.context.toString())
                 val openAppSettingsIntent = Intent().apply {
                     action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
                     data = Uri.fromParts("package", coreRepository.context.packageName, null)
@@ -96,8 +89,4 @@ class MainViewModel @Inject constructor(
     fun setNavController(navController: NavHostController) {
         this.navController = navController
     }
-
-
-
-
 }

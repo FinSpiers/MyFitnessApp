@@ -1,11 +1,12 @@
 package uniks.cc.myfitnessapp.core.domain.repository
 
+import kotlinx.coroutines.flow.MutableStateFlow
 import uniks.cc.myfitnessapp.core.domain.model.sensors.AccelerometerSensor
 import uniks.cc.myfitnessapp.core.domain.model.sensors.StepCounterSensor
 
 interface SensorRepository {
 
-    var stepCounterSensorValue: Int
+    var stepCounterSensorValueStateFlow: MutableStateFlow<Int>
     var accelerometerSensorValueX: Double
     var accelerometerSensorValueY: Double
     var accelerometerSensorValueZ: Double

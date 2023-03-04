@@ -2,6 +2,7 @@ package uniks.cc.myfitnessapp.core.domain.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import uniks.cc.myfitnessapp.core.domain.util.TimestampConverter
 import uniks.cc.myfitnessapp.feature_current_workout.domain.util.WorkoutMap
 import java.time.Instant
 
@@ -9,7 +10,7 @@ import java.time.Instant
 data class Steps(
     var count : Int,
     @PrimaryKey(autoGenerate = false)
-    var timeStamp: Long = Instant.now().epochSecond
+    var date: String = TimestampConverter.convertToDate(Instant.now().epochSecond)
 )
 
 

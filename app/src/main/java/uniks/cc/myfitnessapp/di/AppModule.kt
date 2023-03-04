@@ -6,6 +6,7 @@ import android.location.LocationManager
 import android.net.ConnectivityManager
 import androidx.compose.material3.SnackbarHostState
 import androidx.room.Room
+import androidx.work.WorkManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import dagger.Module
@@ -47,17 +48,18 @@ object AppModule {
         ).build()
     }
 
+
+
     @Provides
     @Singleton
     fun provideApiService(): OpenWeatherApiService {
         return OpenWeatherApiService()
     }
 
-
     @Provides
     @Singleton
-    fun provideSnackbarHostState(): SnackbarHostState {
-        return SnackbarHostState()
+    fun provideWorkManager(app: Application) : WorkManager {
+        return WorkManager.getInstance(app)
     }
 
     @Provides

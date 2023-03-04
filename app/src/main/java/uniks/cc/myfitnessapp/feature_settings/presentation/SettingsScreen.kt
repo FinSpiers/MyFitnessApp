@@ -70,8 +70,8 @@ fun SettingsScreen(
             modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp),
             elevation = CardDefaults.cardElevation(),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                contentColor = MaterialTheme.colorScheme.onPrimaryContainer
             ),
             border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
         ) {
@@ -85,7 +85,7 @@ fun SettingsScreen(
                     style = MaterialTheme.typography.headlineMedium,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth(),
-                    color = MaterialTheme.colorScheme.onSecondaryContainer
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
                 BodyMeasurements(weight, height, isMale, pickedDate) {
                     saveBodyInfo()
@@ -97,8 +97,8 @@ fun SettingsScreen(
             modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp),
             elevation = CardDefaults.cardElevation(),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                contentColor = MaterialTheme.colorScheme.onPrimaryContainer
             ),
             border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
         ) {
@@ -114,7 +114,7 @@ fun SettingsScreen(
                     style = MaterialTheme.typography.headlineMedium,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth(),
-                    color = MaterialTheme.colorScheme.onSecondaryContainer
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
                 GoogleHealthConnect()
 

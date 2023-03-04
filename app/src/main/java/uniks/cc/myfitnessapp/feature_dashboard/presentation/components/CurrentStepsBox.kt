@@ -1,35 +1,47 @@
 package uniks.cc.myfitnessapp.feature_dashboard.presentation.components
 
 import android.icu.number.NumberFormatter
+import android.view.animation.Animation
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.Easing
+import androidx.compose.animation.core.TweenSpec
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.IncompleteCircle
-import androidx.compose.material.icons.filled.SquareFoot
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.github.tehras.charts.piechart.PieChart
+import com.github.tehras.charts.piechart.PieChartData
+import com.github.tehras.charts.piechart.animation.simpleChartAnimation
+import com.github.tehras.charts.piechart.renderer.SimpleSliceDrawer
 import uniks.cc.myfitnessapp.R
 import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
 import java.util.*
 
 @Composable
-fun CurrentStepsBox(steps: Int) {
+fun CurrentStepsBox(steps: Int, stepGoal : Int = 10000) {
+    val progressionPercent = steps.toFloat() / stepGoal.toFloat()
+    val stillRemainingPercent = if (1f - progressionPercent > 0f) 1f - progressionPercent else 0f
+    val animation : TweenSpec<Float> = if (stillRemainingPercent > 0) simpleChartAnimation() else TweenSpec(0, 0)
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surface, MaterialTheme.shapes.large)
-            .border(2.dp, MaterialTheme.colorScheme.outlineVariant, MaterialTheme.shapes.large)
+            .border(1.dp, MaterialTheme.colorScheme.outline, MaterialTheme.shapes.large)
     ) {
         Row(
             horizontalArrangement = Arrangement.Start,
@@ -40,31 +52,52 @@ fun CurrentStepsBox(steps: Int) {
                 text = "Daily steps",
                 style = MaterialTheme.typography.titleLarge,
                 fontFamily = FontFamily.Serif,
-                modifier = Modifier.padding(top = 4.dp, start = 8.dp)
+                modifier = Modifier.padding(top = 4.dp, start = 8.dp),
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
+        Box(
+            contentAlignment = Alignment.Center,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Image(
-                imageVector = Icons.Default.IncompleteCircle,
-                contentDescription = null,
-                modifier = Modifier.size(100.dp)
-            )
+            if (steps < stepGoal) {
+                PieChart(
+                    pieChartData = PieChartData(
+                        listOf(
+                            PieChartData.Slice(
+                                progressionPercent,
+                                MaterialTheme.colorScheme.primary
+                            ),
+
+                            PieChartData.Slice(stillRemainingPercent, MaterialTheme.colorScheme.outlineVariant)
+                        )
+                    ),
+                    animation = animation,
+                    sliceDrawer = SimpleSliceDrawer(),
+                    modifier = Modifier.size(100.dp),
+                )
+            }
+            else {
+                Box(contentAlignment = Alignment.Center, modifier = Modifier.size(100.dp).border(12.dp, MaterialTheme.colorScheme.primary, CircleShape)) {
+                    Icon(imageVector = Icons.Filled.Check, contentDescription = null, modifier = Modifier.size(60.dp), tint = MaterialTheme.colorScheme.primary)
+                }
+            }
         }
         val text = NumberFormatter.withLocale(Locale.GERMANY).format(steps).toString()
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
                 painter = painterResource(id = R.drawable.icon_steps),
                 contentDescription = null,
-                modifier = Modifier.padding(bottom = 16.dp, end = 4.dp).size(32.dp)
+                modifier = Modifier
+                    .padding(bottom = 16.dp, end = 4.dp)
+                    .size(32.dp),
+                tint = MaterialTheme.colorScheme.onSurface
             )
             Text(
                 text = "$text / 10.000 steps",
                 modifier = Modifier.padding(bottom = 8.dp),
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
 
@@ -74,7 +107,7 @@ fun CurrentStepsBox(steps: Int) {
 @Preview(showBackground = true)
 @Composable
 fun CurrentStepsBoxPreview() {
-    MyFitnessAppTheme {
-        CurrentStepsBox(steps = 10000)
+    MyFitnessAppTheme(darkTheme = true) {
+        CurrentStepsBox(steps = 46320)
     }
 }

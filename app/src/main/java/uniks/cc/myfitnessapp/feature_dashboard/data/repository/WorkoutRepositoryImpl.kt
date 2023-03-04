@@ -12,6 +12,8 @@ class WorkoutRepositoryImpl(private val workoutDao: WorkoutDao) : WorkoutReposit
     override var workouts: List<Workout> = emptyList()
     override var currentWorkout: Workout? = null
     override var selectedWorkoutDetail: Workout? = null
+    override var oldStepsValue: Int = 0
+
     override suspend fun getAllWorkoutsFromDatabase(): List<Workout> {
         return workoutDao.getAllWorkouts()
     }
@@ -32,9 +34,15 @@ class WorkoutRepositoryImpl(private val workoutDao: WorkoutDao) : WorkoutReposit
         workoutDao.saveDailySteps(steps)
     }
 
+    override suspend fun getDailyStepsByDate(date: String): Steps? {
+        return workoutDao.getDailyStepsByDate(date)
+    }
+
     override suspend fun getAllDailySteps(): List<Steps> {
         return workoutDao.getAllDailySteps()
     }
+
+
 
     init {
         suspend {
