@@ -3,6 +3,7 @@ package uniks.cc.myfitnessapp.feature_dashboard.data.repository
 import kotlinx.coroutines.runBlocking
 import uniks.cc.myfitnessapp.core.data.database.WorkoutDao
 import uniks.cc.myfitnessapp.core.domain.model.Steps
+import uniks.cc.myfitnessapp.core.domain.model.Waypoint
 import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.core.domain.util.TimestampConverter
 import uniks.cc.myfitnessapp.feature_dashboard.presentation.WorkoutEvent
@@ -19,6 +20,7 @@ class WorkoutRepositoryImpl(private val workoutDao: WorkoutDao) : WorkoutReposit
 
     init {
         runBlocking {
+            workouts = workoutDao.getAllWorkouts()
             oldStepsValue = getDailyStepsByDate(
                 TimestampConverter.convertToDate(Instant.now().epochSecond - 60 * 60 * 24)
             )?.count ?: 0
@@ -53,11 +55,15 @@ class WorkoutRepositoryImpl(private val workoutDao: WorkoutDao) : WorkoutReposit
         return workoutDao.getAllDailySteps()
     }
 
+    override suspend fun getAllWaypoints(): List<Waypoint> {
+        return workoutDao.getAllWaypoints()
+    }
 
+    override suspend fun getWaypointsByWorkoutId(id: Int): List<Waypoint> {
+        return workoutDao.getWaypointsByWorkoutId(id)
+    }
 
-    init {
-        suspend {
-            workouts = workoutDao.getAllWorkouts()
-        }
+    override suspend fun saveWaypoint(waypoint: Waypoint) {
+        workoutDao.addWaypoint(waypoint)
     }
 }

@@ -1,18 +1,14 @@
 package uniks.cc.myfitnessapp.feature_dashboard.presentation
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.util.Log
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.work.*
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.Priority
-import com.vanpra.composematerialdialogs.MaterialDialogState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -26,7 +22,6 @@ import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.Navigati
 import uniks.cc.myfitnessapp.feature_current_workout.data.data_source.StepCounterResetWorker
 import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.WorkoutRepository
 import java.time.*
-import java.time.format.DateTimeFormatter
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -43,7 +38,7 @@ class DashBoardViewModel @Inject constructor(
     ) : ViewModel() {
     val dashBoardState = mutableStateOf(DashBoardState())
     val stepCounterStateFlow = sensorRepository.stepCounterSensorValueStateFlow
-    val dialogState = MaterialDialogState()
+    val dialogStateFlow = MutableStateFlow(false)
 
 
     init {

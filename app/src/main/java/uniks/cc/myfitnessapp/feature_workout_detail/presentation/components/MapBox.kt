@@ -16,7 +16,7 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.rememberCameraPositionState
-import uniks.cc.myfitnessapp.core.domain.model.sensors.Waypoint
+import uniks.cc.myfitnessapp.core.domain.model.Waypoint
 import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
 
 @Composable

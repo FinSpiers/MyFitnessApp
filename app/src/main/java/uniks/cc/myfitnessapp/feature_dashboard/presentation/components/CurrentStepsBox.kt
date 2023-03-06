@@ -14,8 +14,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -26,14 +24,14 @@ import com.github.tehras.charts.piechart.PieChart
 import com.github.tehras.charts.piechart.PieChartData
 import com.github.tehras.charts.piechart.animation.simpleChartAnimation
 import com.github.tehras.charts.piechart.renderer.SimpleSliceDrawer
-import com.vanpra.composematerialdialogs.MaterialDialogState
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import kotlinx.coroutines.flow.MutableStateFlow
 import uniks.cc.myfitnessapp.R
 import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
 import java.util.*
 
 @Composable
-fun CurrentStepsBox(steps: Int, stepGoal: Int = 10000, dialogState: MaterialDialogState) {
+fun CurrentStepsBox(steps: Int, stepGoal: Int = 10000, dialogState: MutableStateFlow<Boolean>) {
     val progressionPercent = steps.toFloat() / stepGoal.toFloat()
     val stillRemainingPercent = if (1f - progressionPercent > 0f) 1f - progressionPercent else 0f
     val animation: TweenSpec<Float> =
@@ -64,11 +62,8 @@ fun CurrentStepsBox(steps: Int, stepGoal: Int = 10000, dialogState: MaterialDial
                     .size(40.dp)
                     .padding(top = 4.dp, end = 8.dp)
                     .clickable {
-                        if (!dialogState.showing) {
-                            dialogState.show()
-                        } else {
-                            dialogState.hide()
-                        }
+                        dialogState.value = !dialogState.value
+                        dialogState.tryEmit(dialogState.value)
                     }
             )
         }
@@ -128,13 +123,5 @@ fun CurrentStepsBox(steps: Int, stepGoal: Int = 10000, dialogState: MaterialDial
             )
         }
 
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun CurrentStepsBoxPreview() {
-    MyFitnessAppTheme(darkTheme = true) {
-        CurrentStepsBox(steps = 9030, dialogState = rememberMaterialDialogState())
     }
 }

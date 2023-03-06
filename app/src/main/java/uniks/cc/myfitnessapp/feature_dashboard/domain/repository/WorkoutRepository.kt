@@ -1,6 +1,7 @@
 package uniks.cc.myfitnessapp.feature_dashboard.domain.repository
 
 import uniks.cc.myfitnessapp.core.domain.model.Steps
+import uniks.cc.myfitnessapp.core.domain.model.Waypoint
 import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.feature_dashboard.presentation.WorkoutEvent
 import kotlin.reflect.KFunction1
@@ -24,6 +25,12 @@ interface WorkoutRepository {
 
     suspend fun getDailyStepsByDate(date : String) : Steps?
     suspend fun getAllDailySteps() : List<Steps>
+
+    suspend fun getAllWaypoints() : List<Waypoint>
+
+    suspend fun getWaypointsByWorkoutId(id : Int) : List<Waypoint>
+
+    suspend fun saveWaypoint(waypoint: Waypoint)
 
 
 }

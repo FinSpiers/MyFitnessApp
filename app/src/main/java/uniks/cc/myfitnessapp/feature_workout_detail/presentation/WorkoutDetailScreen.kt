@@ -18,7 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import uniks.cc.myfitnessapp.core.domain.model.sensors.Waypoint
+import uniks.cc.myfitnessapp.core.domain.model.Waypoint
 import uniks.cc.myfitnessapp.core.domain.util.TimestampConverter
 import uniks.cc.myfitnessapp.core.presentation.components.WorkoutFab
 import uniks.cc.myfitnessapp.feature_workout_detail.presentation.components.LineChartBox

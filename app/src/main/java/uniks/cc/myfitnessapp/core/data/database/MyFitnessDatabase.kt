@@ -3,8 +3,8 @@ package uniks.cc.myfitnessapp.core.data.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import uniks.cc.myfitnessapp.core.domain.model.Steps
+import uniks.cc.myfitnessapp.core.domain.model.Waypoint
 import uniks.cc.myfitnessapp.core.domain.model.Workout
-import uniks.cc.myfitnessapp.core.domain.model.sensors.Waypoint
 import uniks.cc.myfitnessapp.feature_settings.data.data_source.database.SettingsDao
 import uniks.cc.myfitnessapp.feature_settings.domain.model.Settings
 
