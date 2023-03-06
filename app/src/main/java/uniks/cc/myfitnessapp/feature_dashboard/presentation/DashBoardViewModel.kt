@@ -1,19 +1,23 @@
 package uniks.cc.myfitnessapp.feature_dashboard.presentation
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.util.Log
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.work.*
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.Priority
+import com.vanpra.composematerialdialogs.MaterialDialogState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import uniks.cc.myfitnessapp.core.domain.model.Steps
 import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.domain.repository.SensorRepository
@@ -39,33 +43,30 @@ class DashBoardViewModel @Inject constructor(
     ) : ViewModel() {
     val dashBoardState = mutableStateOf(DashBoardState())
     val stepCounterStateFlow = sensorRepository.stepCounterSensorValueStateFlow
+    val dialogState = MaterialDialogState()
 
 
     init {
         sensorRepository.startStepCounterSensor()
         workoutRepository.onWorkoutAction = this::onWorkoutAction
-
         // TODO: move this code into a class that is executed ONLY ONE TIME
         val initialDelay = Duration.between(LocalDateTime.now(), LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(0, 0)))
+
         val resetRequest : PeriodicWorkRequest = PeriodicWorkRequestBuilder<StepCounterResetWorker>(1, TimeUnit.DAYS)
             .setInitialDelay(initialDelay)
             .build()
 
         workManager.enqueueUniquePeriodicWork("stepCounterResetWork", ExistingPeriodicWorkPolicy.UPDATE, resetRequest)
         Log.e("WORK", "Starting worker with initial delay of ${initialDelay.seconds / 60} min = ${initialDelay.seconds / 3600}h, ${(initialDelay.seconds / 60) % 60}min ")
+
     }
 
     fun getOldStepCount() : Int {
-        /*var oldStepCount : Int = 0
-        viewModelScope.launch {
-            val oldSteps = workoutRepository.getDailyStepsByDate(TimestampConverter.convertToDate(Instant.now().epochSecond - 60 * 60 * 24))
-            if (oldSteps != null) {
-                oldStepCount = oldSteps.count
-            }
+        var dailyStepsByDate : Steps?
+        runBlocking {
+            dailyStepsByDate = workoutRepository.getDailyStepsByDate(TimestampConverter.convertToDate(Instant.now().epochSecond - 60 * 60 * 24))
         }
-
-         */
-        return workoutRepository.oldStepsValue
+        return dailyStepsByDate?.count ?: 0
     }
 
     fun getCurrentWorkout() : Workout? {

@@ -52,6 +52,4 @@ class StepCounterResetWorker @AssistedInject constructor(
         Log.e("WORK", "Current State: oldValue=${workoutRepository.oldStepsValue}, newValue=${sensorRepository.stepCounterSensorValueStateFlow.value}")
         return Result.success()
     }
-
-
 }

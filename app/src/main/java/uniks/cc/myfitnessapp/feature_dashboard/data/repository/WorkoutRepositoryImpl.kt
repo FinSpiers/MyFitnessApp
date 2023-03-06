@@ -1,10 +1,13 @@
 package uniks.cc.myfitnessapp.feature_dashboard.data.repository
 
+import kotlinx.coroutines.runBlocking
 import uniks.cc.myfitnessapp.core.data.database.WorkoutDao
 import uniks.cc.myfitnessapp.core.domain.model.Steps
 import uniks.cc.myfitnessapp.core.domain.model.Workout
+import uniks.cc.myfitnessapp.core.domain.util.TimestampConverter
 import uniks.cc.myfitnessapp.feature_dashboard.presentation.WorkoutEvent
 import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.WorkoutRepository
+import java.time.Instant
 import kotlin.reflect.KFunction1
 
 class WorkoutRepositoryImpl(private val workoutDao: WorkoutDao) : WorkoutRepository {
@@ -13,6 +16,14 @@ class WorkoutRepositoryImpl(private val workoutDao: WorkoutDao) : WorkoutReposit
     override var currentWorkout: Workout? = null
     override var selectedWorkoutDetail: Workout? = null
     override var oldStepsValue: Int = 0
+
+    init {
+        runBlocking {
+            oldStepsValue = getDailyStepsByDate(
+                TimestampConverter.convertToDate(Instant.now().epochSecond - 60 * 60 * 24)
+            )?.count ?: 0
+        }
+    }
 
     override suspend fun getAllWorkoutsFromDatabase(): List<Workout> {
         return workoutDao.getAllWorkouts()

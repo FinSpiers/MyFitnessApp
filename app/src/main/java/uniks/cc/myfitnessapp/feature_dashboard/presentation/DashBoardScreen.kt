@@ -8,10 +8,7 @@ import android.content.pm.PackageManager
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -25,6 +22,7 @@ import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.Navigati
 import uniks.cc.myfitnessapp.feature_dashboard.presentation.components.*
 import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun DashBoardScreen(
@@ -32,8 +30,6 @@ fun DashBoardScreen(
         .checkSelfPermission(LocalContext.current, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
 ) {
     val viewModel: DashBoardViewModel = hiltViewModel()
-    val currentDailyStepsState = viewModel.stepCounterStateFlow.collectAsState()
-
     MyFitnessAppTheme {
         Scaffold(
             floatingActionButton = {
@@ -93,7 +89,11 @@ fun DashBoardScreen(
                         .fillMaxSize()
                         .padding(top = 4.dp)
                 ) {
-                    CurrentStepsBox(steps = viewModel.stepCounterStateFlow.collectAsState().value - viewModel.getOldStepCount())
+                    CurrentStepsBox(
+                        steps = viewModel.stepCounterStateFlow.collectAsState().value - viewModel.getOldStepCount(),
+                        dialogState = viewModel.dialogState
+                    )
+                    StepsHistory(viewModel.dialogState)
                     Spacer(modifier = Modifier.height(4.dp))
                     RecentWorkouts(
                         viewModel.getAllWorkouts(),

@@ -1,24 +1,23 @@
 package uniks.cc.myfitnessapp.feature_dashboard.presentation.components
 
 import android.icu.number.NumberFormatter
-import android.view.animation.Animation
-import androidx.compose.animation.core.AnimationSpec
-import androidx.compose.animation.core.Easing
 import androidx.compose.animation.core.TweenSpec
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,15 +26,18 @@ import com.github.tehras.charts.piechart.PieChart
 import com.github.tehras.charts.piechart.PieChartData
 import com.github.tehras.charts.piechart.animation.simpleChartAnimation
 import com.github.tehras.charts.piechart.renderer.SimpleSliceDrawer
+import com.vanpra.composematerialdialogs.MaterialDialogState
+import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import uniks.cc.myfitnessapp.R
 import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
 import java.util.*
 
 @Composable
-fun CurrentStepsBox(steps: Int, stepGoal : Int = 10000) {
+fun CurrentStepsBox(steps: Int, stepGoal: Int = 10000, dialogState: MaterialDialogState) {
     val progressionPercent = steps.toFloat() / stepGoal.toFloat()
     val stillRemainingPercent = if (1f - progressionPercent > 0f) 1f - progressionPercent else 0f
-    val animation : TweenSpec<Float> = if (stillRemainingPercent > 0) simpleChartAnimation() else TweenSpec(0, 0)
+    val animation: TweenSpec<Float> =
+        if (stillRemainingPercent > 0) simpleChartAnimation() else TweenSpec(0, 0)
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -44,7 +46,7 @@ fun CurrentStepsBox(steps: Int, stepGoal : Int = 10000) {
             .border(1.dp, MaterialTheme.colorScheme.outline, MaterialTheme.shapes.large)
     ) {
         Row(
-            horizontalArrangement = Arrangement.Start,
+            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -54,6 +56,20 @@ fun CurrentStepsBox(steps: Int, stepGoal : Int = 10000) {
                 fontFamily = FontFamily.Serif,
                 modifier = Modifier.padding(top = 4.dp, start = 8.dp),
                 color = MaterialTheme.colorScheme.onSurface
+            )
+            Icon(
+                imageVector = Icons.Default.BarChart,
+                contentDescription = "Show steps history",
+                modifier = Modifier
+                    .size(40.dp)
+                    .padding(top = 4.dp, end = 8.dp)
+                    .clickable {
+                        if (!dialogState.showing) {
+                            dialogState.show()
+                        } else {
+                            dialogState.hide()
+                        }
+                    }
             )
         }
         Box(
@@ -69,17 +85,28 @@ fun CurrentStepsBox(steps: Int, stepGoal : Int = 10000) {
                                 MaterialTheme.colorScheme.primary
                             ),
 
-                            PieChartData.Slice(stillRemainingPercent, MaterialTheme.colorScheme.outlineVariant)
+                            PieChartData.Slice(
+                                stillRemainingPercent,
+                                MaterialTheme.colorScheme.outlineVariant
+                            )
                         )
                     ),
                     animation = animation,
                     sliceDrawer = SimpleSliceDrawer(),
                     modifier = Modifier.size(100.dp),
                 )
-            }
-            else {
-                Box(contentAlignment = Alignment.Center, modifier = Modifier.size(100.dp).border(12.dp, MaterialTheme.colorScheme.primary, CircleShape)) {
-                    Icon(imageVector = Icons.Filled.Check, contentDescription = null, modifier = Modifier.size(60.dp), tint = MaterialTheme.colorScheme.primary)
+            } else {
+                Box(
+                    contentAlignment = Alignment.Center, modifier = Modifier
+                        .size(100.dp)
+                        .border(12.dp, MaterialTheme.colorScheme.primary, CircleShape)
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Check,
+                        contentDescription = null,
+                        modifier = Modifier.size(60.dp),
+                        tint = MaterialTheme.colorScheme.primary
+                    )
                 }
             }
         }
@@ -108,6 +135,6 @@ fun CurrentStepsBox(steps: Int, stepGoal : Int = 10000) {
 @Composable
 fun CurrentStepsBoxPreview() {
     MyFitnessAppTheme(darkTheme = true) {
-        CurrentStepsBox(steps = 46320)
+        CurrentStepsBox(steps = 9030, dialogState = rememberMaterialDialogState())
     }
 }

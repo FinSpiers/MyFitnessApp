@@ -13,7 +13,7 @@ class SensorRepositoryImpl(
     private val accelerometerSensor: AccelerometerSensor
 ) : SensorRepository {
 
-    override var stepCounterSensorValueStateFlow = MutableStateFlow<Int>(0)
+    override var stepCounterSensorValueStateFlow = MutableStateFlow(0)
     override var accelerometerSensorValueX: Double = 0.0
     override var accelerometerSensorValueY: Double = 0.0
     override var accelerometerSensorValueZ: Double = 0.0
