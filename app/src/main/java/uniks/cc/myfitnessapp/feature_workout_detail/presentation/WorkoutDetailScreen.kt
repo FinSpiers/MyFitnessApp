@@ -3,8 +3,7 @@
 package uniks.cc.myfitnessapp.feature_workout_detail.presentation
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,6 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import uniks.cc.myfitnessapp.core.domain.model.sensors.Waypoint
 import uniks.cc.myfitnessapp.core.domain.util.TimestampConverter
 import uniks.cc.myfitnessapp.core.presentation.components.WorkoutFab
+import uniks.cc.myfitnessapp.feature_workout_detail.presentation.components.LineChartBox
 import uniks.cc.myfitnessapp.feature_workout_detail.presentation.components.MapBox
 import uniks.cc.myfitnessapp.feature_workout_detail.presentation.components.WorkoutDetailListItem
 
@@ -85,57 +85,83 @@ fun WorkoutDetailScreen(
                     textAlign = TextAlign.Center,
                 )
             }
-            Spacer(modifier = Modifier.height(20.dp))
-            WorkoutDetailListItem(
-                title = "Duration",
-                value = "${viewModel.selectedWorkout.duration}",
-                unit = durationUnit
-            )
-            if (viewModel.selectedWorkout.distance != null) {
-                WorkoutDetailListItem(
-                    title = "Distance",
-                    value = "${viewModel.selectedWorkout.distance}",
-                    unit = distanceUnit
-                )
-            }
-            if (viewModel.selectedWorkout.avgPace != null) {
-                WorkoutDetailListItem(
-                    title = "avg Pace",
-                    value = "${viewModel.selectedWorkout.avgPace}",
-                    unit = paceUnit
-                )
-            }
-            if (viewModel.selectedWorkout.repetitions != null) {
-                WorkoutDetailListItem(
-                    title = "Repetitions",
-                    value = "${viewModel.selectedWorkout.repetitions}",
-                    unit = null
-                )
-            }
-            WorkoutDetailListItem(
-                title = "kcal",
-                value = "${viewModel.selectedWorkout.kcal}",
-                unit = kcalUnit
-            )
-
-            if (viewModel.selectedWorkout.workoutName in listOf(
-                    "Walking",
-                    "Running",
-                    "Bicycling"
-                )
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
             ) {
-                val exampleRoute = listOf(
-                    Waypoint(1, 1, 51.546109235121925, 9.401057125476921),
-                    Waypoint(1, 12, 51.54551062095242, 9.401252428123303),
-                    Waypoint(1, 123, 51.544721964433144, 9.402062357757353),
-                    Waypoint(1, 1234, 51.54473609118497, 9.403702405617599),
-                    Waypoint(1, 12345, 51.54547350154158, 9.40395227440517),
-                    Waypoint(1, 123456, 51.546109235121925, 9.401057125476921),
+                Spacer(modifier = Modifier.height(20.dp))
+                WorkoutDetailListItem(
+                    title = "Duration",
+                    value = "${viewModel.selectedWorkout.duration}",
+                    unit = durationUnit
                 )
 
-                MapBox(true, exampleRoute)
-            }
+                if (viewModel.selectedWorkout.workoutName in listOf(
+                        "Walking",
+                        "Running",
+                        "Bicycling"
+                    )
+                ) {
+                    WorkoutDetailListItem(
+                        title = "Distance",
+                        value = "${viewModel.selectedWorkout.distance}",
+                        unit = distanceUnit
+                    )
+                    WorkoutDetailListItem(
+                        title = "avg Pace",
+                        value = "${viewModel.selectedWorkout.avgPace}",
+                        unit = paceUnit
+                    )
 
+
+                } else {
+                    WorkoutDetailListItem(
+                        title = "Repetitions",
+                        value = "${viewModel.selectedWorkout.repetitions}",
+                        unit = null
+                    )
+                }
+                WorkoutDetailListItem(
+                    title = "kcal",
+                    value = "${viewModel.selectedWorkout.kcal}",
+                    unit = kcalUnit
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+
+                if (viewModel.selectedWorkout.workoutName in listOf(
+                        "Walking",
+                        "Running",
+                        "Bicycling"
+                    )
+                ) {
+                    val exampleRoute = listOf(
+                        Waypoint(1, 1, 51.546109235121925, 9.401057125476921),
+                        Waypoint(1, 12, 51.54551062095242, 9.401252428123303),
+                        Waypoint(1, 123, 51.544721964433144, 9.402062357757353),
+                        Waypoint(1, 1234, 51.54473609118497, 9.403702405617599),
+                        Waypoint(1, 12345, 51.54547350154158, 9.40395227440517),
+                        Waypoint(1, 123456, 51.546109235121925, 9.401057125476921),
+                    )
+                    MapBox(true, exampleRoute)
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    LineChartBox(
+                        "avg Pace",
+                        listOf("1", "2", "3", "4", "5", "6", "7"),
+                        listOf(0f, 20f, 35f, 143f, 21f, 16f, 0f)
+                    )
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    LineChartBox(
+                        "Altitude",
+                        listOf("1", "2", "3", "4", "5", "6", "7"),
+                        listOf(110f, 199f, 523f, 2235f, 3232f, 1233f, 110f)
+                    )
+                    Spacer(modifier = Modifier.height(80.dp))
+                }
+
+            }
         }
     }
 }
