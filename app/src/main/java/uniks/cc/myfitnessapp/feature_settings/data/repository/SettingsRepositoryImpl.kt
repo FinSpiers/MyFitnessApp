@@ -10,14 +10,8 @@ class SettingsRepositoryImpl(
 ) : SettingsRepository {
 
     // Function to get the current settings from the database
-    override suspend fun getSettingsFromDatabase(): Settings? {
-        try {
-            return settingsDao.getSettings()
-        } catch (e: Exception) {
-            Log.e("DB", "Error on loading from database: ${e.stackTrace}")
-            e.printStackTrace()
-        }
-        return null
+    override suspend fun getSettingsFromDatabase(): Settings {
+        return settingsDao.getSettings() ?: Settings()
     }
 
     // Function to set the current settings in the database
