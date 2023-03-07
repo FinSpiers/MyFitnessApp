@@ -38,7 +38,7 @@ fun WeightField(
     TextField(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(12.dp)
+            .padding(vertical = 12.dp)
             .clip(MaterialTheme.shapes.medium),
         textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
         value = if (weight.value != "0") weight.value else "",

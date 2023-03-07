@@ -4,31 +4,28 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
-import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.domain.util.Screen
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationEvent
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationBarState
-import java.time.Instant
+import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.WorkoutRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val coreRepository: CoreRepository
+    private val coreRepository: CoreRepository,
+    private val workoutRepository: WorkoutRepository
 ) : ViewModel() {
     private lateinit var navController: NavHostController
 
     private val navDestinations = listOf(
         Screen.DashBoardScreen.route,
         Screen.SettingsScreen.route,
-        Screen.CurrentActivityScreen.route,
+        Screen.CurrentWorkoutScreen.route,
         Screen.ActivityDetailScreen.route
     )
 
@@ -51,11 +48,16 @@ class MainViewModel @Inject constructor(
         when (event) {
             is NavigationEvent.OnDashBoardClick -> navigate(Screen.DashBoardScreen.route)
             is NavigationEvent.OnSettingsClick -> navigate(Screen.SettingsScreen.route)
-            is NavigationEvent.OnStartWorkoutClick -> navigate(Screen.CurrentActivityScreen.route)
-            is NavigationEvent.OnWorkoutDetailClick -> navigate(Screen.ActivityDetailScreen.route)
+            is NavigationEvent.OnStartWorkoutClick -> navigate(Screen.CurrentWorkoutScreen.route)
+            is NavigationEvent.OnWorkoutDetailClick -> {
+                if (workoutRepository.currentWorkout == event.workout) {
+                    navigate(Screen.CurrentWorkoutScreen.route)
+                } else {
+                    navigate(Screen.ActivityDetailScreen.route)
+                }
+            }
             is NavigationEvent.OnStopWorkoutClick -> navigate(Screen.DashBoardScreen.route)
             is NavigationEvent.OnOpenAppSettingsClick -> {
-                Log.e("Context", coreRepository.context.toString())
                 val openAppSettingsIntent = Intent().apply {
                     action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
                     data = Uri.fromParts("package", coreRepository.context.packageName, null)
@@ -87,7 +89,4 @@ class MainViewModel @Inject constructor(
     fun setNavController(navController: NavHostController) {
         this.navController = navController
     }
-
-
-
 }

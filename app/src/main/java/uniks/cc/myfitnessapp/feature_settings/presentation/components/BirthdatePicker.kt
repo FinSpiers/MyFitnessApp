@@ -1,6 +1,7 @@
 package uniks.cc.myfitnessapp.feature_settings.presentation.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -9,6 +10,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
@@ -21,7 +23,6 @@ import java.time.format.DateTimeFormatter
 fun BirthdatePicker(
     pickedDate: MutableState<LocalDateTime>,
 ) {
-
     val formattedDate = remember {
         derivedStateOf {
             DateTimeFormatter
@@ -29,10 +30,7 @@ fun BirthdatePicker(
                 .format(pickedDate.value)
         }
     }
-
     val dateDialogState = rememberMaterialDialogState()
-
-
     Text(
         text = "Birthdate: " + formattedDate.value,
         modifier = Modifier
@@ -44,6 +42,7 @@ fun BirthdatePicker(
         onClick = {
             dateDialogState.show()
         },
+        modifier = Modifier.padding(4.dp)
     ) {
         Text(text = "Pick birth date")
     }

@@ -1,27 +1,25 @@
 package uniks.cc.myfitnessapp.core.domain.repository
 
-import androidx.compose.runtime.MutableState
-import uniks.cc.myfitnessapp.core.domain.model.sensors.AndroidSensors
-import uniks.cc.myfitnessapp.core.domain.model.sensors.GyroscopeSensor
+import kotlinx.coroutines.flow.MutableStateFlow
+import uniks.cc.myfitnessapp.core.domain.model.sensors.AccelerometerSensor
 import uniks.cc.myfitnessapp.core.domain.model.sensors.StepCounterSensor
 
 interface SensorRepository {
 
-    val stepCounterSensorValue: MutableState<Int>
-    val gyroscopeSensorValueX: MutableState<Double>
-    val gyroscopeSensorValueY: MutableState<Double>
-    val gyroscopeSensorValueZ: MutableState<Double>
+    var stepCounterSensorValueStateFlow: MutableStateFlow<Int>
+    var accelerometerSensorValueX: Double
+    var accelerometerSensorValueY: Double
+    var accelerometerSensorValueZ: Double
+    fun getStepCounterSensor(): StepCounterSensor
 
-    fun getStepCounterSensor(): AndroidSensors
-
-    fun getGyroscopeSensor(): AndroidSensors
+    fun getAccelerometerSensor(): AccelerometerSensor
 
     fun startStepCounterSensor()
 
     fun stopStepCounterSensor()
 
-    fun startGyroscopeSensor()
+    fun startAccelerometerSensor()
 
-    fun stopGyroscopeSensor()
+    fun stopAccelerometerSensor()
 
 }

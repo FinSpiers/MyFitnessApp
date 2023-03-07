@@ -1,4 +1,4 @@
-package uniks.cc.myfitnessapp.core.domain.model.sensors
+package uniks.cc.myfitnessapp.core.domain.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

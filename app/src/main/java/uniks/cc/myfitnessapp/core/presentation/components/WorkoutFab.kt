@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import uniks.cc.myfitnessapp.R
-import uniks.cc.myfitnessapp.core.presentation.WorkoutEvent
+import uniks.cc.myfitnessapp.feature_dashboard.presentation.WorkoutEvent
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationEvent
 import kotlin.reflect.KFunction1
 
@@ -113,7 +113,7 @@ fun WorkoutFab(
             text = { Text(text = text) },
             icon = { Icon(icon, text) },
             onClick = onClick,
-            modifier = Modifier.padding(bottom = 75.dp)
+            modifier = Modifier.padding(bottom = 70.dp)
         )
     }
 

@@ -4,17 +4,24 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import uniks.cc.myfitnessapp.core.domain.model.Workout
+import uniks.cc.myfitnessapp.feature_current_workout.data.data_source.StepCounterResetWorker
+import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.WorkoutRepository
 import uniks.cc.myfitnessapp.feature_settings.domain.model.Settings
 import uniks.cc.myfitnessapp.feature_settings.domain.repository.SettingsRepository
 import java.time.LocalDateTime
 import java.time.ZoneOffset
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val settingsRepository: SettingsRepository
+    private val settingsRepository: SettingsRepository,
+    private val workoutRepository: WorkoutRepository,
+    private val workManager: WorkManager
 ) : ViewModel() {
     // Create private and public version of settings state
     private val _settingsState = mutableStateOf(SettingsState())
@@ -78,6 +85,16 @@ class SettingsViewModel @Inject constructor(
             _isMale = _settingsState.value.isMale,
             _birthDateAsTimeStamp = _settingsState.value.birthDateAsTimeStamp
         )
+        viewModelScope.launch {
+            for (workout : Workout in workoutRepository.getAllWorkoutsFromDatabase()) {
+                workoutRepository.deleteWorkoutFromDatabase(workout)
+            }
+            if (workoutRepository.currentWorkout != null) {
+                workoutRepository.currentWorkout = null
+            }
+            val resetRequest : OneTimeWorkRequest = OneTimeWorkRequestBuilder<StepCounterResetWorker>().build()
+            workManager.enqueue(resetRequest)
+        }
     }
 
 }

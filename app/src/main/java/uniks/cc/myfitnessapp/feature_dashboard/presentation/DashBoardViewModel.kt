@@ -3,51 +3,69 @@ package uniks.cc.myfitnessapp.feature_dashboard.presentation
 import android.annotation.SuppressLint
 import android.location.LocationManager
 import android.net.ConnectivityManager
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
+import androidx.work.*
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.Priority
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import uniks.cc.myfitnessapp.core.domain.model.Steps
 import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
-import uniks.cc.myfitnessapp.core.presentation.WorkoutEvent
+import uniks.cc.myfitnessapp.core.domain.repository.SensorRepository
+import uniks.cc.myfitnessapp.core.domain.util.TimestampConverter
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationEvent
+import uniks.cc.myfitnessapp.feature_current_workout.data.data_source.StepCounterResetWorker
 import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.WorkoutRepository
-import java.time.Instant
+import java.time.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
 class DashBoardViewModel @Inject constructor(
     private val coreRepository: CoreRepository,
     private val workoutRepository: WorkoutRepository,
+    private val sensorRepository: SensorRepository,
     private val locationManager: LocationManager,
     private val connectivityManager: ConnectivityManager,
     private val fusedLocationProviderClient: FusedLocationProviderClient,
+    private val workManager: WorkManager
 
     ) : ViewModel() {
-    private var _dashBoardState: DashBoardState = DashBoardState()
-    val dashBoardState = mutableStateOf(_dashBoardState)
-
+    val dashBoardState = mutableStateOf(DashBoardState())
+    val stepCounterStateFlow = sensorRepository.stepCounterSensorValueStateFlow
+    val dialogStateFlow = MutableStateFlow(false)
 
 
     init {
+        sensorRepository.startStepCounterSensor()
         workoutRepository.onWorkoutAction = this::onWorkoutAction
-        syncRepoWorkouts()
+        // TODO: move this code into a class that is executed ONLY ONE TIME
+        val initialDelay = Duration.between(LocalDateTime.now(), LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(0, 0)))
+
+        val resetRequest : PeriodicWorkRequest = PeriodicWorkRequestBuilder<StepCounterResetWorker>(1, TimeUnit.DAYS)
+            .setInitialDelay(initialDelay)
+            .build()
+
+        workManager.enqueueUniquePeriodicWork("stepCounterResetWork", ExistingPeriodicWorkPolicy.UPDATE, resetRequest)
+        Log.e("WORK", "Starting worker with initial delay of ${initialDelay.seconds / 60} min = ${initialDelay.seconds / 3600}h, ${(initialDelay.seconds / 60) % 60}min ")
+
+    }
+
+    fun getOldStepCount() : Int {
+        var dailyStepsByDate : Steps?
+        runBlocking {
+            dailyStepsByDate = workoutRepository.getDailyStepsByDate(TimestampConverter.convertToDate(Instant.now().epochSecond - 60 * 60 * 24))
+        }
+        return dailyStepsByDate?.count ?: 0
     }
 
     fun getCurrentWorkout() : Workout? {
         return workoutRepository.currentWorkout
-    }
-
-    fun addCurrentWorkoutToWorkouts(workout: Workout) {
-        val workouts = dashBoardState.value.workouts.toMutableList()
-        workouts.add(0, workout)
-        _dashBoardState = _dashBoardState.copy(
-            workouts = workouts,
-            currentWorkout = workout
-        )
     }
 
     fun hasCurrentWorkout() : Boolean {
@@ -92,12 +110,17 @@ class DashBoardViewModel @Inject constructor(
                     }
                 }
                 workoutRepository.currentWorkout = currentWorkout
+
                 viewModelScope.launch {
                     workoutRepository.addWorkoutToDatabase(currentWorkout)
                 }
-                workoutRepository.workouts = _dashBoardState.workouts.toMutableList().apply { add(0, currentWorkout) }
 
-                _dashBoardState.workouts = _dashBoardState.workouts.toMutableList().apply { add(0, currentWorkout) }
+                dashBoardState.value = dashBoardState.value.copy(
+                    workouts = dashBoardState.value.workouts.toMutableList().apply { add(0, currentWorkout) }
+                )
+
+                workoutRepository.workouts = dashBoardState.value.workouts
+
             }
             is WorkoutEvent.StopWorkout -> {
                 workoutRepository.currentWorkout = null
@@ -106,8 +129,12 @@ class DashBoardViewModel @Inject constructor(
         }
     }
 
-    fun syncRepoWorkouts() {
-        workoutRepository.workouts = getAllWorkoutsFromDatabase()
+    private fun syncRepoWorkouts() {
+        val workouts = getAllWorkoutsFromDatabase()
+        workoutRepository.workouts = workouts
+        dashBoardState.value = dashBoardState.value.copy(
+            workouts = workouts
+        )
     }
 
     fun getAllWorkouts() : List<Workout> {
@@ -116,17 +143,8 @@ class DashBoardViewModel @Inject constructor(
     }
 
     @SuppressLint("MissingPermission")
-    fun checkGpsState() {
-        fusedLocationProviderClient.locationAvailability.addOnSuccessListener {
-            _dashBoardState = _dashBoardState.copy(
-                hasGpsConnection = true
-            )
-        }
-        fusedLocationProviderClient.locationAvailability.addOnFailureListener {
-            _dashBoardState = _dashBoardState.copy(
-                hasGpsConnection = false
-            )
-        }
+    fun hasGpsSignal() : Boolean {
+        return locationManager.isLocationEnabled
     }
 
     fun hasInternetConnection(): Boolean {
@@ -138,10 +156,12 @@ class DashBoardViewModel @Inject constructor(
         fusedLocationProviderClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null)
 
         fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
+
             viewModelScope.launch {
                 location?.let {
-                    dashBoardState.value.currentWeatherData =
-                        coreRepository.getCurrentWeather(location.latitude, location.longitude)
+                    dashBoardState.value = dashBoardState.value.copy(
+                        currentWeatherData = coreRepository.getCurrentWeather(location.latitude, location.longitude)
+                    )
                 }
             }
         }

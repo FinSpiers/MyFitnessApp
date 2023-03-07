@@ -1,58 +1,60 @@
 package uniks.cc.myfitnessapp.core.data.repository
 
-import android.content.Context
-import androidx.compose.runtime.mutableStateOf
-import uniks.cc.myfitnessapp.core.domain.model.sensors.AndroidSensors
-import uniks.cc.myfitnessapp.core.domain.model.sensors.GyroscopeSensor
+import android.util.Log
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
+import uniks.cc.myfitnessapp.core.domain.model.sensors.AccelerometerSensor
 import uniks.cc.myfitnessapp.core.domain.model.sensors.StepCounterSensor
 import uniks.cc.myfitnessapp.core.domain.repository.SensorRepository
 
 class SensorRepositoryImpl(
-    private val context: Context
+    private val stepCounterSensor: StepCounterSensor,
+    private val accelerometerSensor: AccelerometerSensor
 ) : SensorRepository {
 
-
-    override val stepCounterSensorValue = mutableStateOf(0)
-    override val gyroscopeSensorValueX = mutableStateOf(0.0)
-    override val gyroscopeSensorValueY = mutableStateOf(0.0)
-    override val gyroscopeSensorValueZ = mutableStateOf(0.0)
-
-    override fun getStepCounterSensor(): AndroidSensors {
-        return StepCounterSensor(context = context)
+    override var stepCounterSensorValueStateFlow = MutableStateFlow(0)
+    override var accelerometerSensorValueX: Double = 0.0
+    override var accelerometerSensorValueY: Double = 0.0
+    override var accelerometerSensorValueZ: Double = 0.0
+    override fun getStepCounterSensor(): StepCounterSensor {
+        return stepCounterSensor
     }
 
-    override fun getGyroscopeSensor(): AndroidSensors {
-        return GyroscopeSensor(context = context)
+    override fun getAccelerometerSensor(): AccelerometerSensor {
+        return accelerometerSensor
     }
 
-    override fun startGyroscopeSensor() {
-        getGyroscopeSensor().setOnSensorValuesChangedListener { values ->
-            gyroscopeSensorValueX.value = values[0].toDouble()
-            gyroscopeSensorValueY.value = values[1].toDouble()
-            gyroscopeSensorValueZ.value = values[2].toDouble()
+    override fun startAccelerometerSensor() {
+        accelerometerSensor.setOnSensorValuesChangedListener { values ->
+            accelerometerSensorValueX = values[0].toDouble()
+            accelerometerSensorValueY = values[1].toDouble()
+            accelerometerSensorValueZ = values[2].toDouble()
+
         }
 
-        if (!getGyroscopeSensor().isListening()) {
-            getGyroscopeSensor().startListening()
+        if (!accelerometerSensor.isListening()) {
+            accelerometerSensor.startListening()
         }
     }
 
-    override fun stopGyroscopeSensor() {
-        getGyroscopeSensor().stopListening()
+    override fun stopAccelerometerSensor() {
+        accelerometerSensor.stopListening()
     }
 
     override fun startStepCounterSensor() {
-        getStepCounterSensor().setOnSensorValuesChangedListener { values ->
-            stepCounterSensorValue.value = values[0].toInt()
+        stepCounterSensor.setOnSensorValuesChangedListener { values ->
+            stepCounterSensorValueStateFlow.tryEmit(values[0].toInt())
+
         }
 
-        if (!getStepCounterSensor().isListening()) {
-            getStepCounterSensor().startListening()
+        if (!stepCounterSensor.isListening()) {
+            stepCounterSensor.startListening()
         }
     }
 
     override fun stopStepCounterSensor() {
-        getStepCounterSensor().stopListening()
+        stepCounterSensor.stopListening()
     }
 
 }

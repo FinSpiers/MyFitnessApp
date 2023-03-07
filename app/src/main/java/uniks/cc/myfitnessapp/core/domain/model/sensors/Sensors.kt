@@ -13,10 +13,10 @@ class StepCounterSensor(
 )
 
 
-class GyroscopeSensor(
+class AccelerometerSensor(
     context: Context
 ) : AndroidSensors(
     context = context,
-    sensorFeature = PackageManager.FEATURE_SENSOR_GYROSCOPE,
-    sensorType = Sensor.TYPE_GYROSCOPE
+    sensorFeature = PackageManager.FEATURE_SENSOR_ACCELEROMETER,
+    sensorType = Sensor.TYPE_ACCELEROMETER
 )

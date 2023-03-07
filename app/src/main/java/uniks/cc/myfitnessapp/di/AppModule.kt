@@ -6,6 +6,7 @@ import android.location.LocationManager
 import android.net.ConnectivityManager
 import androidx.compose.material3.SnackbarHostState
 import androidx.room.Room
+import androidx.work.WorkManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import dagger.Module
@@ -16,8 +17,7 @@ import uniks.cc.myfitnessapp.core.data.database.MyFitnessDatabase
 import uniks.cc.myfitnessapp.core.data.network.OpenWeatherApiService
 import uniks.cc.myfitnessapp.core.data.repository.CoreRepositoryImpl
 import uniks.cc.myfitnessapp.core.data.repository.SensorRepositoryImpl
-import uniks.cc.myfitnessapp.core.domain.model.sensors.AndroidSensors
-import uniks.cc.myfitnessapp.core.domain.model.sensors.GyroscopeSensor
+import uniks.cc.myfitnessapp.core.domain.model.sensors.AccelerometerSensor
 import uniks.cc.myfitnessapp.core.domain.model.sensors.StepCounterSensor
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.domain.repository.SensorRepository
@@ -48,17 +48,18 @@ object AppModule {
         ).build()
     }
 
+
+
     @Provides
     @Singleton
     fun provideApiService(): OpenWeatherApiService {
         return OpenWeatherApiService()
     }
 
-
     @Provides
     @Singleton
-    fun provideSnackbarHostState(): SnackbarHostState {
-        return SnackbarHostState()
+    fun provideWorkManager(app: Application) : WorkManager {
+        return WorkManager.getInstance(app)
     }
 
     @Provides
@@ -85,9 +86,10 @@ object AppModule {
     @Provides
     @Singleton
     fun provideSensorRepository(
-        app: Application
+        stepCounterSensor: StepCounterSensor,
+        accelerometerSensor: AccelerometerSensor
     ): SensorRepository {
-        return SensorRepositoryImpl(app)
+        return SensorRepositoryImpl(stepCounterSensor, accelerometerSensor)
     }
 
     @Provides
@@ -98,14 +100,14 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideStepCounterSensor(app: Application): AndroidSensors {
+    fun provideStepCounterSensor(app: Application): StepCounterSensor {
         return StepCounterSensor(app)
     }
 
     @Provides
     @Singleton
-    fun provideGyroscopeSensor(app: Application): AndroidSensors {
-        return GyroscopeSensor(app)
+    fun provideAccelerometerSensor(app: Application): AccelerometerSensor {
+        return AccelerometerSensor(app)
     }
 
     @Provides

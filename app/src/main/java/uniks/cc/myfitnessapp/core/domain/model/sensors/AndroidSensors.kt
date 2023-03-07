@@ -19,7 +19,6 @@ abstract class AndroidSensors(
     private var isListening = false
     private var onSensorValuesChanged: ((List<Float>) -> Unit)? = null
 
-
     fun setOnSensorValuesChangedListener(listener: ((List<Float>) -> Unit)) {
         onSensorValuesChanged = listener
     }

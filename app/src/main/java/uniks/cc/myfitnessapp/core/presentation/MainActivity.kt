@@ -20,7 +20,6 @@ import javax.inject.Inject
 class MainActivity @Inject constructor() : ComponentActivity() {
     @Inject lateinit var workoutRepository: WorkoutRepository
     @Inject lateinit var coreRepository: CoreRepository
-    @Inject lateinit var snackbarHostState: SnackbarHostState
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,15 +39,11 @@ class MainActivity @Inject constructor() : ComponentActivity() {
                             onEvent = viewModel::onNavigationEvent
                         )
                     },
-                    snackbarHost = { SnackbarHost(hostState = snackbarHostState)}
                 ) {
                     NavigationHost(
                         navController = navController,
                         startDestination = navBarState.currentRoute
                     )
-                    //GlobalScope.launch {
-                    //    snackbarHostState.showSnackbar("Test", "OK", false, SnackbarDuration.Long)
-                    //}
                 }
             }
         }

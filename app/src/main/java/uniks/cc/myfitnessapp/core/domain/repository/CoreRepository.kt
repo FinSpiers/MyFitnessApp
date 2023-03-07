@@ -1,8 +1,6 @@
 package uniks.cc.myfitnessapp.core.domain.repository
 
 import android.content.Context
-import uniks.cc.myfitnessapp.core.domain.model.Workout
-import uniks.cc.myfitnessapp.core.presentation.WorkoutEvent
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationBarState
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationEvent
 import uniks.cc.myfitnessapp.feature_dashboard.domain.model.CurrentWeatherData

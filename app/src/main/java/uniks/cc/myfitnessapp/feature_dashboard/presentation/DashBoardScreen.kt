@@ -8,12 +8,11 @@ import android.content.pm.PackageManager
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -23,18 +22,23 @@ import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.Navigati
 import uniks.cc.myfitnessapp.feature_dashboard.presentation.components.*
 import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun DashBoardScreen(
-    borderStroke: Dp = 2.dp,
+    hasGpsPermission: Boolean = ContextCompat
+        .checkSelfPermission(LocalContext.current, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
 ) {
     val viewModel: DashBoardViewModel = hiltViewModel()
-    val hasGpsPermission = ContextCompat
-        .checkSelfPermission(LocalContext.current, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-
     MyFitnessAppTheme {
         Scaffold(
-            floatingActionButton = { WorkoutFab(viewModel::onNavigationAction, viewModel::onWorkoutAction, viewModel.hasCurrentWorkout()) },
+            floatingActionButton = {
+                WorkoutFab(
+                    viewModel::onNavigationAction,
+                    viewModel::onWorkoutAction,
+                    viewModel.hasCurrentWorkout()
+                )
+            },
         ) {
             Column(
                 modifier = Modifier
@@ -44,21 +48,20 @@ fun DashBoardScreen(
                 var hasError = false
                 var errorTitle = ""
                 var errorText = ""
-                val dashBoardState = viewModel.dashBoardState
                 if (hasGpsPermission) {
-                    viewModel.checkGpsState()
-                    if (dashBoardState.value.hasGpsConnection) {
+                    if (viewModel.hasGpsSignal()) {
                         if (viewModel.hasInternetConnection()) {
-                            viewModel.setWeatherData()
                             WeatherBox(
-                                borderStroke = borderStroke,
-                                currentTemp = dashBoardState.value.currentWeatherData.currentTemperature,
-                                isWeatherGood = dashBoardState.value.currentWeatherData.isWeatherGood,
-                                currentWeatherMain = dashBoardState.value.currentWeatherData.currentWeatherMain
+                                currentTemp = viewModel.dashBoardState.value.currentWeatherData.currentTemperature,
+                                isWeatherGood = viewModel.dashBoardState.value.currentWeatherData.isWeatherGood,
+                                currentWeatherMain = viewModel.dashBoardState.value.currentWeatherData.currentWeatherMain
                             )
+                            viewModel.setWeatherData()
                         } else {
-                            errorTitle = stringResource(id = R.string.warning_no_internet_connection_title)
-                            errorText = stringResource(id = R.string.warning_no_internet_connection_text)
+                            errorTitle =
+                                stringResource(id = R.string.warning_no_internet_connection_title)
+                            errorText =
+                                stringResource(id = R.string.warning_no_internet_connection_text)
                             hasError = true
                         }
                     } else {
@@ -81,8 +84,17 @@ fun DashBoardScreen(
                     }
                 }
 
-                Column(modifier = Modifier.fillMaxSize()) {
-                    CurrentStepsBox(steps = dashBoardState.value.steps)
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 4.dp)
+                ) {
+                    CurrentStepsBox(
+                        steps = viewModel.stepCounterStateFlow.collectAsState().value - viewModel.getOldStepCount(),
+                        dialogState = viewModel.dialogStateFlow
+                    )
+                    StepsHistory(viewModel.dialogStateFlow)
+                    Spacer(modifier = Modifier.height(4.dp))
                     RecentWorkouts(
                         viewModel.getAllWorkouts(),
                         viewModel::onWorkoutDetailClick,

@@ -20,7 +20,8 @@ import androidx.compose.ui.unit.dp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HeightField(
-    height: MutableState<String>
+    height: MutableState<String>,
+    modifier: Modifier = Modifier
 ) {
 
     val isErrorHeight = remember { mutableStateOf(false) }
@@ -37,11 +38,12 @@ fun HeightField(
     TextField(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(12.dp)
+            .padding(vertical = 12.dp)
             .clip(MaterialTheme.shapes.medium),
         textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
         value = if (height.value != "0") height.value else "",
         onValueChange = {
+            /* TODO: Put this validation in viewmodel and just call it here */
             if (it.length <= maxChar && isNumeric(it) && it != "") {
                 height.value = it
                 validateHeight(it.toInt())
