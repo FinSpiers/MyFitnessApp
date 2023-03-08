@@ -46,9 +46,6 @@ class MainViewModel @Inject constructor(
         runBlocking {
             settings = settingsRepository.getSettingsFromDatabase()
         }
-        if (settings.onBoardingShown) {
-            navBarState.value = navBarState.value.copy(currentRoute = Screen.DashBoardScreen.route)
-        }
         coreRepository.navBarState = navBarState.value
     }
     fun setRepoContext(context : Context) {

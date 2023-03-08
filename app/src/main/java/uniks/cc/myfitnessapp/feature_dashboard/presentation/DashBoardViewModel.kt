@@ -44,7 +44,8 @@ class DashBoardViewModel @Inject constructor(
     init {
         sensorRepository.startStepCounterSensor()
         workoutRepository.onWorkoutAction = this::onWorkoutAction
-        // TODO: move this code into a class that is executed ONLY ONE TIME
+
+
         val initialDelay = Duration.between(LocalDateTime.now(), LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(0, 0)))
 
         val resetRequest : PeriodicWorkRequest = PeriodicWorkRequestBuilder<StepCounterResetWorker>(1, TimeUnit.DAYS)
@@ -57,11 +58,7 @@ class DashBoardViewModel @Inject constructor(
     }
 
     fun getOldStepCount() : Int {
-        var dailyStepsByDate : Steps?
-        runBlocking {
-            dailyStepsByDate = workoutRepository.getDailyStepsByDate(TimestampConverter.convertToDate(Instant.now().epochSecond - 60 * 60 * 24))
-        }
-        return dailyStepsByDate?.count ?: 0
+        return workoutRepository.oldStepsValue
     }
 
     fun getCurrentWorkout() : Workout? {

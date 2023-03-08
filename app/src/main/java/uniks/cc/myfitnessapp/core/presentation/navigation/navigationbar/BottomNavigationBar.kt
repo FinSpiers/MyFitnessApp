@@ -23,28 +23,26 @@ fun BottomNavigationBar(
         NavItem("Dashboard", dashboard, Icons.Default.Dashboard, true),
         NavItem("Settings", settings, Icons.Default.Settings, true),
     )
-    if (navBarState.currentRoute != Screen.OnBoardingScreen.route) {
-        NavigationBar(modifier = Modifier.fillMaxWidth()) {
-            items.forEach { item ->
-                if (item.isBottomNavItem) {
-                    NavigationBarItem(
-                        icon = { Icon(imageVector = item.Icon, contentDescription = item.title) },
-                        label = { Text(text = item.title) },
-                        selected = item.route == navBarState.currentRoute,
-                        colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = MaterialTheme.colorScheme.primary,
-                            selectedTextColor = MaterialTheme.colorScheme.primary,
-                            unselectedIconColor = MaterialTheme.colorScheme.onBackground,
-                            unselectedTextColor = MaterialTheme.colorScheme.onBackground
-                        ),
-                        onClick = {
-                            when (item.route) {
-                                dashboard -> onEvent(NavigationEvent.OnDashBoardClick)
-                                settings -> onEvent(NavigationEvent.OnSettingsClick)
-                            }
-                        },
-                    )
-                }
+    NavigationBar(modifier = Modifier.fillMaxWidth()) {
+        items.forEach { item ->
+            if (item.isBottomNavItem) {
+                NavigationBarItem(
+                    icon = { Icon(imageVector = item.Icon, contentDescription = item.title) },
+                    label = { Text(text = item.title) },
+                    selected = item.route == navBarState.currentRoute,
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = MaterialTheme.colorScheme.primary,
+                        selectedTextColor = MaterialTheme.colorScheme.primary,
+                        unselectedIconColor = MaterialTheme.colorScheme.onBackground,
+                        unselectedTextColor = MaterialTheme.colorScheme.onBackground
+                    ),
+                    onClick = {
+                        when (item.route) {
+                            dashboard -> onEvent(NavigationEvent.OnDashBoardClick)
+                            settings -> onEvent(NavigationEvent.OnSettingsClick)
+                        }
+                    },
+                )
             }
         }
     }

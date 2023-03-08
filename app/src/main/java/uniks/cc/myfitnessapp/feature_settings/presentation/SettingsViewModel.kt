@@ -33,16 +33,12 @@ class SettingsViewModel @Inject constructor(
             val loadedSettings = settingsRepository.getSettingsFromDatabase()
 
             // If not null update the state
-            if (loadedSettings != null) {
-                _settingsState.value = _settingsState.value.copy(
-                    isMale = loadedSettings.isMale,
-                    weight = loadedSettings.weight,
-                    height = loadedSettings.height,
-                    birthDateAsTimeStamp = loadedSettings.birthDateAsTimeStamp
-                )
-            } else {
-                _settingsState.value = _settingsState.value.copy(settings = Settings())
-            }
+            _settingsState.value = _settingsState.value.copy(
+                isMale = loadedSettings.isMale,
+                weight = loadedSettings.weight,
+                height = loadedSettings.height,
+                birthDateAsTimeStamp = loadedSettings.birthDateAsTimeStamp
+            )
         }
     }
 

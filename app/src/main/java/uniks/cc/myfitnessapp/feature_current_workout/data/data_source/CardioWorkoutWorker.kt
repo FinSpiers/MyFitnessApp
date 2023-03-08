@@ -1,15 +1,11 @@
 package uniks.cc.myfitnessapp.feature_current_workout.data.data_source
 
-import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
-import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.util.Log
-import androidx.core.app.ActivityCompat
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
@@ -30,7 +26,9 @@ class CardioWorkoutWorker @AssistedInject constructor(
     val locationManager: LocationManager
 ) : CoroutineWorker(appContext, params) {
     override suspend fun doWork(): Result {
-        startLocationTracking()
+        if (coreRepository.isLocationPermissionGranted) {
+            startLocationTracking()
+        }
         return Result.success()
     }
 
