@@ -135,6 +135,7 @@ fun WorkoutDetailScreen(
                         "Bicycling"
                     )
                 ) {
+                    // TODO: these are test charts
                     val exampleRoute = listOf(
                         Waypoint(1, 1, 51.546109235121925, 9.401057125476921),
                         Waypoint(1, 12, 51.54551062095242, 9.401252428123303),

@@ -27,18 +27,22 @@ class CurrentWorkoutViewModel @Inject constructor(
         workoutRepository.onWorkoutAction(workoutEvent)
     }
 
-
-    private val accelerometerSensor = sensorRepository.getAccelerometerSensor()
-
-
     init {
-        sensorRepository.startAccelerometerSensor()
+        if (currentWorkout.workoutName in listOf(
+                "Walking",
+                "Running",
+                "Bicycling"
+            )
+        ) {
+            //TODO: TypeAWorkout
+        } else {
+            //TODO: TypeBWorkout
+            sensorRepository.startAccelerometerSensor()
+        }
     }
 
     override fun onCleared() {
         super.onCleared()
-        if (accelerometerSensor.isListening()) {
-            accelerometerSensor.stopListening()
-        }
+        sensorRepository.stopAccelerometerSensor()
     }
 }

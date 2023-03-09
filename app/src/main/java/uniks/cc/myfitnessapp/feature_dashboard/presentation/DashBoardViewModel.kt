@@ -13,11 +13,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import uniks.cc.myfitnessapp.core.domain.model.Steps
 import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.domain.repository.SensorRepository
-import uniks.cc.myfitnessapp.core.domain.util.TimestampConverter
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationEvent
 import uniks.cc.myfitnessapp.feature_current_workout.data.data_source.StepCounterResetWorker
 import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.WorkoutRepository
@@ -35,7 +33,7 @@ class DashBoardViewModel @Inject constructor(
     private val fusedLocationProviderClient: FusedLocationProviderClient,
     private val workManager: WorkManager
 
-    ) : ViewModel() {
+) : ViewModel() {
     val dashBoardState = mutableStateOf(DashBoardState())
     val stepCounterStateFlow = sensorRepository.stepCounterSensorValueStateFlow
     val dialogStateFlow = MutableStateFlow(false)
@@ -46,26 +44,37 @@ class DashBoardViewModel @Inject constructor(
         workoutRepository.onWorkoutAction = this::onWorkoutAction
 
 
-        val initialDelay = Duration.between(LocalDateTime.now(), LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(0, 0)))
+        val initialDelay = Duration.between(
+            LocalDateTime.now(),
+            LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(0, 0))
+        )
 
-        val resetRequest : PeriodicWorkRequest = PeriodicWorkRequestBuilder<StepCounterResetWorker>(1, TimeUnit.DAYS)
-            .setInitialDelay(initialDelay)
-            .build()
+        val resetRequest: PeriodicWorkRequest =
+            PeriodicWorkRequestBuilder<StepCounterResetWorker>(1, TimeUnit.DAYS)
+                .setInitialDelay(initialDelay)
+                .build()
 
-        workManager.enqueueUniquePeriodicWork("stepCounterResetWork", ExistingPeriodicWorkPolicy.UPDATE, resetRequest)
-        Log.e("WORK", "Starting worker with initial delay of ${initialDelay.seconds / 60} min = ${initialDelay.seconds / 3600}h, ${(initialDelay.seconds / 60) % 60}min ")
+        workManager.enqueueUniquePeriodicWork(
+            "stepCounterResetWork",
+            ExistingPeriodicWorkPolicy.UPDATE,
+            resetRequest
+        )
+        Log.e(
+            "WORK",
+            "Starting worker with initial delay of ${initialDelay.seconds / 60} min = ${initialDelay.seconds / 3600}h, ${(initialDelay.seconds / 60) % 60}min "
+        )
 
     }
 
-    fun getOldStepCount() : Int {
+    fun getOldStepCount(): Int {
         return workoutRepository.oldStepsValue
     }
 
-    fun getCurrentWorkout() : Workout? {
+    fun getCurrentWorkout(): Workout? {
         return workoutRepository.currentWorkout
     }
 
-    fun hasCurrentWorkout() : Boolean {
+    fun hasCurrentWorkout(): Boolean {
         return workoutRepository.currentWorkout != null
     }
 
@@ -85,8 +94,8 @@ class DashBoardViewModel @Inject constructor(
         coreRepository.onNavigationAction(navigationEvent)
     }
 
-    fun onWorkoutAction(event : WorkoutEvent) {
-        when(event) {
+    fun onWorkoutAction(event: WorkoutEvent) {
+        when (event) {
             is WorkoutEvent.StartWorkout -> {
                 val currentWorkout = Workout(
                     workoutName = event.workoutName,
@@ -94,14 +103,13 @@ class DashBoardViewModel @Inject constructor(
                     duration = 0.0,
                     kcal = 0
                 ).apply {
-                    if(workoutName in listOf("Walking", "Running", "Bicycling")) {
+                    if (workoutName in listOf("Walking", "Running", "Bicycling")) {
                         distance = 0.0
                         pace = 0.0
                         avgPace = 0.0
                         // TODO: use activity recognition api and a backgroundService to
                         // TODO: track users activities,time spend, calculate distance, pace, burned kcal, etc..
-                    }
-                    else {
+                    } else {
                         repetitions = 0
                         // TODO: Use backgroundService that tracks the time and repetitions for the activity
                     }
@@ -113,7 +121,8 @@ class DashBoardViewModel @Inject constructor(
                 }
 
                 dashBoardState.value = dashBoardState.value.copy(
-                    workouts = dashBoardState.value.workouts.toMutableList().apply { add(0, currentWorkout) }
+                    workouts = dashBoardState.value.workouts.toMutableList()
+                        .apply { add(0, currentWorkout) }
                 )
 
                 workoutRepository.workouts = dashBoardState.value.workouts
@@ -134,13 +143,13 @@ class DashBoardViewModel @Inject constructor(
         )
     }
 
-    fun getAllWorkouts() : List<Workout> {
+    fun getAllWorkouts(): List<Workout> {
         syncRepoWorkouts()
         return workoutRepository.workouts
     }
 
     @SuppressLint("MissingPermission")
-    fun hasGpsSignal() : Boolean {
+    fun hasGpsSignal(): Boolean {
         return locationManager.isLocationEnabled
     }
 
@@ -157,7 +166,10 @@ class DashBoardViewModel @Inject constructor(
             viewModelScope.launch {
                 location?.let {
                     dashBoardState.value = dashBoardState.value.copy(
-                        currentWeatherData = coreRepository.getCurrentWeather(location.latitude, location.longitude)
+                        currentWeatherData = coreRepository.getCurrentWeather(
+                            location.latitude,
+                            location.longitude
+                        )
                     )
                 }
             }
