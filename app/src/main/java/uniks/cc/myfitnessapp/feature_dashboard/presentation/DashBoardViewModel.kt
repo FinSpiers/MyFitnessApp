@@ -72,19 +72,11 @@ class DashBoardViewModel @Inject constructor(
     }
 
     fun getOldStepCount() : Int {
-        /** LOG: Changed fun to load old steps val from db, if not existent return oldStepsValue from repo
-        DATE: 09.03.23
-        TODO: Make sure oldStepsValue is set in repo the first time the app is started
-         */
-        val oldDate = TimestampConverter.convertToDate(Instant.now().epochSecond - 3600 * 24)
-        var oldStepsValue: Steps? = null
-        viewModelScope.launch {
-            oldStepsValue = workoutRepository.getDailyStepsByDate(oldDate)
+        var oldStepsValue = emptyList<Steps>()
+        runBlocking {
+            oldStepsValue = workoutRepository.getAllDailySteps()
         }
-        if (oldStepsValue != null) {
-            return oldStepsValue!!.count
-        }
-        return 0
+        return oldStepsValue.sumOf { it.count }
     }
 
     fun getCurrentWorkout(): Workout? {

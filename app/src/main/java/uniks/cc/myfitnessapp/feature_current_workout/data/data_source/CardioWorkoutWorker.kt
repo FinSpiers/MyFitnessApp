@@ -16,12 +16,10 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.*
 import uniks.cc.myfitnessapp.core.domain.model.Waypoint
+import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.feature_current_workout.domain.util.stopwatch.*
 import uniks.cc.myfitnessapp.feature_current_workout.domain.util.stopwatch.StopwatchOrchestrator
-import uniks.cc.myfitnessapp.feature_current_workout.domain.util.stopwatch.StopwatchStateHolder
-import uniks.cc.myfitnessapp.feature_current_workout.domain.util.stopwatch.TimestampMillisecondsFormatter
-import uniks.cc.myfitnessapp.feature_current_workout.presentation.CurrentWorkoutState
 import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.WorkoutRepository
 import java.time.Instant
 
@@ -36,27 +34,27 @@ class CardioWorkoutWorker @AssistedInject constructor(
 ) : CoroutineWorker(appContext, params) {
 
     lateinit var locationListener: LocationListener
-
-    init {
-        initLocationListener()
-    }
+    lateinit var workout: Workout
 
     override suspend fun doWork(): Result {
         if (Looper.myLooper() == null)  {
             Looper.prepare()
         }
+        initLocationListener()
         startStopwatch()
-
-        //if (coreRepository.isLocationPermissionGranted) {
-        startLocationTracking()
-
-        while (workoutRepository.currentWorkout != null) {
-            Looper.loop()
+        delay(500)
+        try {
+            startLocationTracking()
+            while (workoutRepository.currentWorkout != null) {
+                delay(500)
+                Looper.loop()
+            }
+            stopListener()
         }
-        stopListener()
+        catch (e : Exception) {
+            Log.e("WORKOUT", "Failure on creating location tracks. \n${e.message}")
+        }
         Looper.myLooper()?.quitSafely()
-
-        //}
         return Result.success()
     }
 
@@ -106,15 +104,12 @@ class CardioWorkoutWorker @AssistedInject constructor(
     @SuppressLint("MissingPermission")
     private fun startLocationTracking() {
         try {
-
             locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER,
                 30 * 1000,
                 0f,
                 locationListener
             )
-
-            //locationManager.removeUpdates(locationListener)
         } catch (e: Exception) {
             e.printStackTrace()
         }
