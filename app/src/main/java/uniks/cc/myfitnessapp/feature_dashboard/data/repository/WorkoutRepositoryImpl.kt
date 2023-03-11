@@ -1,11 +1,13 @@
 package uniks.cc.myfitnessapp.feature_dashboard.data.repository
 
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
 import uniks.cc.myfitnessapp.core.data.database.WorkoutDao
 import uniks.cc.myfitnessapp.core.domain.model.Steps
 import uniks.cc.myfitnessapp.core.domain.model.Waypoint
 import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.core.domain.util.TimestampConverter
+import uniks.cc.myfitnessapp.feature_current_workout.presentation.CurrentWorkoutState
 import uniks.cc.myfitnessapp.feature_dashboard.presentation.WorkoutEvent
 import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.WorkoutRepository
 import java.time.Instant
@@ -17,6 +19,7 @@ class WorkoutRepositoryImpl(private val workoutDao: WorkoutDao) : WorkoutReposit
     override var currentWorkout: Workout? = null
     override var selectedWorkoutDetail: Workout? = null
     override var oldStepsValue: Int = 0
+    override val currentWorkoutTimerStateFlow: MutableStateFlow<String> = MutableStateFlow("00:00:000")
 
     init {
         runBlocking {
@@ -33,6 +36,10 @@ class WorkoutRepositoryImpl(private val workoutDao: WorkoutDao) : WorkoutReposit
 
     override suspend fun getWorkoutById(workoutId: Int): Workout? {
         return workoutDao.getWorkoutById(workoutId)
+    }
+
+    override suspend fun getWorkoutByTimestamp(timestamp: Long): Workout? {
+        return workoutDao.getWorkoutByTimestamp(timestamp)
     }
 
     override suspend fun addWorkoutToDatabase(workout: Workout) {

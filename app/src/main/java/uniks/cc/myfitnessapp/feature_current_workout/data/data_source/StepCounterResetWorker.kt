@@ -1,15 +1,12 @@
 package uniks.cc.myfitnessapp.feature_current_workout.data.data_source
 
 import android.content.Context
-import android.util.Log
-import androidx.compose.runtime.collectAsState
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import uniks.cc.myfitnessapp.core.domain.model.Steps
 import uniks.cc.myfitnessapp.core.domain.repository.SensorRepository
 import uniks.cc.myfitnessapp.core.domain.util.TimestampConverter
@@ -24,32 +21,36 @@ class StepCounterResetWorker @AssistedInject constructor(
     val sensorRepository: SensorRepository
 ) : CoroutineWorker(context, workerParams) {
 
+    override suspend fun doWork(): Result {
+        resetStepCounter()
+        return Result.success()
+    }
+
     private suspend fun resetStepCounter() {
-        val currentDate = TimestampConverter.convertToDate(Instant.now().epochSecond)
         // Save today's steps in the database
         saveDailyCount()
-
+        delay(3000)
         // Update oldValue
-        val oldValue = workoutRepository.getDailyStepsByDate(currentDate)
-        if (oldValue != null) {
-            workoutRepository.oldStepsValue = oldValue.count
+        val oldValue = workoutRepository.getAllDailySteps().sumOf { it.count }
+        if (sensorRepository.stepCounterSensorValueStateFlow.value > oldValue) {
+            workoutRepository.oldStepsValue = oldValue
+        }
+        else {
+            workoutRepository.oldStepsValue = 0
         }
     }
 
     private suspend fun saveDailyCount() {
-            try {
-                val dailySteps = Steps(sensorRepository.stepCounterSensorValueStateFlow.value)
-                workoutRepository.saveDailySteps(dailySteps)
-            }
-            catch (e : Exception) {
-                e.printStackTrace()
-            }
-    }
+        val allSteps = workoutRepository.getAllDailySteps()
 
-    override suspend fun doWork(): Result {
-        resetStepCounter()
-        delay(500)
-        Log.e("WORK", "Current State: oldValue=${workoutRepository.oldStepsValue}, newValue=${sensorRepository.stepCounterSensorValueStateFlow.value}")
-        return Result.success()
+        if (allSteps.isEmpty()) {
+            val oldDate = TimestampConverter.convertToDate(Instant.now().epochSecond - 60 * 60 * 24)
+            val oldStepsCount = sensorRepository.stepCounterSensorValueStateFlow.value
+            workoutRepository.saveDailySteps(Steps(oldStepsCount, oldDate))
+        }
+        else {
+            val oldStepsCount = workoutRepository.getAllDailySteps().sumOf { it.count }
+            workoutRepository.saveDailySteps(Steps(sensorRepository.stepCounterSensorValueStateFlow.value - oldStepsCount))
+        }
     }
 }

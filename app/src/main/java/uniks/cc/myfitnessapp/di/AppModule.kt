@@ -13,6 +13,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.GlobalScope
 import uniks.cc.myfitnessapp.core.data.database.MyFitnessDatabase
 import uniks.cc.myfitnessapp.core.data.network.OpenWeatherApiService
 import uniks.cc.myfitnessapp.core.data.repository.CoreRepositoryImpl
@@ -21,6 +22,10 @@ import uniks.cc.myfitnessapp.core.domain.model.sensors.AccelerometerSensor
 import uniks.cc.myfitnessapp.core.domain.model.sensors.StepCounterSensor
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.domain.repository.SensorRepository
+import uniks.cc.myfitnessapp.feature_current_workout.domain.util.stopwatch.*
+import uniks.cc.myfitnessapp.feature_current_workout.domain.util.stopwatch.StopwatchOrchestrator
+import uniks.cc.myfitnessapp.feature_current_workout.domain.util.stopwatch.StopwatchStateHolder
+import uniks.cc.myfitnessapp.feature_current_workout.domain.util.stopwatch.TimestampMillisecondsFormatter
 import uniks.cc.myfitnessapp.feature_dashboard.data.repository.WorkoutRepositoryImpl
 import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.WorkoutRepository
 import uniks.cc.myfitnessapp.feature_settings.data.repository.SettingsRepositoryImpl
@@ -49,6 +54,15 @@ object AppModule {
     }
 
 
+    @Provides
+    @Singleton
+    fun provideStopwatchOrchestrator() : StopwatchOrchestrator {
+        val timestampProvider = TimestampProviderImpl()
+        val elapsedTimeCalculator = ElapsedTimeCalculator(timestampProvider)
+        val stopwatchStateCalculator = StopwatchStateCalculator(timestampProvider, elapsedTimeCalculator)
+        val stopwatchStateHolder = StopwatchStateHolder(stopwatchStateCalculator, elapsedTimeCalculator, TimestampMillisecondsFormatter())
+        return StopwatchOrchestrator(stopwatchStateHolder, GlobalScope)
+    }
 
     @Provides
     @Singleton

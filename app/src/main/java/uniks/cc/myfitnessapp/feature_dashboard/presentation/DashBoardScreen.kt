@@ -90,7 +90,7 @@ fun DashBoardScreen(
                         .padding(top = 4.dp)
                 ) {
                     CurrentStepsBox(
-                        steps = viewModel.stepCounterStateFlow.collectAsState().value, //- viewModel.getOldStepCount(),
+                        steps = viewModel.stepCounterStateFlow.collectAsState().value - viewModel.getOldStepCount(),
                         dialogState = viewModel.dialogStateFlow
                     )
                     StepsHistory(viewModel.dialogStateFlow)

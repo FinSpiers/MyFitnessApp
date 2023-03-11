@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -104,8 +105,8 @@ fun CurrentWorkoutScreen(viewModel: CurrentWorkoutViewModel = hiltViewModel()) {
                 ) {
                     DataBox(
                         title = "Duration",
-                        data = (currentWorkout.duration).toString(),
-                        unit = "min"
+                        data = (viewModel.stopwatchOrchestrator.ticker.collectAsState().value),
+                        unit = ""
                     )
                 }
             }

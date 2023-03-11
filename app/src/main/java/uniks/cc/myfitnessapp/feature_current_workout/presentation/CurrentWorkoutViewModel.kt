@@ -7,6 +7,7 @@ import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.domain.repository.SensorRepository
 import uniks.cc.myfitnessapp.feature_dashboard.presentation.WorkoutEvent
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationEvent
+import uniks.cc.myfitnessapp.feature_current_workout.domain.util.stopwatch.StopwatchOrchestrator
 import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.WorkoutRepository
 import javax.inject.Inject
 
@@ -14,10 +15,13 @@ import javax.inject.Inject
 class CurrentWorkoutViewModel @Inject constructor(
     private val coreRepository: CoreRepository,
     private val workoutRepository: WorkoutRepository,
-    private val sensorRepository: SensorRepository
+    private val sensorRepository: SensorRepository,
+    val stopwatchOrchestrator: StopwatchOrchestrator
 ) : ViewModel() {
     val currentWorkout: Workout = workoutRepository.currentWorkout
         ?: throw NullPointerException("Expression 'workoutRepository.selectedWorkoutDetail' must not be null")
+
+    val currentWorkoutTimerStateFlow = workoutRepository.currentWorkoutTimerStateFlow
 
     fun onNavigationAction(navigationEvent: NavigationEvent) {
         coreRepository.onNavigationAction(navigationEvent)

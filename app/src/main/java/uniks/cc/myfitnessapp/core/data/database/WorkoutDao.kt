@@ -16,6 +16,10 @@ interface WorkoutDao {
     suspend fun getWorkoutById(workoutId : Int) : Workout?
 
     @Transaction
+    @Query("SELECT * FROM Workouts WHERE timeStamp=:timestamp")
+    suspend fun getWorkoutByTimestamp(timestamp : Long) : Workout?
+
+    @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addWorkout(workout: Workout)
 

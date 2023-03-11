@@ -1,5 +1,6 @@
 package uniks.cc.myfitnessapp.feature_dashboard.domain.repository
 
+import kotlinx.coroutines.flow.MutableStateFlow
 import uniks.cc.myfitnessapp.core.domain.model.Steps
 import uniks.cc.myfitnessapp.core.domain.model.Waypoint
 import uniks.cc.myfitnessapp.core.domain.model.Workout
@@ -12,10 +13,13 @@ interface WorkoutRepository {
     var currentWorkout: Workout?
     var selectedWorkoutDetail : Workout?
     var oldStepsValue : Int
+    val currentWorkoutTimerStateFlow : MutableStateFlow<String>
 
     suspend fun getAllWorkoutsFromDatabase() : List<Workout>
 
     suspend fun getWorkoutById(workoutId : Int) : Workout?
+
+    suspend fun getWorkoutByTimestamp(timestamp : Long) : Workout?
 
     suspend fun addWorkoutToDatabase(workout: Workout)
 

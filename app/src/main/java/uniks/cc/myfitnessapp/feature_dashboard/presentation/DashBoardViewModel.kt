@@ -19,6 +19,7 @@ import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.domain.repository.SensorRepository
 import uniks.cc.myfitnessapp.core.domain.util.TimestampConverter
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationEvent
+import uniks.cc.myfitnessapp.feature_current_workout.data.data_source.CardioWorkoutWorker
 import uniks.cc.myfitnessapp.feature_current_workout.data.data_source.StepCounterResetWorker
 import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.WorkoutRepository
 import java.time.*
@@ -58,6 +59,18 @@ class DashBoardViewModel @Inject constructor(
     }
 
     fun getOldStepCount() : Int {
+        /** LOG: Changed fun to load old steps val from db, if not existent return oldStepsValue from repo
+           DATE: 09.03.23
+           TODO: Make sure oldStepsValue is set in repo the first time the app is started
+         */
+        val oldDate = TimestampConverter.convertToDate(Instant.now().epochSecond - 3600 * 24)
+        var oldStepsValue : Steps? = null
+        viewModelScope.launch {
+            oldStepsValue = workoutRepository.getDailyStepsByDate(oldDate)
+        }
+        if (oldStepsValue != null) {
+            return oldStepsValue!!.count
+        }
         return workoutRepository.oldStepsValue
     }
 
@@ -88,7 +101,7 @@ class DashBoardViewModel @Inject constructor(
     fun onWorkoutAction(event : WorkoutEvent) {
         when(event) {
             is WorkoutEvent.StartWorkout -> {
-                val currentWorkout = Workout(
+                var currentWorkout = Workout(
                     workoutName = event.workoutName,
                     timeStamp = Instant.now().epochSecond,
                     duration = 0.0,
@@ -98,19 +111,20 @@ class DashBoardViewModel @Inject constructor(
                         distance = 0.0
                         pace = 0.0
                         avgPace = 0.0
-                        // TODO: use activity recognition api and a backgroundService to
-                        // TODO: track users activities,time spend, calculate distance, pace, burned kcal, etc..
+
+                        val cardioWorkoutWorker = OneTimeWorkRequestBuilder<CardioWorkoutWorker>().build()
+                        workManager.enqueue(cardioWorkoutWorker)
                     }
                     else {
                         repetitions = 0
                         // TODO: Use backgroundService that tracks the time and repetitions for the activity
                     }
                 }
-                workoutRepository.currentWorkout = currentWorkout
-
-                viewModelScope.launch {
+                runBlocking {
                     workoutRepository.addWorkoutToDatabase(currentWorkout)
+                    currentWorkout = workoutRepository.getWorkoutByTimestamp(currentWorkout.timeStamp)!!
                 }
+                workoutRepository.currentWorkout = currentWorkout
 
                 dashBoardState.value = dashBoardState.value.copy(
                     workouts = dashBoardState.value.workouts.toMutableList().apply { add(0, currentWorkout) }
