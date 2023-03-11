@@ -50,12 +50,12 @@ class CardioWorkoutWorker @AssistedInject constructor(
         //if (coreRepository.isLocationPermissionGranted) {
         startLocationTracking()
 
-        if (workoutRepository.currentWorkout != null) {
+        while (workoutRepository.currentWorkout != null) {
             Looper.loop()
-        } else {
-            stopListener()
-            Looper.myLooper()?.quitSafely()
         }
+        stopListener()
+        Looper.myLooper()?.quitSafely()
+
         //}
         return Result.success()
     }

@@ -13,12 +13,15 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import uniks.cc.myfitnessapp.core.domain.model.Steps
 import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.domain.repository.SensorRepository
+import uniks.cc.myfitnessapp.core.domain.util.TimestampConverter
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationEvent
 import uniks.cc.myfitnessapp.feature_current_workout.data.data_source.CardioWorkoutWorker
 import uniks.cc.myfitnessapp.feature_current_workout.data.data_source.StepCounterResetWorker
+import uniks.cc.myfitnessapp.feature_current_workout.domain.util.stopwatch.StopwatchOrchestrator
 import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.WorkoutRepository
 import java.time.*
 import java.util.concurrent.TimeUnit
@@ -32,7 +35,8 @@ class DashBoardViewModel @Inject constructor(
     private val locationManager: LocationManager,
     private val connectivityManager: ConnectivityManager,
     private val fusedLocationProviderClient: FusedLocationProviderClient,
-    private val workManager: WorkManager
+    private val workManager: WorkManager,
+    private val stopwatchOrchestrator: StopwatchOrchestrator
 
 ) : ViewModel() {
     val dashBoardState = mutableStateOf(DashBoardState())
@@ -67,24 +71,20 @@ class DashBoardViewModel @Inject constructor(
 
     }
 
-<<<<<<< HEAD
     fun getOldStepCount() : Int {
         /** LOG: Changed fun to load old steps val from db, if not existent return oldStepsValue from repo
-           DATE: 09.03.23
-           TODO: Make sure oldStepsValue is set in repo the first time the app is started
+        DATE: 09.03.23
+        TODO: Make sure oldStepsValue is set in repo the first time the app is started
          */
         val oldDate = TimestampConverter.convertToDate(Instant.now().epochSecond - 3600 * 24)
-        var oldStepsValue : Steps? = null
+        var oldStepsValue: Steps? = null
         viewModelScope.launch {
             oldStepsValue = workoutRepository.getDailyStepsByDate(oldDate)
         }
         if (oldStepsValue != null) {
             return oldStepsValue!!.count
         }
-=======
-    fun getOldStepCount(): Int {
->>>>>>> 6363fc29a6e85f8ef685dd0f0a9922eff87b5253
-        return workoutRepository.oldStepsValue
+        return 0
     }
 
     fun getCurrentWorkout(): Workout? {
@@ -96,7 +96,7 @@ class DashBoardViewModel @Inject constructor(
     }
 
 
-    private fun getAllWorkoutsFromDatabase(): List<Workout> {
+    fun getAllWorkoutsFromDatabase(): List<Workout> {
         lateinit var workouts: List<Workout>
         runBlocking { workouts = workoutRepository.getAllWorkoutsFromDatabase() }
         return workouts.sortedByDescending { it.timeStamp }
@@ -124,17 +124,12 @@ class DashBoardViewModel @Inject constructor(
                         distance = 0.0
                         pace = 0.0
                         avgPace = 0.0
-<<<<<<< HEAD
-
+                        // TODO: use activity recognition api and a backgroundService to
+                        // TODO: track users activities,time spend, calculate distance, pace, burned kcal, etc..
                         val cardioWorkoutWorker = OneTimeWorkRequestBuilder<CardioWorkoutWorker>().build()
                         workManager.enqueue(cardioWorkoutWorker)
                     }
                     else {
-=======
-                        // TODO: use activity recognition api and a backgroundService to
-                        // TODO: track users activities,time spend, calculate distance, pace, burned kcal, etc..
-                    } else {
->>>>>>> 6363fc29a6e85f8ef685dd0f0a9922eff87b5253
                         repetitions = 0
                         // TODO: Use backgroundService that tracks the time and repetitions for the activity
                     }
@@ -155,12 +150,12 @@ class DashBoardViewModel @Inject constructor(
             }
             is WorkoutEvent.StopWorkout -> {
                 workoutRepository.currentWorkout = null
-                /* TODO: Stop Service(s) */
+                stopwatchOrchestrator.stop()
             }
         }
     }
 
-    private fun syncRepoWorkouts() {
+    fun syncRepoWorkouts() {
         val workouts = getAllWorkoutsFromDatabase()
         workoutRepository.workouts = workouts
         dashBoardState.value = dashBoardState.value.copy(
@@ -181,6 +176,7 @@ class DashBoardViewModel @Inject constructor(
     fun hasInternetConnection(): Boolean {
         return connectivityManager.activeNetwork != null
     }
+
 
     @SuppressLint("MissingPermission")
     fun setWeatherData() {
