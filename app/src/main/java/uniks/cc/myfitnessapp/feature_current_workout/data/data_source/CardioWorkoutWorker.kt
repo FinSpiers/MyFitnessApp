@@ -36,25 +36,27 @@ class CardioWorkoutWorker @AssistedInject constructor(
     lateinit var locationListener: LocationListener
     lateinit var workout: Workout
 
+    init {
+        initLocationListener()
+    }
+
     override suspend fun doWork(): Result {
         if (Looper.myLooper() == null)  {
             Looper.prepare()
         }
-        initLocationListener()
         startStopwatch()
+
+        //if (coreRepository.isLocationPermissionGranted) {
+        startLocationTracking()
         delay(500)
-        try {
-            startLocationTracking()
-            while (workoutRepository.currentWorkout != null) {
-                delay(500)
-                Looper.loop()
-            }
-            stopListener()
+        if (workoutRepository.currentWorkout != null) {
+            delay(500)
+            Looper.loop()
         }
-        catch (e : Exception) {
-            Log.e("WORKOUT", "Failure on creating location tracks. \n${e.message}")
-        }
+        stopListener()
         Looper.myLooper()?.quitSafely()
+
+        //}
         return Result.success()
     }
 
@@ -104,12 +106,15 @@ class CardioWorkoutWorker @AssistedInject constructor(
     @SuppressLint("MissingPermission")
     private fun startLocationTracking() {
         try {
+
             locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER,
                 30 * 1000,
                 0f,
                 locationListener
             )
+
+            //locationManager.removeUpdates(locationListener)
         } catch (e: Exception) {
             e.printStackTrace()
         }
