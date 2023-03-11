@@ -1,9 +1,6 @@
 package uniks.cc.myfitnessapp.core.data.repository
 
-import android.util.Log
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 import uniks.cc.myfitnessapp.core.domain.model.sensors.AccelerometerSensor
 import uniks.cc.myfitnessapp.core.domain.model.sensors.StepCounterSensor
 import uniks.cc.myfitnessapp.core.domain.repository.SensorRepository
@@ -39,7 +36,9 @@ class SensorRepositoryImpl(
     }
 
     override fun stopAccelerometerSensor() {
-        accelerometerSensor.stopListening()
+        if (accelerometerSensor.isListening()) {
+            accelerometerSensor.stopListening()
+        }
     }
 
     override fun startStepCounterSensor() {
@@ -54,7 +53,10 @@ class SensorRepositoryImpl(
     }
 
     override fun stopStepCounterSensor() {
-        stepCounterSensor.stopListening()
+        if (stepCounterSensor.isListening()) {
+            stepCounterSensor.stopListening()
+        }
+
     }
 
 }

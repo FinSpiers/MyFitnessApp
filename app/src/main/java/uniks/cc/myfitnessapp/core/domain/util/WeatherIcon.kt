@@ -10,6 +10,7 @@ enum class WeatherIcon(@DrawableRes resId : Int) {
     Extreme(R.drawable.image_weather_extreme),
     Sun(R.drawable.image_weather_sunny),
     Fog(R.drawable.image_weather_fog),
+    Mist(R.drawable.image_weather_fog),
     Clear(R.drawable.image_weather_sunny),
     Drizzle(R.drawable.image_weather_drizzle),
     Unknown(R.drawable.image_weather_extreme),
@@ -23,6 +24,7 @@ fun getIcon(apiName : String) : WeatherIcon {
         "Extreme" -> WeatherIcon.Extreme
         "Sun" -> WeatherIcon.Sun
         "Fog" -> WeatherIcon.Fog
+        "Mist" -> WeatherIcon.Fog
         "Clear" -> WeatherIcon.Clear
         "Drizzle" -> WeatherIcon.Drizzle
         else -> WeatherIcon.Unknown

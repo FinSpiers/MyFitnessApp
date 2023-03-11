@@ -10,14 +10,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.rememberCameraPositionState
 import uniks.cc.myfitnessapp.core.domain.model.Waypoint
-import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
 
 @Composable
 fun MapBox(hasInternetConnection: Boolean = false, path: List<Waypoint> = emptyList()) {
@@ -38,13 +36,5 @@ fun MapBox(hasInternetConnection: Boolean = false, path: List<Waypoint> = emptyL
         ) {
             GoogleMap(cameraPositionState = cameraPositionState, modifier = Modifier.fillMaxSize())
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun MapBoxPreview() {
-    MyFitnessAppTheme {
-        MapBox()
     }
 }
