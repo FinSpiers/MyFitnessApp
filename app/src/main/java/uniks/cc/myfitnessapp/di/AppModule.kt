@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.Context
 import android.location.LocationManager
 import android.net.ConnectivityManager
-import androidx.compose.material3.SnackbarHostState
 import androidx.room.Room
 import androidx.work.WorkManager
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -23,7 +22,7 @@ import uniks.cc.myfitnessapp.core.domain.model.sensors.StepCounterSensor
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.domain.repository.SensorRepository
 import uniks.cc.myfitnessapp.feature_current_workout.domain.util.stopwatch.*
-import uniks.cc.myfitnessapp.feature_current_workout.domain.util.stopwatch.StopwatchOrchestrator
+import uniks.cc.myfitnessapp.feature_current_workout.domain.util.stopwatch.StopwatchManager
 import uniks.cc.myfitnessapp.feature_current_workout.domain.util.stopwatch.StopwatchStateHolder
 import uniks.cc.myfitnessapp.feature_current_workout.domain.util.stopwatch.TimestampMillisecondsFormatter
 import uniks.cc.myfitnessapp.feature_dashboard.data.repository.WorkoutRepositoryImpl
@@ -56,12 +55,12 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideStopwatchOrchestrator() : StopwatchOrchestrator {
+    fun provideStopwatchManager() : StopwatchManager {
         val timestampProvider = TimestampProviderImpl()
         val elapsedTimeCalculator = ElapsedTimeCalculator(timestampProvider)
         val stopwatchStateCalculator = StopwatchStateCalculator(timestampProvider, elapsedTimeCalculator)
         val stopwatchStateHolder = StopwatchStateHolder(stopwatchStateCalculator, elapsedTimeCalculator, TimestampMillisecondsFormatter())
-        return StopwatchOrchestrator(stopwatchStateHolder, GlobalScope)
+        return StopwatchManager(stopwatchStateHolder, GlobalScope)
     }
 
     @Provides

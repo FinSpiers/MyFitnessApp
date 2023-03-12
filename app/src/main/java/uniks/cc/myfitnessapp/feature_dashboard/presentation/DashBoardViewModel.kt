@@ -14,14 +14,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import uniks.cc.myfitnessapp.core.domain.model.Steps
+import uniks.cc.myfitnessapp.core.domain.model.Waypoint
 import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.domain.repository.SensorRepository
-import uniks.cc.myfitnessapp.core.domain.util.TimestampConverter
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationEvent
-import uniks.cc.myfitnessapp.feature_current_workout.data.data_source.CardioWorkoutWorker
-import uniks.cc.myfitnessapp.feature_current_workout.data.data_source.StepCounterResetWorker
-import uniks.cc.myfitnessapp.feature_current_workout.domain.util.stopwatch.StopwatchOrchestrator
+import uniks.cc.myfitnessapp.feature_current_workout.data.calculator.DistanceCalculator
+import uniks.cc.myfitnessapp.feature_current_workout.data.worker.CardioWorkoutWorker
+import uniks.cc.myfitnessapp.feature_current_workout.data.worker.StepCounterResetWorker
+import uniks.cc.myfitnessapp.feature_current_workout.domain.util.stopwatch.StopwatchManager
 import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.WorkoutRepository
 import java.time.*
 import java.util.concurrent.TimeUnit
@@ -36,7 +37,7 @@ class DashBoardViewModel @Inject constructor(
     private val connectivityManager: ConnectivityManager,
     private val fusedLocationProviderClient: FusedLocationProviderClient,
     private val workManager: WorkManager,
-    private val stopwatchOrchestrator: StopwatchOrchestrator
+    private val stopwatchManager: StopwatchManager
 
 ) : ViewModel() {
     val dashBoardState = mutableStateOf(DashBoardState())
@@ -64,10 +65,18 @@ class DashBoardViewModel @Inject constructor(
             ExistingPeriodicWorkPolicy.UPDATE,
             resetRequest
         )
-        Log.e(
-            "WORK",
-            "Starting worker with initial delay of ${initialDelay.seconds / 60} min = ${initialDelay.seconds / 3600}h, ${(initialDelay.seconds / 60) % 60}min "
+
+        val exampleRoute = listOf(
+            Waypoint(1, 1, 51.546109235121925, 9.401057125476921),
+            Waypoint(1, 12, 51.54551062095242, 9.401252428123303),
+            Waypoint(1, 123, 51.544721964433144, 9.402062357757353),
+            Waypoint(1, 1234, 51.54473609118497, 9.403702405617599),
+            Waypoint(1, 12345, 51.54547350154158, 9.40395227440517),
+            Waypoint(1, 123456, 51.546109235121925, 9.401057125476921),
         )
+
+        val calculate = DistanceCalculator.calculateMeters(exampleRoute)
+        Log.e("DISTANCE", calculate.toString())
 
     }
 
@@ -142,7 +151,7 @@ class DashBoardViewModel @Inject constructor(
             }
             is WorkoutEvent.StopWorkout -> {
                 workoutRepository.currentWorkout = null
-                stopwatchOrchestrator.stop()
+                stopwatchManager.stop()
             }
         }
     }

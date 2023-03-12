@@ -4,7 +4,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class StopwatchOrchestrator(
+class StopwatchManager(
     private val stopwatchStateHolder: StopwatchStateHolder,
     private val scope : CoroutineScope
 ) {

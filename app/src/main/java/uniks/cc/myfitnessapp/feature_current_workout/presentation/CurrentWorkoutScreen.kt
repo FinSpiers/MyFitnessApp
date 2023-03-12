@@ -105,7 +105,7 @@ fun CurrentWorkoutScreen(viewModel: CurrentWorkoutViewModel = hiltViewModel()) {
                 ) {
                     DataBox(
                         title = "Duration",
-                        data = (viewModel.stopwatchOrchestrator.ticker.collectAsState().value),
+                        data = (viewModel.stopwatchManager.ticker.collectAsState().value),
                         unit = ""
                     )
                 }

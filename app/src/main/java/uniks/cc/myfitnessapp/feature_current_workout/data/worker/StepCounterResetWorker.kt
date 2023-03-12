@@ -1,4 +1,4 @@
-package uniks.cc.myfitnessapp.feature_current_workout.data.data_source
+package uniks.cc.myfitnessapp.feature_current_workout.data.worker
 
 import android.content.Context
 import androidx.hilt.work.HiltWorker

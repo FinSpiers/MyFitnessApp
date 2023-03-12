@@ -1,6 +1,6 @@
 @file:OptIn(DelicateCoroutinesApi::class)
 
-package uniks.cc.myfitnessapp.feature_current_workout.data.data_source
+package uniks.cc.myfitnessapp.feature_current_workout.data.worker
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -19,7 +19,7 @@ import uniks.cc.myfitnessapp.core.domain.model.Waypoint
 import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.feature_current_workout.domain.util.stopwatch.*
-import uniks.cc.myfitnessapp.feature_current_workout.domain.util.stopwatch.StopwatchOrchestrator
+import uniks.cc.myfitnessapp.feature_current_workout.domain.util.stopwatch.StopwatchManager
 import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.WorkoutRepository
 import java.time.Instant
 
@@ -30,7 +30,7 @@ class CardioWorkoutWorker @AssistedInject constructor(
     val workoutRepository: WorkoutRepository,
     val coreRepository: CoreRepository,
     val locationManager: LocationManager,
-    val stopwatchOrchestrator: StopwatchOrchestrator
+    val stopwatchManager: StopwatchManager
 ) : CoroutineWorker(appContext, params) {
 
     lateinit var locationListener: LocationListener
@@ -41,6 +41,7 @@ class CardioWorkoutWorker @AssistedInject constructor(
     }
 
     override suspend fun doWork(): Result {
+        try {
         if (Looper.myLooper() == null)  {
             Looper.prepare()
         }
@@ -56,8 +57,13 @@ class CardioWorkoutWorker @AssistedInject constructor(
         stopListener()
         Looper.myLooper()?.quitSafely()
 
-        //}
-        return Result.success()
+            return Result.success()
+        }
+        catch (e : Exception) {
+            e.printStackTrace()
+            return Result.retry()
+        }
+
     }
 
     private fun stopListener() {
@@ -80,7 +86,7 @@ class CardioWorkoutWorker @AssistedInject constructor(
                     workoutRepository.saveWaypoint(currentWayPoint)
                     Log.e(
                         "DB",
-                        "Saved waypoint $currentWayPoint with current workout time of ${stopwatchOrchestrator.ticker.value} to database"
+                        "Saved waypoint $currentWayPoint with current workout time of ${stopwatchManager.ticker.value} to database"
                     )
                 }
             }
@@ -88,19 +94,19 @@ class CardioWorkoutWorker @AssistedInject constructor(
     }
 
     private fun startStopwatch() {
-        stopwatchOrchestrator.start()
+        stopwatchManager.start()
     }
 
     fun stopStopwatch() {
-        stopwatchOrchestrator.stop()
+        stopwatchManager.stop()
     }
 
     fun pause() {
-        stopwatchOrchestrator.pause()
+        stopwatchManager.pause()
     }
 
     fun getTicker(): String {
-        return stopwatchOrchestrator.ticker.value
+        return stopwatchManager.ticker.value
     }
 
     @SuppressLint("MissingPermission")
@@ -109,7 +115,7 @@ class CardioWorkoutWorker @AssistedInject constructor(
 
             locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER,
-                30 * 1000,
+                15 * 1000,
                 0f,
                 locationListener
             )
