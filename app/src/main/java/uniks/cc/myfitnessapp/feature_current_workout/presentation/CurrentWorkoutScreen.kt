@@ -92,7 +92,7 @@ fun CurrentWorkoutScreen(viewModel: CurrentWorkoutViewModel = hiltViewModel()) {
                     ) {
                         DataBox(
                             title = "Distance",
-                            data = (currentWorkout.distance).toString(),
+                            data = viewModel.currentWorkoutDistanceStateFlow.collectAsState().value,
                             unit = "km"
                         )
                     }

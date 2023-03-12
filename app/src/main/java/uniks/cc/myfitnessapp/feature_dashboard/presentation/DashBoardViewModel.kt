@@ -74,10 +74,6 @@ class DashBoardViewModel @Inject constructor(
             Waypoint(1, 12345, 51.54547350154158, 9.40395227440517),
             Waypoint(1, 123456, 51.546109235121925, 9.401057125476921),
         )
-
-        val calculate = DistanceCalculator.calculateMeters(exampleRoute)
-        Log.e("DISTANCE", calculate.toString())
-
     }
 
     fun getOldStepCount() : Int {

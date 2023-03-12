@@ -1,5 +1,6 @@
 package uniks.cc.myfitnessapp.feature_dashboard.data.repository
 
+import android.util.Log
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
 import uniks.cc.myfitnessapp.core.data.database.WorkoutDao
@@ -20,6 +21,7 @@ class WorkoutRepositoryImpl(private val workoutDao: WorkoutDao) : WorkoutReposit
     override var selectedWorkoutDetail: Workout? = null
     override var oldStepsValue: Int = 0
     override val currentWorkoutTimerStateFlow: MutableStateFlow<String> = MutableStateFlow("00:00:000")
+    override val currentWorkoutDistanceStateFlow: MutableStateFlow<String> = MutableStateFlow("-")
 
     init {
         runBlocking {
@@ -59,6 +61,7 @@ class WorkoutRepositoryImpl(private val workoutDao: WorkoutDao) : WorkoutReposit
     }
 
     override suspend fun getAllDailySteps(): List<Steps> {
+        Log.e("STEPS", workoutDao.getAllDailySteps().toString())
         return workoutDao.getAllDailySteps()
     }
 

@@ -21,7 +21,7 @@ class CurrentWorkoutViewModel @Inject constructor(
     val currentWorkout: Workout = workoutRepository.currentWorkout
         ?: throw NullPointerException("Expression 'workoutRepository.selectedWorkoutDetail' must not be null")
 
-    val currentWorkoutTimerStateFlow = workoutRepository.currentWorkoutTimerStateFlow
+    val currentWorkoutDistanceStateFlow = workoutRepository.currentWorkoutDistanceStateFlow
 
     fun onNavigationAction(navigationEvent: NavigationEvent) {
         coreRepository.onNavigationAction(navigationEvent)

@@ -18,6 +18,7 @@ import kotlinx.coroutines.*
 import uniks.cc.myfitnessapp.core.domain.model.Waypoint
 import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
+import uniks.cc.myfitnessapp.feature_current_workout.data.calculator.DistanceCalculator
 import uniks.cc.myfitnessapp.feature_current_workout.domain.util.stopwatch.*
 import uniks.cc.myfitnessapp.feature_current_workout.domain.util.stopwatch.StopwatchManager
 import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.WorkoutRepository
@@ -34,7 +35,6 @@ class CardioWorkoutWorker @AssistedInject constructor(
 ) : CoroutineWorker(appContext, params) {
 
     lateinit var locationListener: LocationListener
-    lateinit var workout: Workout
 
     init {
         initLocationListener()
@@ -42,24 +42,30 @@ class CardioWorkoutWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result {
         try {
-        if (Looper.myLooper() == null)  {
-            Looper.prepare()
-        }
-        startStopwatch()
+            if (Looper.myLooper() == null) {
+                Looper.prepare()
+            }
+            startStopwatch()
 
-        //if (coreRepository.isLocationPermissionGranted) {
-        startLocationTracking()
-        delay(500)
-        if (workoutRepository.currentWorkout != null) {
+            //if (coreRepository.isLocationPermissionGranted) {
+            startLocationTracking()
             delay(500)
-            Looper.loop()
-        }
-        stopListener()
-        Looper.myLooper()?.quitSafely()
-
+            if (workoutRepository.currentWorkout != null) {
+                delay(500)
+                val waypoints = workoutRepository.currentWorkout?.let {
+                    workoutRepository.getWaypointsByWorkoutId(it.id)
+                }
+                if (waypoints != null && waypoints.size > 1) {
+                    val distance = DistanceCalculator.calculateMeters(waypoints)
+                    workoutRepository.currentWorkoutDistanceStateFlow.emit(distance.toString())
+                }
+                Looper.loop()
+            }
+            stopListener()
+            Looper.myLooper()?.quitSafely()
             return Result.success()
-        }
-        catch (e : Exception) {
+
+        } catch (e: Exception) {
             e.printStackTrace()
             return Result.retry()
         }
@@ -95,18 +101,6 @@ class CardioWorkoutWorker @AssistedInject constructor(
 
     private fun startStopwatch() {
         stopwatchManager.start()
-    }
-
-    fun stopStopwatch() {
-        stopwatchManager.stop()
-    }
-
-    fun pause() {
-        stopwatchManager.pause()
-    }
-
-    fun getTicker(): String {
-        return stopwatchManager.ticker.value
     }
 
     @SuppressLint("MissingPermission")

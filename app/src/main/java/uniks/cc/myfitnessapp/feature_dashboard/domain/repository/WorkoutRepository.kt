@@ -14,6 +14,7 @@ interface WorkoutRepository {
     var selectedWorkoutDetail : Workout?
     var oldStepsValue : Int
     val currentWorkoutTimerStateFlow : MutableStateFlow<String>
+    val currentWorkoutDistanceStateFlow : MutableStateFlow<String>
 
     suspend fun getAllWorkoutsFromDatabase() : List<Workout>
 
