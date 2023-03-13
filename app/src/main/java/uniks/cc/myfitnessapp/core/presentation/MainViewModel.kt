@@ -1,6 +1,7 @@
 package uniks.cc.myfitnessapp.core.presentation
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -34,7 +35,7 @@ class MainViewModel @Inject constructor(
     private val coreRepository: CoreRepository,
     private val workoutRepository: WorkoutRepository,
     private val settingsRepository: SettingsRepository,
-    private val activityRecognitionClient : ActivityRecognitionClient
+    private val activityRecognitionClient: ActivityRecognitionClient
 ) : ViewModel() {
     private lateinit var navController: NavHostController
     private lateinit var settings: Settings
@@ -58,34 +59,17 @@ class MainViewModel @Inject constructor(
         runBlocking {
             settings = settingsRepository.getSettingsFromDatabase()
         }
-
-        if (ActivityCompat.checkSelfPermission(
-                coreRepository.context,
-                Manifest.permission.ACTIVITY_RECOGNITION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
+        coreRepository.checkActivityRecognitionPermission()
+        if (coreRepository.isActivityRecognitionPermissionGranted) {
             requestForUpdates()
         }
         coreRepository.navBarState = navBarState.value
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.S)
+
+    @SuppressLint("MissingPermission")
     private fun requestForUpdates() {
-        if (ActivityCompat.checkSelfPermission(
-                coreRepository.context,
-                Manifest.permission.ACTIVITY_RECOGNITION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return
-        }
         activityRecognitionClient
             .requestActivityTransitionUpdates(
                 ActivityTransitions.getActivityTransitionRequest(),
@@ -110,35 +94,7 @@ class MainViewModel @Inject constructor(
         )
     }
 
-    @RequiresApi(Build.VERSION_CODES.S)
-    private fun deregisterForUpdates() {
-
-        if (ActivityCompat.checkSelfPermission(
-                coreRepository.context,
-                Manifest.permission.ACTIVITY_RECOGNITION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return
-        }
-        activityRecognitionClient
-            .removeActivityTransitionUpdates(getPendingIntent())
-            .addOnSuccessListener {
-                getPendingIntent().cancel()
-                Log.e("ATU", "successful deregistration")
-            }
-            .addOnFailureListener {
-                Log.e("ATU", "unsuccessful deregistration")
-            }
-    }
-
-    fun setRepoContext(context : Context) {
+    fun setRepoContext(context: Context) {
         coreRepository.context = context
     }
 
