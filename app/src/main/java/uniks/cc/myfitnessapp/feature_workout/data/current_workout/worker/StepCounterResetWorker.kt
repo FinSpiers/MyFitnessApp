@@ -10,6 +10,7 @@ import kotlinx.coroutines.delay
 import uniks.cc.myfitnessapp.core.domain.model.Steps
 import uniks.cc.myfitnessapp.core.domain.repository.SensorRepository
 import uniks.cc.myfitnessapp.core.domain.util.TimestampConverter
+import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.DashBoardRepository
 import uniks.cc.myfitnessapp.feature_workout.domain.repository.WorkoutRepository
 import java.time.Instant
 
@@ -17,6 +18,7 @@ import java.time.Instant
 class StepCounterResetWorker @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted workerParams: WorkerParameters,
+    val dashBoardRepository: DashBoardRepository,
     val workoutRepository: WorkoutRepository,
     val sensorRepository: SensorRepository
 ) : CoroutineWorker(context, workerParams) {
@@ -31,26 +33,26 @@ class StepCounterResetWorker @AssistedInject constructor(
         saveDailyCount()
         delay(3000)
         // Update oldValue
-        val oldValue = workoutRepository.getAllDailySteps().sumOf { it.count }
+        val oldValue = dashBoardRepository.getAllDailySteps().sumOf { it.count }
         if (sensorRepository.stepCounterSensorValueStateFlow.value > oldValue) {
-            workoutRepository.oldStepsValue = oldValue
+            dashBoardRepository.oldStepsValue = oldValue
         }
         else {
-            workoutRepository.oldStepsValue = 0
+            dashBoardRepository.oldStepsValue = 0
         }
     }
 
     private suspend fun saveDailyCount() {
-        val allSteps = workoutRepository.getAllDailySteps()
+        val allSteps = dashBoardRepository.getAllDailySteps()
 
         if (allSteps.isEmpty()) {
             val oldDate = TimestampConverter.convertToDate(Instant.now().epochSecond - 60 * 60 * 24)
             val oldStepsCount = sensorRepository.stepCounterSensorValueStateFlow.value
-            workoutRepository.saveDailySteps(Steps(oldStepsCount, oldDate))
+            dashBoardRepository.saveDailySteps(Steps(oldStepsCount, oldDate))
         }
         else {
-            val oldStepsCount = workoutRepository.getAllDailySteps().sumOf { it.count }
-            workoutRepository.saveDailySteps(Steps(sensorRepository.stepCounterSensorValueStateFlow.value - oldStepsCount))
+            val oldStepsCount = dashBoardRepository.getAllDailySteps().sumOf { it.count }
+            dashBoardRepository.saveDailySteps(Steps(sensorRepository.stepCounterSensorValueStateFlow.value - oldStepsCount))
         }
     }
 }

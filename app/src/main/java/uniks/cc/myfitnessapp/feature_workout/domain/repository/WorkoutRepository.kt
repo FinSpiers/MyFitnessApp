@@ -12,7 +12,6 @@ interface WorkoutRepository {
     var workouts : List<Workout>
     var currentWorkout: Workout?
     var selectedWorkoutDetail : Workout?
-    var oldStepsValue : Int
     val currentWorkoutTimerStateFlow : MutableStateFlow<String>
     val currentWorkoutDistanceStateFlow : MutableStateFlow<String>
 
@@ -25,11 +24,6 @@ interface WorkoutRepository {
     suspend fun addWorkoutToDatabase(workout: Workout)
 
     suspend fun deleteWorkoutFromDatabase(workout: Workout)
-
-    suspend fun saveDailySteps(steps: Steps)
-
-    suspend fun getDailyStepsByDate(date : String) : Steps?
-    suspend fun getAllDailySteps() : List<Steps>
 
     suspend fun getAllWaypoints() : List<Waypoint>
 

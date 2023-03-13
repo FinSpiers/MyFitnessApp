@@ -7,8 +7,10 @@ import android.content.Context
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
+import android.net.ConnectivityManager
 import android.os.Looper
 import android.util.Log
+import android.widget.Toast
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
@@ -28,38 +30,29 @@ class CardioWorkoutWorker @AssistedInject constructor(
     @Assisted val params: WorkerParameters,
     val workoutRepository: WorkoutRepository,
     val coreRepository: CoreRepository,
-    val locationManager: LocationManager,
-    val stopwatchManager: StopwatchManager
+    private val locationManager: LocationManager,
+    private val stopwatchManager: StopwatchManager
 ) : CoroutineWorker(appContext, params) {
 
     lateinit var locationListener: LocationListener
-
-    init {
-        initLocationListener()
-    }
-
     override suspend fun doWork(): Result {
         try {
             if (Looper.myLooper() == null) {
                 Looper.prepare()
             }
-            startStopwatch()
-
-            //if (coreRepository.isLocationPermissionGranted) {
-            startLocationTracking()
+            initLocationListener()
+            coreRepository.checkLocationPermission()
             delay(500)
-            if (workoutRepository.currentWorkout != null) {
-                delay(500)
-                val waypoints = workoutRepository.currentWorkout?.let {
-                    workoutRepository.getWaypointsByWorkoutId(it.id)
+
+            startStopwatch()
+            if (coreRepository.isLocationPermissionGranted && locationManager.isLocationEnabled) {
+                startLocationTracking()
+                if (workoutRepository.currentWorkout != null) {
+                    delay(500)
+                    Looper.loop()
                 }
-                if (waypoints != null && waypoints.size > 1) {
-                    val distance = DistanceCalculator.calculateMeters(waypoints)
-                    workoutRepository.currentWorkoutDistanceStateFlow.emit(distance.toString())
-                }
-                Looper.loop()
+                stopListener()
             }
-            stopListener()
             Looper.myLooper()?.quitSafely()
             return Result.success()
 
@@ -79,7 +72,6 @@ class CardioWorkoutWorker @AssistedInject constructor(
         locationListener = LocationListener { location: Location ->
             val currentWorkout = workoutRepository.currentWorkout
             if (currentWorkout != null) {
-                Log.e("CURRENT_WORKOUT", "ID=$currentWorkout")
                 GlobalScope.launch(Dispatchers.IO) {
                     val currentWayPoint = Waypoint(
                         currentWorkout.id,
@@ -88,10 +80,7 @@ class CardioWorkoutWorker @AssistedInject constructor(
                         location.longitude
                     )
                     workoutRepository.saveWaypoint(currentWayPoint)
-                    Log.e(
-                        "DB",
-                        "Saved waypoint $currentWayPoint with current workout time of ${stopwatchManager.ticker.value} to database"
-                    )
+                    Log.e("WORK", "Created waypoint")
                 }
             }
         }
@@ -103,16 +92,16 @@ class CardioWorkoutWorker @AssistedInject constructor(
 
     @SuppressLint("MissingPermission")
     private fun startLocationTracking() {
+        if (Looper.myLooper() == null) {
+            Looper.prepare()
+        }
         try {
-
             locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER,
                 15 * 1000,
                 0f,
                 locationListener
             )
-
-            //locationManager.removeUpdates(locationListener)
         } catch (e: Exception) {
             e.printStackTrace()
         }

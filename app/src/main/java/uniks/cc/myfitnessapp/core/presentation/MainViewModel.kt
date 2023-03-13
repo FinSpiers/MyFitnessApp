@@ -1,15 +1,25 @@
 package uniks.cc.myfitnessapp.core.presentation
 
+import android.Manifest
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.mutableStateOf
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
+import com.google.android.gms.location.ActivityRecognitionClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.runBlocking
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
+import uniks.cc.myfitnessapp.core.domain.util.ActivityTransitionReceiver
+import uniks.cc.myfitnessapp.core.domain.util.ActivityTransitions
 import uniks.cc.myfitnessapp.core.domain.util.Screen
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationEvent
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationBarState
@@ -18,11 +28,13 @@ import uniks.cc.myfitnessapp.feature_settings.domain.model.Settings
 import uniks.cc.myfitnessapp.feature_settings.domain.repository.SettingsRepository
 import javax.inject.Inject
 
+@RequiresApi(Build.VERSION_CODES.S)
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val coreRepository: CoreRepository,
     private val workoutRepository: WorkoutRepository,
-    private val settingsRepository: SettingsRepository
+    private val settingsRepository: SettingsRepository,
+    private val activityRecognitionClient : ActivityRecognitionClient
 ) : ViewModel() {
     private lateinit var navController: NavHostController
     private lateinit var settings: Settings
@@ -46,8 +58,86 @@ class MainViewModel @Inject constructor(
         runBlocking {
             settings = settingsRepository.getSettingsFromDatabase()
         }
+
+        if (ActivityCompat.checkSelfPermission(
+                coreRepository.context,
+                Manifest.permission.ACTIVITY_RECOGNITION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            requestForUpdates()
+        }
         coreRepository.navBarState = navBarState.value
+
     }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun requestForUpdates() {
+        if (ActivityCompat.checkSelfPermission(
+                coreRepository.context,
+                Manifest.permission.ACTIVITY_RECOGNITION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        activityRecognitionClient
+            .requestActivityTransitionUpdates(
+                ActivityTransitions.getActivityTransitionRequest(),
+                getPendingIntent()
+            )
+            .addOnSuccessListener {
+                Log.e("ATU", "successful registration")
+            }
+            .addOnFailureListener {
+                Log.e("ATU", "Unsuccessful registration")
+            }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun getPendingIntent(): PendingIntent {
+        val intent = Intent(coreRepository.context, ActivityTransitionReceiver::class.java)
+        return PendingIntent.getBroadcast(
+            coreRepository.context,
+            122,
+            intent,
+            PendingIntent.FLAG_MUTABLE
+        )
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun deregisterForUpdates() {
+
+        if (ActivityCompat.checkSelfPermission(
+                coreRepository.context,
+                Manifest.permission.ACTIVITY_RECOGNITION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        activityRecognitionClient
+            .removeActivityTransitionUpdates(getPendingIntent())
+            .addOnSuccessListener {
+                getPendingIntent().cancel()
+                Log.e("ATU", "successful deregistration")
+            }
+            .addOnFailureListener {
+                Log.e("ATU", "unsuccessful deregistration")
+            }
+    }
+
     fun setRepoContext(context : Context) {
         coreRepository.context = context
     }

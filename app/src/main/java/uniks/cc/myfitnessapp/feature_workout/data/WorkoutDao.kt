@@ -1,4 +1,4 @@
-package uniks.cc.myfitnessapp.core.data.database
+package uniks.cc.myfitnessapp.feature_workout.data
 
 import androidx.room.*
 import uniks.cc.myfitnessapp.core.domain.model.Steps
@@ -38,16 +38,5 @@ interface WorkoutDao {
     @Query("SELECT * FROM TraveledRoute WHERE workoutId=:id")
     suspend fun getWaypointsByWorkoutId(id : Int) : List<Waypoint>
 
-    @Transaction
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun saveDailySteps(steps: Steps)
-
-    @Transaction
-    @Query("SELECT * FROM DailySteps")
-    suspend fun getAllDailySteps() : List<Steps>
-
-    @Transaction
-    @Query("SELECT * FROM DailySteps WHERE date=:pDate")
-    suspend fun getDailyStepsByDate(pDate : String) : Steps?
 
 }

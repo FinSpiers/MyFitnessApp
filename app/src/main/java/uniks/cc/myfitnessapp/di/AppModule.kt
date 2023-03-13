@@ -6,6 +6,8 @@ import android.location.LocationManager
 import android.net.ConnectivityManager
 import androidx.room.Room
 import androidx.work.WorkManager
+import com.google.android.gms.location.ActivityRecognition
+import com.google.android.gms.location.ActivityRecognitionClient
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import dagger.Module
@@ -21,6 +23,7 @@ import uniks.cc.myfitnessapp.core.domain.model.sensors.AccelerometerSensor
 import uniks.cc.myfitnessapp.core.domain.model.sensors.StepCounterSensor
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.domain.repository.SensorRepository
+import uniks.cc.myfitnessapp.feature_dashboard.data.DashboardDao
 import uniks.cc.myfitnessapp.feature_dashboard.data.repository.DashBoardRepositoryImpl
 import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.DashBoardRepository
 import uniks.cc.myfitnessapp.feature_workout.data.repository.WorkoutRepositoryImpl
@@ -40,6 +43,12 @@ object AppModule {
         return listOf("Walking", "Running", "Bicycling", "PushUps", "SitUps", "Squats")
     }
 
+
+    @Provides
+    @Singleton
+    fun provideActivityRecognitionClient(app: Application) : ActivityRecognitionClient {
+        return ActivityRecognition.getClient(app.applicationContext)
+    }
 
     @Provides
     @Singleton
@@ -76,16 +85,17 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideCoreRepository() : CoreRepository {
-        return CoreRepositoryImpl()
+    fun provideCoreRepository(app: Application) : CoreRepository {
+        return CoreRepositoryImpl(app)
     }
 
     @Provides
     @Singleton
     fun provideDashBoardRepository(
-        apiService: OpenWeatherApiService
+        apiService: OpenWeatherApiService,
+        db : MyFitnessDatabase
     ): DashBoardRepository {
-        return DashBoardRepositoryImpl(apiService)
+        return DashBoardRepositoryImpl(apiService, db.dashboardDao)
     }
 
     @Provides

@@ -3,7 +3,7 @@ package uniks.cc.myfitnessapp.feature_workout.data.repository
 import android.util.Log
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
-import uniks.cc.myfitnessapp.core.data.database.WorkoutDao
+import uniks.cc.myfitnessapp.feature_workout.data.WorkoutDao
 import uniks.cc.myfitnessapp.core.domain.model.Steps
 import uniks.cc.myfitnessapp.core.domain.model.Waypoint
 import uniks.cc.myfitnessapp.core.domain.model.Workout
@@ -18,17 +18,11 @@ class WorkoutRepositoryImpl(private val workoutDao: WorkoutDao) : WorkoutReposit
     override var workouts: List<Workout> = emptyList()
     override var currentWorkout: Workout? = null
     override var selectedWorkoutDetail: Workout? = null
-    override var oldStepsValue: Int = 0
     override val currentWorkoutTimerStateFlow: MutableStateFlow<String> = MutableStateFlow("00:00:000")
     override val currentWorkoutDistanceStateFlow: MutableStateFlow<String> = MutableStateFlow("-")
 
     init {
-        runBlocking {
-            workouts = workoutDao.getAllWorkouts()
-            oldStepsValue = getDailyStepsByDate(
-                TimestampConverter.convertToDate(Instant.now().epochSecond - 60 * 60 * 24)
-            )?.count ?: 0
-        }
+
     }
 
     override suspend fun getAllWorkoutsFromDatabase(): List<Workout> {
@@ -49,19 +43,6 @@ class WorkoutRepositoryImpl(private val workoutDao: WorkoutDao) : WorkoutReposit
 
     override suspend fun deleteWorkoutFromDatabase(workout: Workout) {
         return workoutDao.deleteWorkout(workout)
-    }
-
-    override suspend fun saveDailySteps(steps: Steps) {
-        workoutDao.saveDailySteps(steps)
-    }
-
-    override suspend fun getDailyStepsByDate(date: String): Steps? {
-        return workoutDao.getDailyStepsByDate(date)
-    }
-
-    override suspend fun getAllDailySteps(): List<Steps> {
-        Log.e("STEPS", workoutDao.getAllDailySteps().toString())
-        return workoutDao.getAllDailySteps()
     }
 
     override suspend fun getAllWaypoints(): List<Waypoint> {

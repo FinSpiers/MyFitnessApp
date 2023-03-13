@@ -65,21 +65,12 @@ class DashBoardViewModel @Inject constructor(
             ExistingPeriodicWorkPolicy.UPDATE,
             resetRequest
         )
-
-        val exampleRoute = listOf(
-            Waypoint(1, 1, 51.546109235121925, 9.401057125476921),
-            Waypoint(1, 12, 51.54551062095242, 9.401252428123303),
-            Waypoint(1, 123, 51.544721964433144, 9.402062357757353),
-            Waypoint(1, 1234, 51.54473609118497, 9.403702405617599),
-            Waypoint(1, 12345, 51.54547350154158, 9.40395227440517),
-            Waypoint(1, 123456, 51.546109235121925, 9.401057125476921),
-        )
     }
 
     fun getOldStepCount() : Int {
         var oldStepsValue = emptyList<Steps>()
         runBlocking {
-            oldStepsValue = workoutRepository.getAllDailySteps()
+            oldStepsValue = dashBoardRepository.getAllDailySteps()
         }
         return oldStepsValue.sumOf { it.count }
     }
@@ -121,10 +112,11 @@ class DashBoardViewModel @Inject constructor(
                         distance = 0.0
                         pace = 0.0
                         avgPace = 0.0
-                        // TODO: use activity recognition api and a backgroundService to
-                        // TODO: track users activities,time spend, calculate distance, pace, burned kcal, etc..
-                        val cardioWorkoutWorker = OneTimeWorkRequestBuilder<CardioWorkoutWorker>().build()
-                        workManager.enqueue(cardioWorkoutWorker)
+                        val cardioWorkoutWorker = OneTimeWorkRequestBuilder<CardioWorkoutWorker>()
+                            .setBackoffCriteria(
+                            BackoffPolicy.LINEAR, 3, TimeUnit.SECONDS
+                        ).build()
+                        workManager.enqueueUniqueWork("cardioWorkoutWorker", ExistingWorkPolicy.REPLACE, cardioWorkoutWorker)
                     }
                     else {
                         repetitions = 0
@@ -148,6 +140,7 @@ class DashBoardViewModel @Inject constructor(
             is WorkoutEvent.StopWorkout -> {
                 workoutRepository.currentWorkout = null
                 stopwatchManager.stop()
+                workManager.cancelUniqueWork("cardioWorkoutWorker")
             }
         }
     }

@@ -36,14 +36,10 @@ class MainActivity @Inject constructor() : ComponentActivity() {
     @Inject
     lateinit var coreRepository: CoreRepository
 
-    lateinit var client: ActivityRecognitionClient
-
     @RequiresApi(Build.VERSION_CODES.S)
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        client = ActivityRecognition.getClient(this)
 
         setContent {
             val viewModel: MainViewModel = hiltViewModel()
@@ -69,81 +65,6 @@ class MainActivity @Inject constructor() : ComponentActivity() {
                 }
             }
         }
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACTIVITY_RECOGNITION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            requestForUpdates()
-        }
+
     }
-
-    @RequiresApi(Build.VERSION_CODES.S)
-    private fun requestForUpdates() {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACTIVITY_RECOGNITION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return
-        }
-        client
-            .requestActivityTransitionUpdates(
-                ActivityTransitions.getActivityTransitionRequest(),
-                getPendingIntent()
-            )
-            .addOnSuccessListener {
-                Log.e("ATU", "successful registration")
-            }
-            .addOnFailureListener {
-                Log.e("ATU", "Unsuccessful registration")
-            }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.S)
-    private fun deregisterForUpdates() {
-
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACTIVITY_RECOGNITION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return
-        }
-        client
-            .removeActivityTransitionUpdates(getPendingIntent())
-            .addOnSuccessListener {
-                getPendingIntent().cancel()
-                Log.e("ATU", "successful deregistration")
-            }
-            .addOnFailureListener {
-                Log.e("ATU", "unsuccessful deregistration")
-            }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.S)
-    private fun getPendingIntent(): PendingIntent {
-        val intent = Intent(this, ActivityTransitionReceiver::class.java)
-        return PendingIntent.getBroadcast(
-            this,
-            122,
-            intent,
-            PendingIntent.FLAG_MUTABLE
-        )
-    }
-
 }
