@@ -3,7 +3,6 @@ package uniks.cc.myfitnessapp.feature_dashboard.presentation
 import android.annotation.SuppressLint
 import android.location.LocationManager
 import android.net.ConnectivityManager
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.*
 import androidx.work.*
@@ -19,11 +18,11 @@ import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.domain.repository.SensorRepository
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationEvent
-import uniks.cc.myfitnessapp.feature_current_workout.data.calculator.DistanceCalculator
-import uniks.cc.myfitnessapp.feature_current_workout.data.worker.CardioWorkoutWorker
-import uniks.cc.myfitnessapp.feature_current_workout.data.worker.StepCounterResetWorker
-import uniks.cc.myfitnessapp.feature_current_workout.domain.util.stopwatch.StopwatchManager
-import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.WorkoutRepository
+import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.DashBoardRepository
+import uniks.cc.myfitnessapp.feature_workout.data.current_workout.worker.CardioWorkoutWorker
+import uniks.cc.myfitnessapp.feature_workout.data.current_workout.worker.StepCounterResetWorker
+import uniks.cc.myfitnessapp.feature_workout.domain.current_workout.util.stopwatch.StopwatchManager
+import uniks.cc.myfitnessapp.feature_workout.domain.repository.WorkoutRepository
 import java.time.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -31,6 +30,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DashBoardViewModel @Inject constructor(
     private val coreRepository: CoreRepository,
+    private val dashBoardRepository: DashBoardRepository,
     private val workoutRepository: WorkoutRepository,
     private val sensorRepository: SensorRepository,
     private val locationManager: LocationManager,
@@ -184,7 +184,7 @@ class DashBoardViewModel @Inject constructor(
             viewModelScope.launch {
                 location?.let {
                     dashBoardState.value = dashBoardState.value.copy(
-                        currentWeatherData = coreRepository.getCurrentWeather(
+                        currentWeatherData = dashBoardRepository.getCurrentWeatherData(
                             location.latitude,
                             location.longitude
                         )

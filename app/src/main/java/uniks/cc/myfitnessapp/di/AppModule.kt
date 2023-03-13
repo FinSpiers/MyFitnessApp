@@ -14,21 +14,20 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.GlobalScope
 import uniks.cc.myfitnessapp.core.data.database.MyFitnessDatabase
-import uniks.cc.myfitnessapp.core.data.network.OpenWeatherApiService
+import uniks.cc.myfitnessapp.feature_dashboard.data.network.OpenWeatherApiService
 import uniks.cc.myfitnessapp.core.data.repository.CoreRepositoryImpl
 import uniks.cc.myfitnessapp.core.data.repository.SensorRepositoryImpl
 import uniks.cc.myfitnessapp.core.domain.model.sensors.AccelerometerSensor
 import uniks.cc.myfitnessapp.core.domain.model.sensors.StepCounterSensor
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.domain.repository.SensorRepository
-import uniks.cc.myfitnessapp.feature_current_workout.domain.util.stopwatch.*
-import uniks.cc.myfitnessapp.feature_current_workout.domain.util.stopwatch.StopwatchManager
-import uniks.cc.myfitnessapp.feature_current_workout.domain.util.stopwatch.StopwatchStateHolder
-import uniks.cc.myfitnessapp.feature_current_workout.domain.util.stopwatch.TimestampMillisecondsFormatter
-import uniks.cc.myfitnessapp.feature_dashboard.data.repository.WorkoutRepositoryImpl
-import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.WorkoutRepository
+import uniks.cc.myfitnessapp.feature_dashboard.data.repository.DashBoardRepositoryImpl
+import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.DashBoardRepository
+import uniks.cc.myfitnessapp.feature_workout.data.repository.WorkoutRepositoryImpl
+import uniks.cc.myfitnessapp.feature_workout.domain.repository.WorkoutRepository
 import uniks.cc.myfitnessapp.feature_settings.data.repository.SettingsRepositoryImpl
 import uniks.cc.myfitnessapp.feature_settings.domain.repository.SettingsRepository
+import uniks.cc.myfitnessapp.feature_workout.domain.current_workout.util.stopwatch.*
 import javax.inject.Singleton
 
 @Module
@@ -77,10 +76,16 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideCoreRepository(
+    fun provideCoreRepository() : CoreRepository {
+        return CoreRepositoryImpl()
+    }
+
+    @Provides
+    @Singleton
+    fun provideDashBoardRepository(
         apiService: OpenWeatherApiService
-    ): CoreRepository {
-        return CoreRepositoryImpl(apiService)
+    ): DashBoardRepository {
+        return DashBoardRepositoryImpl(apiService)
     }
 
     @Provides

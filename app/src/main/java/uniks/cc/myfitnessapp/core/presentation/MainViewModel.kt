@@ -13,7 +13,7 @@ import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.domain.util.Screen
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationEvent
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationBarState
-import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.WorkoutRepository
+import uniks.cc.myfitnessapp.feature_workout.domain.repository.WorkoutRepository
 import uniks.cc.myfitnessapp.feature_settings.domain.model.Settings
 import uniks.cc.myfitnessapp.feature_settings.domain.repository.SettingsRepository
 import javax.inject.Inject

@@ -23,7 +23,7 @@ import uniks.cc.myfitnessapp.core.domain.util.ActivityTransitionReceiver
 import uniks.cc.myfitnessapp.core.domain.util.ActivityTransitions
 import uniks.cc.myfitnessapp.core.presentation.navigation.NavigationHost
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.BottomNavigationBar
-import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.WorkoutRepository
+import uniks.cc.myfitnessapp.feature_workout.domain.repository.WorkoutRepository
 import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
 import javax.inject.Inject
 

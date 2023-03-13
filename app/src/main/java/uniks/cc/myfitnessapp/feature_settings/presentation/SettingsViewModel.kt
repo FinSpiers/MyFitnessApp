@@ -8,8 +8,8 @@ import androidx.work.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import uniks.cc.myfitnessapp.core.domain.model.Workout
-import uniks.cc.myfitnessapp.feature_current_workout.data.worker.StepCounterResetWorker
-import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.WorkoutRepository
+import uniks.cc.myfitnessapp.feature_workout.data.current_workout.worker.StepCounterResetWorker
+import uniks.cc.myfitnessapp.feature_workout.domain.repository.WorkoutRepository
 import uniks.cc.myfitnessapp.feature_settings.domain.repository.SettingsRepository
 import java.time.LocalDateTime
 import java.time.ZoneOffset
