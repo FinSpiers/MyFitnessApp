@@ -18,11 +18,12 @@ class WorkoutRepositoryImpl(private val workoutDao: WorkoutDao) : WorkoutReposit
     override var workouts: List<Workout> = emptyList()
     override var currentWorkout: Workout? = null
     override var selectedWorkoutDetail: Workout? = null
+
     override val currentWorkoutTimerStateFlow: MutableStateFlow<String> = MutableStateFlow("00:00:000")
     override val currentWorkoutDistanceStateFlow: MutableStateFlow<String> = MutableStateFlow("-")
 
-    init {
-
+    override suspend fun getOldStepsValueFromDatabase(): Int {
+        TODO("Not yet implemented")
     }
 
     override suspend fun getAllWorkoutsFromDatabase(): List<Workout> {

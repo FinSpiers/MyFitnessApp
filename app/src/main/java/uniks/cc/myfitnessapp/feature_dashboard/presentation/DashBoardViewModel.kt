@@ -9,11 +9,12 @@ import androidx.work.*
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.Priority
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import uniks.cc.myfitnessapp.core.domain.model.Steps
-import uniks.cc.myfitnessapp.core.domain.model.Waypoint
 import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.domain.repository.SensorRepository
@@ -21,6 +22,7 @@ import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.Navigati
 import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.DashBoardRepository
 import uniks.cc.myfitnessapp.feature_workout.data.current_workout.worker.CardioWorkoutWorker
 import uniks.cc.myfitnessapp.feature_workout.data.current_workout.worker.StepCounterResetWorker
+import uniks.cc.myfitnessapp.feature_workout.data.current_workout.worker.WeightWorkoutWorker
 import uniks.cc.myfitnessapp.feature_workout.domain.current_workout.util.stopwatch.StopwatchManager
 import uniks.cc.myfitnessapp.feature_workout.domain.repository.WorkoutRepository
 import java.time.*
@@ -67,12 +69,12 @@ class DashBoardViewModel @Inject constructor(
         )
     }
 
-    fun getOldStepCount() : Int {
+    fun getOldStepCount(): Int {
         var oldStepsValue = emptyList<Steps>()
         runBlocking {
             oldStepsValue = dashBoardRepository.getAllDailySteps()
         }
-        return oldStepsValue.sumOf { it.count }
+        return oldStepsValue.sumOf { it.dailyCount }
     }
 
     fun getCurrentWorkout(): Workout? {
@@ -102,45 +104,55 @@ class DashBoardViewModel @Inject constructor(
     fun onWorkoutAction(event: WorkoutEvent) {
         when (event) {
             is WorkoutEvent.StartWorkout -> {
+                var workerBuilder: OneTimeWorkRequest.Builder
                 var currentWorkout = Workout(
                     workoutName = event.workoutName,
                     timeStamp = Instant.now().epochSecond,
-                    duration = 0.0,
+                    duration = "00:00:000",
                     kcal = 0
                 ).apply {
                     if (workoutName in listOf("Walking", "Running", "Bicycling")) {
                         distance = 0.0
                         pace = 0.0
                         avgPace = 0.0
-                        val cardioWorkoutWorker = OneTimeWorkRequestBuilder<CardioWorkoutWorker>()
-                            .setBackoffCriteria(
-                            BackoffPolicy.LINEAR, 3, TimeUnit.SECONDS
-                        ).build()
-                        workManager.enqueueUniqueWork("cardioWorkoutWorker", ExistingWorkPolicy.REPLACE, cardioWorkoutWorker)
-                    }
-                    else {
+                        workerBuilder = OneTimeWorkRequestBuilder<CardioWorkoutWorker>()
+                    } else {
                         repetitions = 0
-                        // TODO: Use backgroundService that tracks the time and repetitions for the activity
+                        workerBuilder = OneTimeWorkRequestBuilder<WeightWorkoutWorker>()
                     }
                 }
+                // Save and load created workout to / from database to ensure id is set
                 runBlocking {
                     workoutRepository.addWorkoutToDatabase(currentWorkout)
-                    currentWorkout = workoutRepository.getWorkoutByTimestamp(currentWorkout.timeStamp)!!
+                    currentWorkout =
+                        workoutRepository.getWorkoutByTimestamp(currentWorkout.timeStamp)!!
                 }
                 workoutRepository.currentWorkout = currentWorkout
+
+                workerBuilder
+                    .setBackoffCriteria(BackoffPolicy.LINEAR, 5, TimeUnit.SECONDS)
+                    .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+                    .setInputData(workDataOf("WORKOUT_ID" to currentWorkout.id))
+
+                workManager.enqueueUniqueWork(
+                    "currentWorkoutWorker",
+                    ExistingWorkPolicy.REPLACE,
+                    workerBuilder.build()
+                )
 
                 dashBoardState.value = dashBoardState.value.copy(
                     workouts = dashBoardState.value.workouts.toMutableList()
                         .apply { add(0, currentWorkout) }
                 )
-
                 workoutRepository.workouts = dashBoardState.value.workouts
 
             }
             is WorkoutEvent.StopWorkout -> {
                 workoutRepository.currentWorkout = null
-                stopwatchManager.stop()
-                workManager.cancelUniqueWork("cardioWorkoutWorker")
+                viewModelScope.launch(Dispatchers.IO) {
+                    delay(1000)
+                    workManager.cancelUniqueWork("currentWorkoutWorker")
+                }
             }
         }
     }

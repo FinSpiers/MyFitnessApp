@@ -115,6 +115,7 @@ class MainViewModel @Inject constructor(
                 val openAppSettingsIntent = Intent().apply {
                     action = ACTION_APPLICATION_DETAILS_SETTINGS
                     data = Uri.fromParts("package", coreRepository.context.packageName, null)
+                    flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }
                 coreRepository.context.startActivity(openAppSettingsIntent)
             }

@@ -25,7 +25,7 @@ class StopwatchManager(
         stopJob()
     }
 
-    fun stop() {
+    fun stopAndReset() {
         stopwatchStateHolder.stop()
         stopJob()
         clearValue()

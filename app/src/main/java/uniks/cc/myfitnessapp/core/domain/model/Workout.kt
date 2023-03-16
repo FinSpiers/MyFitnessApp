@@ -10,7 +10,7 @@ data class Workout(
     // TODO: Add traveled route (list of locations?) and pace per km (list of doubles?) to parameters
     var workoutName: String,
     var timeStamp: Long = Instant.now().epochSecond,
-    var duration: Double = 0.0,
+    var duration: String = "00:00:000",
     var kcal: Int = 0,
 
     // Only Cardiovascular Activities

@@ -33,7 +33,7 @@ class StepCounterResetWorker @AssistedInject constructor(
         saveDailyCount()
         delay(3000)
         // Update oldValue
-        val oldValue = dashBoardRepository.getAllDailySteps().sumOf { it.count }
+        val oldValue = dashBoardRepository.getAllDailySteps().sumOf { it.dailyCount }
         if (sensorRepository.stepCounterSensorValueStateFlow.value > oldValue) {
             dashBoardRepository.oldStepsValue = oldValue
         }
@@ -51,7 +51,7 @@ class StepCounterResetWorker @AssistedInject constructor(
             dashBoardRepository.saveDailySteps(Steps(oldStepsCount, oldDate))
         }
         else {
-            val oldStepsCount = dashBoardRepository.getAllDailySteps().sumOf { it.count }
+            val oldStepsCount = dashBoardRepository.getAllDailySteps().sumOf { it.dailyCount }
             dashBoardRepository.saveDailySteps(Steps(sensorRepository.stepCounterSensorValueStateFlow.value - oldStepsCount))
         }
     }

@@ -100,18 +100,8 @@ fun DashBoardScreen(
                         viewModel::onWorkoutDetailClick,
                         viewModel.getCurrentWorkout()
                     )
-
                 }
             }
         }
-
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DashBoardPreview() {
-    MyFitnessAppTheme {
-        DashBoardScreen()
     }
 }

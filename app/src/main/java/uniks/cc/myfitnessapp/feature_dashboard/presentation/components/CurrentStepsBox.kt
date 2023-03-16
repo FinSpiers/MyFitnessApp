@@ -55,6 +55,7 @@ fun CurrentStepsBox(steps: Int, stepGoal: Int = 10000, dialogState: MutableState
                 modifier = Modifier.padding(top = 4.dp, start = 8.dp),
                 color = MaterialTheme.colorScheme.onSurface
             )
+            /*
             Icon(
                 imageVector = Icons.Default.BarChart,
                 contentDescription = "Show steps history",
@@ -66,6 +67,7 @@ fun CurrentStepsBox(steps: Int, stepGoal: Int = 10000, dialogState: MutableState
                         dialogState.tryEmit(dialogState.value)
                     }
             )
+             */
         }
         Box(
             contentAlignment = Alignment.Center,
@@ -79,7 +81,6 @@ fun CurrentStepsBox(steps: Int, stepGoal: Int = 10000, dialogState: MutableState
                                 progressionPercent,
                                 MaterialTheme.colorScheme.primary
                             ),
-
                             PieChartData.Slice(
                                 stillRemainingPercent,
                                 MaterialTheme.colorScheme.outlineVariant
