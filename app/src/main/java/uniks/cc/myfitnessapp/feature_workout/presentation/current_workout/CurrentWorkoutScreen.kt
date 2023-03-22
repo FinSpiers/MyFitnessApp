@@ -20,6 +20,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import uniks.cc.myfitnessapp.core.presentation.components.WorkoutFab
 import uniks.cc.myfitnessapp.feature_workout.domain.current_workout.util.WorkoutMap
 import uniks.cc.myfitnessapp.feature_core.presentation.components.DataBox
@@ -105,47 +107,53 @@ fun CurrentWorkoutScreen(viewModel: CurrentWorkoutViewModel = hiltViewModel()) {
                 ) {
                     DataBox(
                         title = "Duration",
-                        data = (viewModel.stopwatchManager.ticker.collectAsState().value),
+                        data = viewModel.timerFlow.collectAsState().value,
                         unit = ""
                     )
                 }
             }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(4.dp),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                if (currentWorkout.repetitions != null) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(4.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        DataBox(
-                            title = "Repetitions",
-                            data = (currentWorkout.repetitions).toString(),
-                            unit = ""
-                        )
-                    }
-                }
-                if (currentWorkout.pace != null) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth(0.5f)
-                            .padding(4.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        DataBox(
-                            title = "Pace",
-                            data = (currentWorkout.pace).toString(),
-                            unit = "km/h"
-                        )
-                    }
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(4.dp),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            if (currentWorkout.repetitions != null) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(4.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    DataBox(
+                        title = "Repetitions",
+                        data = (currentWorkout.repetitions).toString(),
+                        unit = ""
+                    )
                 }
             }
         }
-
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(4.dp),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            if (currentWorkout.pace != null) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth(0.5f)
+                        .padding(4.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    DataBox(
+                        title = "Pace",
+                        data = (currentWorkout.pace).toString(),
+                        unit = "km/h"
+                    )
+                }
+            }
+        }
     }
 }

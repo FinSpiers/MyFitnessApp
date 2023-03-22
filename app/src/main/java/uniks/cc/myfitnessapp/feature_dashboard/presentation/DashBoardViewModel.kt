@@ -38,8 +38,7 @@ class DashBoardViewModel @Inject constructor(
     private val locationManager: LocationManager,
     private val connectivityManager: ConnectivityManager,
     private val fusedLocationProviderClient: FusedLocationProviderClient,
-    private val workManager: WorkManager,
-    private val stopwatchManager: StopwatchManager
+    private val workManager: WorkManager
 
 ) : ViewModel() {
     val dashBoardState = mutableStateOf(DashBoardState())
@@ -140,6 +139,7 @@ class DashBoardViewModel @Inject constructor(
                     workerBuilder.build()
                 )
 
+
                 dashBoardState.value = dashBoardState.value.copy(
                     workouts = dashBoardState.value.workouts.toMutableList()
                         .apply { add(0, currentWorkout) }
@@ -150,8 +150,8 @@ class DashBoardViewModel @Inject constructor(
             is WorkoutEvent.StopWorkout -> {
                 workoutRepository.currentWorkout = null
                 viewModelScope.launch(Dispatchers.IO) {
-                    delay(1000)
-                    workManager.cancelUniqueWork("currentWorkoutWorker")
+                    //delay(3 * 1000)
+                    //workManager.cancelUniqueWork("currentWorkoutWorker")
                 }
             }
         }

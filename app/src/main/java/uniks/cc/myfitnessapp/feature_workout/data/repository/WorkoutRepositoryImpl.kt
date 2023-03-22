@@ -9,6 +9,7 @@ import uniks.cc.myfitnessapp.core.domain.model.Waypoint
 import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.core.domain.util.TimestampConverter
 import uniks.cc.myfitnessapp.feature_dashboard.presentation.WorkoutEvent
+import uniks.cc.myfitnessapp.feature_workout.domain.current_workout.util.stopwatch.StopwatchManager
 import uniks.cc.myfitnessapp.feature_workout.domain.repository.WorkoutRepository
 import java.time.Instant
 import kotlin.reflect.KFunction1
@@ -21,6 +22,8 @@ class WorkoutRepositoryImpl(private val workoutDao: WorkoutDao) : WorkoutReposit
 
     override val currentWorkoutTimerStateFlow: MutableStateFlow<String> = MutableStateFlow("00:00:000")
     override val currentWorkoutDistanceStateFlow: MutableStateFlow<String> = MutableStateFlow("-")
+    override var stopwatchManager: StopwatchManager? = null
+
 
     override suspend fun getOldStepsValueFromDatabase(): Int {
         TODO("Not yet implemented")

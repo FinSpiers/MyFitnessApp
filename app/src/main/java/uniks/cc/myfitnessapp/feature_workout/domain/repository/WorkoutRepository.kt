@@ -5,6 +5,7 @@ import uniks.cc.myfitnessapp.core.domain.model.Steps
 import uniks.cc.myfitnessapp.core.domain.model.Waypoint
 import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.feature_dashboard.presentation.WorkoutEvent
+import uniks.cc.myfitnessapp.feature_workout.domain.current_workout.util.stopwatch.StopwatchManager
 import kotlin.reflect.KFunction1
 
 interface WorkoutRepository {
@@ -14,6 +15,7 @@ interface WorkoutRepository {
     var selectedWorkoutDetail : Workout?
     val currentWorkoutTimerStateFlow : MutableStateFlow<String>
     val currentWorkoutDistanceStateFlow : MutableStateFlow<String>
+    var stopwatchManager : StopwatchManager?
 
     suspend fun getOldStepsValueFromDatabase() : Int
     suspend fun getAllWorkoutsFromDatabase() : List<Workout>

@@ -9,18 +9,20 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
+import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
 import uniks.cc.myfitnessapp.core.domain.util.hasLocationPermission
+import kotlin.system.exitProcess
 
 class LocationClientImpl(
     private val context : Context,
     private val client : FusedLocationProviderClient
 ) : LocationClient {
 
-    lateinit var locationCallback : LocationCallback
+    private var locationCallback : LocationCallback? = null
     @SuppressLint("MissingPermission")
     override fun getLocationUpdates(interval: Long): Flow<Location> {
         return callbackFlow {
@@ -43,19 +45,24 @@ class LocationClientImpl(
                 override fun onLocationResult(result: LocationResult) {
                     super.onLocationResult(result)
                     result.locations.lastOrNull()?.let { location: Location ->
-                        launch { send(location) }
+                        launch {
+                            send(location)
+                        }
                     }
                 }
             }
-            client.requestLocationUpdates(request, locationCallback, Looper.getMainLooper())
+            val looper = Looper.getMainLooper()
+            client.requestLocationUpdates(request, locationCallback as LocationCallback, looper)
 
             awaitClose {
                 stopLocationUpdates()
+                looper.quitSafely()
             }
         }
     }
 
     override fun stopLocationUpdates() {
-        client.removeLocationUpdates(locationCallback)
+        client.removeLocationUpdates(locationCallback as LocationCallback)
+        locationCallback = null
     }
 }

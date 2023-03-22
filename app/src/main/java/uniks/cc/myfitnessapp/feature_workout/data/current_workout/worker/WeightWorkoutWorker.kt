@@ -7,10 +7,13 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.feature_workout.domain.current_workout.util.stopwatch.StopwatchManager
+import uniks.cc.myfitnessapp.feature_workout.domain.current_workout.util.stopwatch.StopwatchStateHolder
 import uniks.cc.myfitnessapp.feature_workout.domain.repository.WorkoutRepository
 
 @HiltWorker
@@ -21,32 +24,36 @@ class WeightWorkoutWorker @AssistedInject constructor(
     private val stopwatchManager: StopwatchManager,
 ) : CoroutineWorker(appContext, params) {
 
-    override suspend fun doWork(): Result = coroutineScope {
+    lateinit var currentWorkout : Workout
+
+    override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         try {
-            var currentWorkout : Workout? = null
-            stopwatchManager.stopAndReset()
             if (Looper.myLooper() == null) {
                 Looper.prepare()
             }
+            val workoutId = params.inputData.getInt("WORKOUT_ID", -1)
+            if (workoutId == -1 || workoutRepository.getWorkoutById(workoutId) == null) {
+                return@withContext Result.failure()
+            }
+            currentWorkout = workoutRepository.getWorkoutById(workoutId)!!
+
+            stopwatchManager.stopAndReset()
             stopwatchManager.start()
+
             if (workoutRepository.currentWorkout != null) {
-                if (currentWorkout == null) {
-                    currentWorkout = workoutRepository.currentWorkout
-                }
                 delay(500)
                 Looper.loop()
             }
-            if (currentWorkout != null) {
-                currentWorkout.duration = stopwatchManager.ticker.value
-                workoutRepository.addWorkoutToDatabase(currentWorkout)
-            }
+
+            currentWorkout.duration = stopwatchManager.ticker.value
             stopwatchManager.stopAndReset()
+            workoutRepository.addWorkoutToDatabase(currentWorkout)
             Looper.myLooper()?.quitSafely()
-            return@coroutineScope Result.success()
+            return@withContext Result.success()
         }
         catch (e : Exception) {
             e.printStackTrace()
-            return@coroutineScope Result.retry()
+            return@withContext Result.retry()
         }
 
     }

@@ -5,7 +5,9 @@ import android.content.Context
 import android.location.LocationManager
 import android.net.ConnectivityManager
 import androidx.room.Room
+import androidx.work.CoroutineWorker
 import androidx.work.WorkManager
+import androidx.work.WorkerParameters
 import com.google.android.gms.location.ActivityRecognition
 import com.google.android.gms.location.ActivityRecognitionClient
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -14,7 +16,10 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withContext
 import uniks.cc.myfitnessapp.core.data.database.MyFitnessDatabase
 import uniks.cc.myfitnessapp.feature_dashboard.data.network.OpenWeatherApiService
 import uniks.cc.myfitnessapp.core.data.repository.CoreRepositoryImpl
@@ -23,13 +28,14 @@ import uniks.cc.myfitnessapp.core.domain.model.sensors.AccelerometerSensor
 import uniks.cc.myfitnessapp.core.domain.model.sensors.StepCounterSensor
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.domain.repository.SensorRepository
-import uniks.cc.myfitnessapp.feature_dashboard.data.DashboardDao
+import uniks.cc.myfitnessapp.core.domain.util.Constants
 import uniks.cc.myfitnessapp.feature_dashboard.data.repository.DashBoardRepositoryImpl
 import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.DashBoardRepository
 import uniks.cc.myfitnessapp.feature_workout.data.repository.WorkoutRepositoryImpl
 import uniks.cc.myfitnessapp.feature_workout.domain.repository.WorkoutRepository
 import uniks.cc.myfitnessapp.feature_settings.data.repository.SettingsRepositoryImpl
 import uniks.cc.myfitnessapp.feature_settings.domain.repository.SettingsRepository
+import uniks.cc.myfitnessapp.feature_workout.data.current_workout.worker.CardioWorkoutWorker
 import uniks.cc.myfitnessapp.feature_workout.domain.current_workout.util.stopwatch.*
 import javax.inject.Singleton
 
@@ -39,14 +45,26 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideWorkoutNames() : List<String> {
-        return listOf("Walking", "Running", "Bicycling", "PushUps", "SitUps", "Squats")
+    fun provideWorkoutNames(): List<String> {
+        return listOf(
+            Constants.WORKOUT_WALKING,
+            Constants.WORKOUT_RUNNING,
+            Constants.WORKOUT_BICYCLING,
+            Constants.WORKOUT_PUSH_UPS,
+            Constants.WORKOUT_SIT_UPS,
+            Constants.WORKOUT_SQUATS
+        )
     }
 
 
     @Provides
+    fun provideCoroutineScope(): CoroutineScope {
+        return CoroutineScope(Dispatchers.IO)
+    }
+
+    @Provides
     @Singleton
-    fun provideActivityRecognitionClient(app: Application) : ActivityRecognitionClient {
+    fun provideActivityRecognitionClient(app: Application): ActivityRecognitionClient {
         return ActivityRecognition.getClient(app.applicationContext)
     }
 
@@ -63,12 +81,15 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideStopwatchManager() : StopwatchManager {
+    fun provideStopwatchManager(coroutineScope: CoroutineScope): StopwatchManager {
         val timestampProvider = TimestampProviderImpl()
         val elapsedTimeCalculator = ElapsedTimeCalculator(timestampProvider)
-        val stopwatchStateCalculator = StopwatchStateCalculator(timestampProvider, elapsedTimeCalculator)
-        val stopwatchStateHolder = StopwatchStateHolder(stopwatchStateCalculator, elapsedTimeCalculator, TimestampMillisecondsFormatter())
-        return StopwatchManager(stopwatchStateHolder, GlobalScope)
+        val stopwatchStateCalculator =
+            StopwatchStateCalculator(timestampProvider, elapsedTimeCalculator)
+        val stopwatchStateHolder = StopwatchStateHolder(
+            stopwatchStateCalculator, elapsedTimeCalculator, TimestampMillisecondsFormatter()
+        )
+        return StopwatchManager(stopwatchStateHolder, coroutineScope)
     }
 
     @Provides
@@ -79,13 +100,13 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideWorkManager(app: Application) : WorkManager {
+    fun provideWorkManager(app: Application): WorkManager {
         return WorkManager.getInstance(app)
     }
 
     @Provides
     @Singleton
-    fun provideCoreRepository(app: Application) : CoreRepository {
+    fun provideCoreRepository(app: Application): CoreRepository {
         return CoreRepositoryImpl(app)
     }
 
@@ -93,20 +114,20 @@ object AppModule {
     @Singleton
     fun provideDashBoardRepository(
         apiService: OpenWeatherApiService,
-        db : MyFitnessDatabase
+        db: MyFitnessDatabase
     ): DashBoardRepository {
         return DashBoardRepositoryImpl(apiService, db.dashboardDao)
     }
 
     @Provides
     @Singleton
-    fun provideWorkoutRepository(db : MyFitnessDatabase) : WorkoutRepository {
+    fun provideWorkoutRepository(db: MyFitnessDatabase): WorkoutRepository {
         return WorkoutRepositoryImpl(db.workoutDao)
     }
 
     @Provides
     @Singleton
-    fun provideSettingsRepository(db : MyFitnessDatabase) : SettingsRepository {
+    fun provideSettingsRepository(db: MyFitnessDatabase): SettingsRepository {
         return SettingsRepositoryImpl(db.settingsDao)
     }
 

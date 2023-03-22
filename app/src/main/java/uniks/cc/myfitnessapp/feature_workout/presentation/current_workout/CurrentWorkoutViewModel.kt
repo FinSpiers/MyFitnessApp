@@ -1,10 +1,18 @@
 package uniks.cc.myfitnessapp.feature_workout.presentation.current_workout
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.domain.repository.SensorRepository
+import uniks.cc.myfitnessapp.core.domain.util.Constants
 import uniks.cc.myfitnessapp.feature_dashboard.presentation.WorkoutEvent
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationEvent
 import uniks.cc.myfitnessapp.feature_workout.domain.current_workout.util.stopwatch.StopwatchManager
@@ -16,26 +24,23 @@ class CurrentWorkoutViewModel @Inject constructor(
     private val coreRepository: CoreRepository,
     private val workoutRepository: WorkoutRepository,
     private val sensorRepository: SensorRepository,
-    val stopwatchManager: StopwatchManager
+    private val stopwatchManager: StopwatchManager
 ) : ViewModel() {
-    val currentWorkout: Workout = workoutRepository.currentWorkout
-        ?: throw NullPointerException("Expression 'workoutRepository.selectedWorkoutDetail' must not be null")
+    var currentWorkout : Workout
 
     val currentWorkoutDistanceStateFlow = workoutRepository.currentWorkoutDistanceStateFlow
-
-    fun onNavigationAction(navigationEvent: NavigationEvent) {
-        coreRepository.onNavigationAction(navigationEvent)
-    }
-
-    fun onWorkoutAction(workoutEvent: WorkoutEvent) {
-        workoutRepository.onWorkoutAction(workoutEvent)
-    }
+    var timerFlow : MutableStateFlow<String>
 
     init {
+        runBlocking {
+            currentWorkout = workoutRepository.currentWorkout!!
+        }
+        timerFlow = stopwatchManager.ticker as MutableStateFlow<String>
+
         if (currentWorkout.workoutName in listOf(
-                "Walking",
-                "Running",
-                "Bicycling"
+                Constants.WORKOUT_WALKING,
+                Constants.WORKOUT_RUNNING,
+                Constants.WORKOUT_BICYCLING
             )
         ) {
             //TODO: TypeAWorkout
@@ -43,6 +48,14 @@ class CurrentWorkoutViewModel @Inject constructor(
             //TODO: TypeBWorkout
             sensorRepository.startAccelerometerSensor()
         }
+    }
+
+    fun onNavigationAction(navigationEvent: NavigationEvent) {
+        coreRepository.onNavigationAction(navigationEvent)
+    }
+
+    fun onWorkoutAction(workoutEvent: WorkoutEvent) {
+        workoutRepository.onWorkoutAction(workoutEvent)
     }
 
     override fun onCleared() {

@@ -1,7 +1,10 @@
 package uniks.cc.myfitnessapp.feature_workout.presentation.workout_detail
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.feature_dashboard.presentation.WorkoutEvent
@@ -17,6 +20,11 @@ class WorkoutDetailViewModel @Inject constructor(
     var selectedWorkout: Workout = workoutRepository.selectedWorkoutDetail
         ?: throw NullPointerException("Expression 'workoutRepository.selectedWorkoutDetail' must not be null")
 
+    init {
+        runBlocking {
+            selectedWorkout = workoutRepository.getWorkoutById(selectedWorkout.id)!!
+        }
+    }
     fun onNavigationAction(navigationEvent: NavigationEvent) {
         coreRepository.onNavigationAction(navigationEvent)
     }
