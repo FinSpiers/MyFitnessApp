@@ -9,6 +9,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.Priority
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -18,51 +19,55 @@ import uniks.cc.myfitnessapp.core.domain.util.hasLocationPermission
 import kotlin.system.exitProcess
 
 class LocationClientImpl(
-    private val context : Context,
-    private val client : FusedLocationProviderClient
+    private val context: Context,
+    private val client: FusedLocationProviderClient
 ) : LocationClient {
 
-    private var locationCallback : LocationCallback? = null
+    private lateinit var locationCallback: LocationCallback
+
     @SuppressLint("MissingPermission")
     override fun getLocationUpdates(interval: Long): Flow<Location> {
         return callbackFlow {
-            if (!context.hasLocationPermission()) {
-                throw LocationClient.LocationException("Missing location permission")
-            }
-            val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-            val isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-            val isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-            if (!isGpsEnabled && !isNetworkEnabled) {
-                throw LocationClient.LocationException("GPS is disabled")
-            }
+            if (!isClosedForSend) {
+                if (!context.hasLocationPermission()) {
+                    throw LocationClient.LocationException("Missing location permission")
+                }
+                val locationManager =
+                    context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                val isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                val isNetworkEnabled =
+                    locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+                if (!isGpsEnabled && !isNetworkEnabled) {
+                    throw LocationClient.LocationException("GPS is disabled")
+                }
 
-            val request = LocationRequest.Builder(interval)
-                .setMinUpdateIntervalMillis(interval)
-                .setMaxUpdateDelayMillis(interval)
-                .build()
+                val request = LocationRequest.Builder(interval)
+                    .setMinUpdateIntervalMillis(interval)
+                    .setMaxUpdateDelayMillis(interval)
+                    .build()
 
-            locationCallback = object : LocationCallback() {
-                override fun onLocationResult(result: LocationResult) {
-                    super.onLocationResult(result)
-                    result.locations.lastOrNull()?.let { location: Location ->
-                        launch {
-                            send(location)
+                locationCallback = object : LocationCallback() {
+                    override fun onLocationResult(result: LocationResult) {
+                        super.onLocationResult(result)
+                        result.locations.lastOrNull()?.let { location: Location ->
+                            launch {
+                                send(location)
+                            }
                         }
                     }
                 }
-            }
-            val looper = Looper.getMainLooper()
-            client.requestLocationUpdates(request, locationCallback as LocationCallback, looper)
+                client.requestLocationUpdates(request, locationCallback, Looper.getMainLooper())
 
-            awaitClose {
-                stopLocationUpdates()
-                looper.quitSafely()
+
+                awaitClose {
+                    stopLocationUpdates()
+                    this.close()
+                }
             }
         }
     }
 
     override fun stopLocationUpdates() {
-        client.removeLocationUpdates(locationCallback as LocationCallback)
-        locationCallback = null
+        client.removeLocationUpdates(locationCallback)
     }
 }

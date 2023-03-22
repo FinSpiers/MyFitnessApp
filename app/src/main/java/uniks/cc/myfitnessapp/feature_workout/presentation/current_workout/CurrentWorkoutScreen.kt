@@ -112,46 +112,46 @@ fun CurrentWorkoutScreen(viewModel: CurrentWorkoutViewModel = hiltViewModel()) {
                     )
                 }
             }
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(4.dp),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            if (currentWorkout.repetitions != null) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(4.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    DataBox(
-                        title = "Repetitions",
-                        data = (currentWorkout.repetitions).toString(),
-                        unit = ""
-                    )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(4.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                if (currentWorkout.repetitions != null) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(4.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        DataBox(
+                            title = "Repetitions",
+                            data = (currentWorkout.repetitions).toString(),
+                            unit = ""
+                        )
+                    }
                 }
             }
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(4.dp),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            if (currentWorkout.pace != null) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth(0.5f)
-                        .padding(4.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    DataBox(
-                        title = "Pace",
-                        data = (currentWorkout.pace).toString(),
-                        unit = "km/h"
-                    )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(4.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                if (currentWorkout.pace != null) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth(0.5f)
+                            .padding(4.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        DataBox(
+                            title = "Pace",
+                            data = (currentWorkout.pace).toString(),
+                            unit = "km/h"
+                        )
+                    }
                 }
             }
         }

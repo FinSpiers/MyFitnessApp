@@ -149,10 +149,6 @@ class DashBoardViewModel @Inject constructor(
             }
             is WorkoutEvent.StopWorkout -> {
                 workoutRepository.currentWorkout = null
-                viewModelScope.launch(Dispatchers.IO) {
-                    //delay(3 * 1000)
-                    //workManager.cancelUniqueWork("currentWorkoutWorker")
-                }
             }
         }
     }
