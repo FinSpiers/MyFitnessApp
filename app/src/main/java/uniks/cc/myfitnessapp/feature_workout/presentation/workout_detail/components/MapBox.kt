@@ -11,11 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.rememberCameraPositionState
+import com.google.android.gms.maps.model.*
+import com.google.maps.android.compose.*
 import uniks.cc.myfitnessapp.core.domain.model.Waypoint
+import uniks.cc.myfitnessapp.core.domain.util.TimestampConverter
 
 @Composable
 fun MapBox(hasInternetConnection: Boolean = false, path: List<Waypoint> = emptyList()) {
@@ -34,7 +33,23 @@ fun MapBox(hasInternetConnection: Boolean = false, path: List<Waypoint> = emptyL
                 .shadow(20.dp)
                 .clip(MaterialTheme.shapes.large)
         ) {
-            GoogleMap(cameraPositionState = cameraPositionState, modifier = Modifier.fillMaxSize())
+            GoogleMap(
+                cameraPositionState = cameraPositionState,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                val points = arrayListOf<LatLng>()
+                for (waypoint in path) {
+                    points.add(LatLng(waypoint.locationLat, waypoint.locationLon))
+                    Marker(
+                        state = MarkerState(LatLng(waypoint.locationLat, waypoint.locationLon)),
+                        title = TimestampConverter.convertToTime(waypoint.timeStamp)
+                    )
+                }
+                Polyline(
+                    points = points, geodesic = false, pattern = listOf(Dot(), Gap(16F))
+                )
+            }
+
         }
     }
 }

@@ -28,8 +28,8 @@ import uniks.cc.myfitnessapp.feature_workout.presentation.workout_detail.compone
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun WorkoutDetailScreen(
-    durationUnit: String = "h",
-    distanceUnit: String = "km",
+    durationUnit: String = "",
+    distanceUnit: String = "m",
     paceUnit: String = "km/h",
     kcalUnit: String = "kcal",
     viewModel: WorkoutDetailViewModel = hiltViewModel()
@@ -137,14 +137,18 @@ fun WorkoutDetailScreen(
                 ) {
                     // TODO: these are test charts
                     val exampleRoute = listOf(
-                        Waypoint(1, 1, 51.546109235121925, 9.401057125476921),
-                        Waypoint(1, 12, 51.54551062095242, 9.401252428123303),
-                        Waypoint(1, 123, 51.544721964433144, 9.402062357757353),
-                        Waypoint(1, 1234, 51.54473609118497, 9.403702405617599),
-                        Waypoint(1, 12345, 51.54547350154158, 9.40395227440517),
-                        Waypoint(1, 123456, 51.546109235121925, 9.401057125476921),
+                        Waypoint(1, 1679656338, 51.546109235121925, 9.401057125476921),
+                        Waypoint(1, 1679656354, 51.54551062095242, 9.401252428123303),
+                        Waypoint(1, 1679656388, 51.544721964433144, 9.402062357757353),
+                        Waypoint(1, 1679656408, 51.54473609118497, 9.403702405617599),
+                        Waypoint(1, 1679656432, 51.54547350154158, 9.40395227440517),
+                        Waypoint(1, 1679656449, 51.546109235121925, 9.401057125476921),
                     )
-                    MapBox(true, exampleRoute)
+                    MapBox(
+                        true,
+                        //viewModel.waypoints
+                        exampleRoute
+                    )
                     Spacer(modifier = Modifier.height(20.dp))
 
                     LineChartBox(

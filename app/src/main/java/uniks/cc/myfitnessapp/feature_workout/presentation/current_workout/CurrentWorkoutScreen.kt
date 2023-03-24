@@ -20,8 +20,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import uniks.cc.myfitnessapp.core.presentation.components.WorkoutFab
 import uniks.cc.myfitnessapp.feature_workout.domain.current_workout.util.WorkoutMap
 import uniks.cc.myfitnessapp.feature_core.presentation.components.DataBox
@@ -95,7 +93,7 @@ fun CurrentWorkoutScreen(viewModel: CurrentWorkoutViewModel = hiltViewModel()) {
                         DataBox(
                             title = "Distance",
                             data = viewModel.currentWorkoutDistanceStateFlow.collectAsState().value,
-                            unit = "km"
+                            unit = "m"
                         )
                     }
                 }
