@@ -8,9 +8,6 @@ data class DashBoardState(
     val workouts : List<Workout> = emptyList(),
     val selectedWorkoutDetail : Workout? = null,
     val currentWorkout : Workout? = null,
-    val steps : Int = 0,
-    val hasLocationPermission : Boolean = false,
-    val hasGpsConnection : Boolean = false,
-    val hasInternetConnection : Boolean = false
+    val steps : Int = 0
 
 )

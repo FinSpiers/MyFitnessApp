@@ -8,6 +8,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import uniks.cc.myfitnessapp.feature_dashboard.data.network.response.toCurrentWeatherData
 import uniks.cc.myfitnessapp.feature_dashboard.data.network.OpenWeatherApiService
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
+import uniks.cc.myfitnessapp.core.domain.util.hasActivityRecognitionPermission
+import uniks.cc.myfitnessapp.core.domain.util.hasLocationPermission
+import uniks.cc.myfitnessapp.core.domain.util.hasNotificationPermission
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationBarState
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationEvent
 import uniks.cc.myfitnessapp.feature_dashboard.domain.model.CurrentWeatherData
@@ -19,18 +22,25 @@ class CoreRepositoryImpl @Inject constructor(override var context: Context) : Co
     override var navBarState: NavigationBarState? = null
     override var isLocationPermissionGranted: Boolean = false
     override var isActivityRecognitionPermissionGranted: Boolean = false
+    override var isNotificationPermissionGranted: Boolean = false
+
+    init {
+        checkLocationPermission()
+        checkActivityRecognitionPermission()
+        checkNotificationPermission()
+    }
 
     override fun checkActivityRecognitionPermission() {
-        isActivityRecognitionPermissionGranted = ContextCompat.checkSelfPermission(
-            context,
-            Manifest.permission.ACTIVITY_RECOGNITION
-        ) == PackageManager.PERMISSION_GRANTED
+       isActivityRecognitionPermissionGranted = context.hasActivityRecognitionPermission()
     }
 
     override fun checkLocationPermission() {
-        isLocationPermissionGranted = ContextCompat.checkSelfPermission(
-            context,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
+        isLocationPermissionGranted = context.hasLocationPermission()
     }
+
+    override fun checkNotificationPermission() {
+        isNotificationPermissionGranted = context.hasNotificationPermission()
+    }
+
+
 }

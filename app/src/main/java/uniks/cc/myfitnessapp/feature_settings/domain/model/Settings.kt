@@ -10,7 +10,8 @@ class Settings(
     var isMale: Boolean = true,
     var height: Int = 0,
     var weight: Int = 0,
-    var birthDateAsTimeStamp: Long = 0
+    var birthDateAsTimeStamp: Long = 0,
+    var initComplete : Boolean = false
 ) {
     @PrimaryKey(autoGenerate = false)
     var id: Int = CURRENT_SETTINGS_ID

@@ -5,13 +5,16 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "TraveledRoute",
+    tableName = "TraveledRoute"
+    /*,
     foreignKeys = [ForeignKey(
         entity = Workout::class,
         parentColumns = arrayOf("id"),
         childColumns = arrayOf("workoutId"),
         onDelete = ForeignKey.CASCADE
     )]
+
+     */
 )
 data class Waypoint(
     var workoutId: Int,

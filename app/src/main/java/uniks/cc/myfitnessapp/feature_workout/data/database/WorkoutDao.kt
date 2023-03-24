@@ -1,4 +1,4 @@
-package uniks.cc.myfitnessapp.feature_workout.data
+package uniks.cc.myfitnessapp.feature_workout.data.database
 
 import androidx.room.*
 import uniks.cc.myfitnessapp.core.domain.model.Steps

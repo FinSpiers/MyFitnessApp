@@ -8,7 +8,7 @@ import java.time.Instant
 @Entity(tableName = "DailySteps")
 data class Steps(
     var dailyCount : Int,
-    /* TODO: Add var totalCount : Long, */
+    var sensorCount : Long,
     @PrimaryKey(autoGenerate = false)
     var date: String = TimestampConverter.convertToDate(Instant.now().epochSecond)
 )

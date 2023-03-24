@@ -1,4 +1,4 @@
-package uniks.cc.myfitnessapp.core.domain.util
+package uniks.cc.myfitnessapp.feature_workout.data.current_workout.activity_reconition
 
 import com.google.android.gms.location.ActivityTransition
 import com.google.android.gms.location.ActivityTransitionRequest

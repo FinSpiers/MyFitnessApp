@@ -23,12 +23,16 @@ import uniks.cc.myfitnessapp.core.domain.model.Waypoint
 import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.domain.util.Constants
+import uniks.cc.myfitnessapp.core.domain.util.hasLocationPermission
 import uniks.cc.myfitnessapp.core.presentation.MainActivity
+import uniks.cc.myfitnessapp.feature_dashboard.presentation.WorkoutEvent
 import uniks.cc.myfitnessapp.feature_workout.domain.current_workout.location_client.LocationClient
 import uniks.cc.myfitnessapp.feature_workout.domain.current_workout.location_client.LocationClientImpl
 import uniks.cc.myfitnessapp.feature_workout.domain.current_workout.util.stopwatch.StopwatchManager
 import uniks.cc.myfitnessapp.feature_workout.domain.repository.WorkoutRepository
 import java.time.Instant
+import java.util.LinkedList
+import java.util.Queue
 
 const val CHANNEL_ID = "CURRENT_WORKOUT"
 
@@ -48,10 +52,12 @@ class CardioWorkoutWorker @AssistedInject constructor(
     private val waypoints = mutableListOf<Waypoint>()
     private lateinit var locationFlow: Flow<Location>
 
-    private var lastLocation: Waypoint? = null
-    private var currentLocation: Waypoint? = null
+    private var lastLocation: Location? = null//Waypoint? = null
+    private var currentLocation: Location? = null //Waypoint? = null
     private var movedDistance = 0
     private var currentPace = 0.0
+
+    private val waypointQueue = LinkedList<Waypoint>()
 
     override suspend fun doWork(): Result = coroutineScope {
         try {
@@ -64,31 +70,34 @@ class CardioWorkoutWorker @AssistedInject constructor(
             currentWorkout = workoutRepository.getWorkoutById(workoutId)!!
 
             startStopwatch()
-            locationFlow = locationClient.getLocationUpdates(10 * 1000).cancellable()
 
-            locationFlow.catch { e -> e.printStackTrace() }
-                .onEach { location ->
-                    val lat = location.latitude
-                    val lon = location.longitude
-                    val waypoint = Waypoint(currentWorkout.id, Instant.now().epochSecond, lat, lon)
-                    if (currentLocation != null) {
-                        lastLocation = currentLocation
-                        currentLocation = waypoint
+            if (appContext.hasLocationPermission()) {
+                locationFlow = locationClient.getLocationUpdates(1 * 1000)
+
+                locationFlow.catch { e -> e.printStackTrace() }
+                    .onEach { location ->
+                        if (currentLocation != null) {
+                            lastLocation = currentLocation
+                            currentLocation = location
+                        } else {
+                            currentLocation = location
+                        }
+                        val lat = location.latitude
+                        val lon = location.longitude
+                        val waypoint =
+                            Waypoint(currentWorkout.id, Instant.now().epochSecond, lat, lon)
+
+                        workoutRepository.saveWaypoint(waypoint)
+                        waypointQueue.add(waypoint)
+                        waypoints.add(waypoint)
                     }
-                    else {
-                        currentLocation = waypoint
-                    }
-                    workoutRepository.saveWaypoint(waypoint)
-                    waypoints.add(waypoint)
-                    Log.e(
-                        "LOCATION",
-                        "Waypoint [${currentWorkout.id}, ($lat, $lon)] saved to database with elapsed time ${stopwatchManager.ticker.value}"
-                    )
-                }
-                .launchIn(this)
+                    .launchIn(this)
+            } else {
+                workoutRepository.onWorkoutAction(WorkoutEvent.OnError.NoLocationPermissionOnError)
+            }
             while (true) {
-                delay(3000)
-                calculateDistanceAndPace()
+                delay(1000)
+                calculateDistance()
                 currentWorkout = currentWorkout.apply {
                     duration = stopwatchManager.ticker.value
                     distance = movedDistance.toDouble()
@@ -152,25 +161,24 @@ class CardioWorkoutWorker @AssistedInject constructor(
         stopwatchManager.start()
     }
 
-    private fun calculateDistanceAndPace() {
-        val last = lastLocation
-        val current = currentLocation
-        if (last != null && current != null) {
-            val lastLocation = Location("lastLocation").apply {
-                latitude = last.locationLat
-                longitude = last.locationLon
+    private fun calculateDistance() {
+        if (waypointQueue.isNotEmpty()) {
+            val waypoint = waypointQueue.pop()
+            val location = Location("waypoint").apply {
+                latitude = waypoint.locationLat
+                longitude = waypoint.locationLon
             }
-            val currentLocation = Location("currentLocation").apply {
-                latitude = last.locationLat
-                longitude = last.locationLon
+            if (currentLocation == null) {
+                currentLocation = location
+            } else {
+                lastLocation = currentLocation
+                currentLocation = location
             }
-            movedDistance += lastLocation.distanceTo(currentLocation).toInt()
-            val time = current.timeStamp - last.timeStamp
-
-            currentPace = (movedDistance / time).toDouble() // in m/s -> km/h = (m / 1000) / (s / 3600)
-            Log.e("CALC", "Calculated moved distance: $movedDistance m, current Pace: $currentPace m/s")
+            val last = lastLocation
+            val current = currentLocation
+            if (last != null && current != null) {
+                movedDistance += last.distanceTo(current).toInt()
+            }
         }
-
-
     }
 }

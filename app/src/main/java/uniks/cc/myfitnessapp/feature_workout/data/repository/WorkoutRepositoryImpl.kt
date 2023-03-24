@@ -1,13 +1,11 @@
 package uniks.cc.myfitnessapp.feature_workout.data.repository
 
-import android.util.Log
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.runBlocking
-import uniks.cc.myfitnessapp.feature_workout.data.WorkoutDao
-import uniks.cc.myfitnessapp.core.domain.model.Steps
+import uniks.cc.myfitnessapp.feature_workout.data.database.WorkoutDao
 import uniks.cc.myfitnessapp.core.domain.model.Waypoint
 import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.core.domain.util.TimestampConverter
+import uniks.cc.myfitnessapp.feature_dashboard.data.DashboardDao
 import uniks.cc.myfitnessapp.feature_dashboard.presentation.WorkoutEvent
 import uniks.cc.myfitnessapp.feature_workout.domain.current_workout.util.stopwatch.StopwatchManager
 import uniks.cc.myfitnessapp.feature_workout.domain.repository.WorkoutRepository
@@ -20,14 +18,9 @@ class WorkoutRepositoryImpl(private val workoutDao: WorkoutDao) : WorkoutReposit
     override var currentWorkout: Workout? = null
     override var selectedWorkoutDetail: Workout? = null
 
-    override val currentWorkoutTimerStateFlow: MutableStateFlow<String> = MutableStateFlow("00:00:000")
     override val currentWorkoutDistanceStateFlow: MutableStateFlow<String> = MutableStateFlow("-")
     override var stopwatchManager: StopwatchManager? = null
 
-
-    override suspend fun getOldStepsValueFromDatabase(): Int {
-        TODO("Not yet implemented")
-    }
 
     override suspend fun getAllWorkoutsFromDatabase(): List<Workout> {
         return workoutDao.getAllWorkouts()

@@ -3,14 +3,20 @@ package uniks.cc.myfitnessapp.feature_dashboard.data.repository
 import android.util.Log
 import uniks.cc.myfitnessapp.core.data.database.MyFitnessDatabase
 import uniks.cc.myfitnessapp.core.domain.model.Steps
+import uniks.cc.myfitnessapp.core.domain.util.TimestampConverter
 import uniks.cc.myfitnessapp.feature_dashboard.data.DashboardDao
 import uniks.cc.myfitnessapp.feature_dashboard.data.network.OpenWeatherApiService
 import uniks.cc.myfitnessapp.feature_dashboard.data.network.response.toCurrentWeatherData
 import uniks.cc.myfitnessapp.feature_dashboard.domain.model.CurrentWeatherData
 import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.DashBoardRepository
+import java.time.Instant
 
-class DashBoardRepositoryImpl(private val apiService: OpenWeatherApiService, val dashboardDao: DashboardDao) : DashBoardRepository {
-    override var oldStepsValue: Int = 0
+class DashBoardRepositoryImpl(private val apiService: OpenWeatherApiService, private val dashboardDao: DashboardDao) : DashBoardRepository {
+
+    override suspend fun getOldStepsValueFromDatabase(): Long {
+        val steps = dashboardDao.getDailyStepsByDate(TimestampConverter.convertToDate(Instant.now().epochSecond))
+        return steps?.sensorCount ?: -1
+    }
 
     override suspend fun getCurrentWeatherData(lat: Double, lon: Double): CurrentWeatherData {
         return apiService.getCurrentWeatherAsync(lat, lon, "metric", "en").await().toCurrentWeatherData()

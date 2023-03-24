@@ -8,7 +8,7 @@ import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.feature_dashboard.data.DashboardDao
 import uniks.cc.myfitnessapp.feature_settings.data.data_source.database.SettingsDao
 import uniks.cc.myfitnessapp.feature_settings.domain.model.Settings
-import uniks.cc.myfitnessapp.feature_workout.data.WorkoutDao
+import uniks.cc.myfitnessapp.feature_workout.data.database.WorkoutDao
 
 @Database(
     entities = [

@@ -93,7 +93,7 @@ fun WorkoutDetailScreen(
                 Spacer(modifier = Modifier.height(20.dp))
                 WorkoutDetailListItem(
                     title = "Duration",
-                    value = "${viewModel.selectedWorkout.duration}",
+                    value = viewModel.selectedWorkout.duration,
                     unit = durationUnit
                 )
 

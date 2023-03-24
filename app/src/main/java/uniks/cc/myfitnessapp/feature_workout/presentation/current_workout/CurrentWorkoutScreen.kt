@@ -23,6 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import uniks.cc.myfitnessapp.core.presentation.components.WorkoutFab
 import uniks.cc.myfitnessapp.feature_workout.domain.current_workout.util.WorkoutMap
 import uniks.cc.myfitnessapp.feature_core.presentation.components.DataBox
+import uniks.cc.myfitnessapp.feature_dashboard.presentation.components.WarningBox
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -35,7 +36,8 @@ fun CurrentWorkoutScreen(viewModel: CurrentWorkoutViewModel = hiltViewModel()) {
                 onWorkoutAction = viewModel::onWorkoutAction,
                 hasCurrentWorkout = true
             )
-        }
+        },
+        topBar = { WarningBox(title = "Motivationsfehler", text = "Keine Motivation gefunden...")}
     ) {
         Column(
             modifier = Modifier
