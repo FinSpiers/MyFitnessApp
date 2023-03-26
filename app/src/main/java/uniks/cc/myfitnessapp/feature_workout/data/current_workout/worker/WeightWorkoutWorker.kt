@@ -28,9 +28,6 @@ class WeightWorkoutWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         try {
-            if (Looper.myLooper() == null) {
-                Looper.prepare()
-            }
             val workoutId = params.inputData.getInt("WORKOUT_ID", -1)
             if (workoutId == -1 || workoutRepository.getWorkoutById(workoutId) == null) {
                 return@withContext Result.failure()
@@ -40,15 +37,16 @@ class WeightWorkoutWorker @AssistedInject constructor(
             stopwatchManager.stopAndReset()
             stopwatchManager.start()
 
-            if (workoutRepository.currentWorkout != null) {
-                delay(500)
-                Looper.loop()
+            while (true) {
+                delay(1000)
+                // TODO: Write and call function that counts repetitions automatically
+                if (workoutRepository.currentWorkout != null) {
+                    break
+                }
             }
-
             currentWorkout.duration = stopwatchManager.ticker.value
             stopwatchManager.stopAndReset()
             workoutRepository.addWorkoutToDatabase(currentWorkout)
-            Looper.myLooper()?.quitSafely()
             return@withContext Result.success()
         }
         catch (e : Exception) {

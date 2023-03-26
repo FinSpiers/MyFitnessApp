@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.location.Location
 import android.util.Log
+import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
@@ -72,7 +73,7 @@ class CardioWorkoutWorker @AssistedInject constructor(
             startStopwatch()
 
             if (appContext.hasLocationPermission()) {
-                locationFlow = locationClient.getLocationUpdates(1 * 1000)
+                locationFlow = locationClient.getLocationUpdates(6 * 1000)
 
                 locationFlow.catch { e -> e.printStackTrace() }
                     .onEach { location ->
@@ -88,12 +89,19 @@ class CardioWorkoutWorker @AssistedInject constructor(
                             Waypoint(currentWorkout.id, Instant.now().epochSecond, lat, lon)
 
                         workoutRepository.saveWaypoint(waypoint)
+                        delay(250)
+                        Log.e("DB", workoutRepository.getWaypointsByWorkoutId(currentWorkout.id).toString())
                         waypointQueue.add(waypoint)
                         waypoints.add(waypoint)
                     }
                     .launchIn(this)
             } else {
-                workoutRepository.onWorkoutAction(WorkoutEvent.OnError.NoLocationPermissionOnError)
+                try {
+                    Toast.makeText(appContext, "Error on getting GPS signal!", Toast.LENGTH_LONG).show()
+                }
+                catch (e : Exception) {
+                    e.printStackTrace()
+                }
             }
             while (true) {
                 delay(1000)
@@ -103,10 +111,10 @@ class CardioWorkoutWorker @AssistedInject constructor(
                     distance = movedDistance.toDouble()
                     pace = currentPace
                 }
-                Log.e("STATUS", currentWorkout.toString())
                 if (workoutRepository.currentWorkout == null)
                     break
             }
+            calculateDistance()
 
             locationClient.stopLocationUpdates()
             currentWorkout.duration = stopwatchManager.ticker.value

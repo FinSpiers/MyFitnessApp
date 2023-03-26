@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+
 
 package uniks.cc.myfitnessapp.feature_workout.presentation.workout_detail
 
@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -18,6 +19,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import uniks.cc.myfitnessapp.core.domain.model.Waypoint
 import uniks.cc.myfitnessapp.core.domain.util.TimestampConverter
 import uniks.cc.myfitnessapp.core.presentation.components.WorkoutFab
@@ -146,8 +149,8 @@ fun WorkoutDetailScreen(
                     )
                     MapBox(
                         true,
-                        //viewModel.waypoints
-                        exampleRoute
+                        //exampleRoute
+                        viewModel.getWaypointsByWorkoutId(viewModel.selectedWorkout.id)
                     )
                     Spacer(modifier = Modifier.height(20.dp))
 

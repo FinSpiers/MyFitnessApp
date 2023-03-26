@@ -194,15 +194,6 @@ class DashBoardViewModel @Inject constructor(
             is WorkoutEvent.StopWorkout -> {
                 workoutRepository.currentWorkout = null
             }
-            is WorkoutEvent.OnError.NoActivityRecognitionPermissionOnError -> {
-                TODO()
-            }
-            is WorkoutEvent.OnError.NoLocationPermissionOnError -> {
-                TODO()
-            }
-            is WorkoutEvent.OnError.NoNotificationPermissionOnError -> {
-                TODO()
-            }
         }
     }
 
