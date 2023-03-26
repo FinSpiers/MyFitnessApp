@@ -54,23 +54,25 @@ class DashBoardViewModel @Inject constructor(
 
     init {
         workoutRepository.onWorkoutAction = this::onWorkoutAction
-        sensorRepository.startStepCounterSensor()
+        if (coreRepository.isActivityRecognitionPermissionGranted) {
+            sensorRepository.startStepCounterSensor()
+            viewModelScope.launch {
+                // Load settings from database
+                settings = settingsRepository.getSettingsFromDatabase()
 
-        viewModelScope.launch {
-            // Load settings from database
-            settings = settingsRepository.getSettingsFromDatabase()
+                // Check if
+                if (!settings.initComplete) {
+                    val resetRequest: OneTimeWorkRequest =
+                        OneTimeWorkRequestBuilder<StepCounterResetWorker>()
+                            .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+                            .build()
 
-            // Check if
-            if (!settings.initComplete) {
-                val resetRequest: OneTimeWorkRequest =
-                    OneTimeWorkRequestBuilder<StepCounterResetWorker>()
-                        .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
-                        .build()
-
-                workManager.enqueue(resetRequest)
-                settings.initComplete = true
-                settingsRepository.saveSettingsToDatabase(settings)
+                    workManager.enqueue(resetRequest)
+                    settings.initComplete = true
+                    settingsRepository.saveSettingsToDatabase(settings)
+                }
             }
+
             val initialDelay = Duration.between(
                 LocalDateTime.now(),
                 LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(0, 0))
@@ -99,7 +101,7 @@ class DashBoardViewModel @Inject constructor(
     }
 
     fun getOldStepCount(): Int {
-        var oldStepsValue : Long
+        var oldStepsValue: Long
         runBlocking {
             oldStepsValue = dashBoardRepository.getOldStepsValueFromDatabase()
         }
@@ -146,7 +148,12 @@ class DashBoardViewModel @Inject constructor(
                     duration = "00:00:000",
                     kcal = 0
                 ).apply {
-                    if (workoutName in listOf(Constants.WORKOUT_WALKING, Constants.WORKOUT_RUNNING, Constants.WORKOUT_BICYCLING)) {
+                    if (workoutName in listOf(
+                            Constants.WORKOUT_WALKING,
+                            Constants.WORKOUT_RUNNING,
+                            Constants.WORKOUT_BICYCLING
+                        )
+                    ) {
                         distance = 0.0
                         pace = 0.0
                         avgPace = 0.0
@@ -159,7 +166,8 @@ class DashBoardViewModel @Inject constructor(
                 // Save and load created workout to / from database to ensure id is set
                 runBlocking {
                     workoutRepository.addWorkoutToDatabase(currentWorkout)
-                    currentWorkout = workoutRepository.getWorkoutByTimestamp(currentWorkout.timeStamp)!!
+                    currentWorkout =
+                        workoutRepository.getWorkoutByTimestamp(currentWorkout.timeStamp)!!
                 }
                 workoutRepository.currentWorkout = currentWorkout
 

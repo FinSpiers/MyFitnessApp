@@ -2,7 +2,10 @@
     <string name="app_name">MyFitnessApp</string>
 
     <string name="warning_no_gps_permission_title">No location permission granted!</string>
-    <string name="warning_no_gps_permission_text">"Enable it via App settings to ensure the full functionality of this app. Click here to enable it.</string>
+    <string name="warning_no_gps_permission_text">"Your Location is used to track your workouts and fetch weather data. Please Click here to enable it.</string>
+
+    <string name="warning_no_activity_recognition_permission_title">No activity recognition permission granted!</string>
+    <string name="warning_no_activity_recognition_permission_text">"This permission is needed for counting steps and starting workouts automatically. Please click here to enable it.</string>
 
     <string name="warning_no_gps_signal_title">No GPS Signal detected!</string>
     <string name="warning_no_gps_signal_text">Make sure to enable gps to ensure location tracking for your activities. </string>

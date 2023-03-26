@@ -1,0 +1,4 @@
+Title:	 Manually start a workout
+Start:	 Alice opens the app. The Dashboard with all recent workouts is shown.
+Action: Alice tabs the “Start Workout”-Button and selects Walking-Workout.
+Result: The App creates a Workout-Object and switches from dashboard to the current workout screen, which displays information about the current workout like type, duration, etc., and starts a service that ensures that the app keeps running in background or with screen off.
