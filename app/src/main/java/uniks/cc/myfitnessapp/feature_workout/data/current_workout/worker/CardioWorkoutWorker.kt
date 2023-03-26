@@ -26,14 +26,12 @@ import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.domain.util.Constants
 import uniks.cc.myfitnessapp.core.domain.util.hasLocationPermission
 import uniks.cc.myfitnessapp.core.presentation.MainActivity
-import uniks.cc.myfitnessapp.feature_dashboard.presentation.WorkoutEvent
 import uniks.cc.myfitnessapp.feature_workout.domain.current_workout.location_client.LocationClient
 import uniks.cc.myfitnessapp.feature_workout.domain.current_workout.location_client.LocationClientImpl
 import uniks.cc.myfitnessapp.feature_workout.domain.current_workout.util.stopwatch.StopwatchManager
 import uniks.cc.myfitnessapp.feature_workout.domain.repository.WorkoutRepository
 import java.time.Instant
 import java.util.LinkedList
-import java.util.Queue
 
 const val CHANNEL_ID = "CURRENT_WORKOUT"
 
@@ -90,16 +88,19 @@ class CardioWorkoutWorker @AssistedInject constructor(
 
                         workoutRepository.saveWaypoint(waypoint)
                         delay(250)
-                        Log.e("DB", workoutRepository.getWaypointsByWorkoutId(currentWorkout.id).toString())
+                        Log.e(
+                            "DB",
+                            workoutRepository.getWaypointsByWorkoutId(currentWorkout.id).toString()
+                        )
                         waypointQueue.add(waypoint)
                         waypoints.add(waypoint)
                     }
                     .launchIn(this)
             } else {
                 try {
-                    Toast.makeText(appContext, "Error on getting GPS signal!", Toast.LENGTH_LONG).show()
-                }
-                catch (e : Exception) {
+                    Toast.makeText(appContext, "Error on getting GPS signal!", Toast.LENGTH_LONG)
+                        .show()
+                } catch (e: Exception) {
                     e.printStackTrace()
                 }
             }

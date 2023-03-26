@@ -24,7 +24,7 @@ fun StartWorkoutListItem(
     imageId: Int,
     onWorkoutNavigation: KFunction1<NavigationEvent, Unit>,
     onWorkoutAction: KFunction1<WorkoutEvent, Unit>,
-    openDialog : MutableState<Boolean>
+    openDialog: MutableState<Boolean>
 ) {
     Row(
         horizontalArrangement = Arrangement.Center,

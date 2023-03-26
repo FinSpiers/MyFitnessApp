@@ -14,7 +14,8 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun ActivityPlanner(isWeatherGood: Boolean) {
-    val resId = if (isWeatherGood) R.drawable.icon_weather_outside else R.drawable.icon_weather_inside
+    val resId =
+        if (isWeatherGood) R.drawable.icon_weather_outside else R.drawable.icon_weather_inside
     Row(
         modifier = Modifier
             .padding(4.dp)
@@ -25,7 +26,12 @@ fun ActivityPlanner(isWeatherGood: Boolean) {
         val motivationText =
             if (isWeatherGood) "Good weather,\nyou might wanna go outside!" else "Better train inside,\nnot looking too good outside!"
         Column(modifier = Modifier.fillMaxWidth(0.85f), verticalArrangement = Arrangement.Center) {
-            Text(text = "Activity planner", style = MaterialTheme.typography.titleMedium, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+            Text(
+                text = "Activity planner",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
             Text(
                 text = motivationText,
                 style = MaterialTheme.typography.bodySmall,
@@ -36,7 +42,13 @@ fun ActivityPlanner(isWeatherGood: Boolean) {
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            Icon(painter = painterResource(id = resId), contentDescription = null, modifier = Modifier.size(32.dp).padding(end = 4.dp))
+            Icon(
+                painter = painterResource(id = resId),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(32.dp)
+                    .padding(end = 4.dp)
+            )
         }
     }
 }

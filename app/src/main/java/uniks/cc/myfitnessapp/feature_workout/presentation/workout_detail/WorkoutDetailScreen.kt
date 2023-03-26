@@ -1,17 +1,13 @@
-
-
 package uniks.cc.myfitnessapp.feature_workout.presentation.workout_detail
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -19,9 +15,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
 import uniks.cc.myfitnessapp.core.domain.model.Waypoint
+import uniks.cc.myfitnessapp.core.domain.util.Constants.WORKOUT_BICYCLING
+import uniks.cc.myfitnessapp.core.domain.util.Constants.WORKOUT_RUNNING
+import uniks.cc.myfitnessapp.core.domain.util.Constants.WORKOUT_WALKING
 import uniks.cc.myfitnessapp.core.domain.util.TimestampConverter
 import uniks.cc.myfitnessapp.core.presentation.components.WorkoutFab
 import uniks.cc.myfitnessapp.feature_workout.presentation.workout_detail.components.LineChartBox
@@ -101,9 +98,9 @@ fun WorkoutDetailScreen(
                 )
 
                 if (viewModel.selectedWorkout.workoutName in listOf(
-                        "Walking",
-                        "Running",
-                        "Bicycling"
+                        WORKOUT_WALKING,
+                        WORKOUT_RUNNING,
+                        WORKOUT_BICYCLING
                     )
                 ) {
                     WorkoutDetailListItem(
@@ -133,9 +130,9 @@ fun WorkoutDetailScreen(
                 Spacer(modifier = Modifier.height(20.dp))
 
                 if (viewModel.selectedWorkout.workoutName in listOf(
-                        "Walking",
-                        "Running",
-                        "Bicycling"
+                        WORKOUT_WALKING,
+                        WORKOUT_RUNNING,
+                        WORKOUT_BICYCLING
                     )
                 ) {
                     // TODO: these are test charts

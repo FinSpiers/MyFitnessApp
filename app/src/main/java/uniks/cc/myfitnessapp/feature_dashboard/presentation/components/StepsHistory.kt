@@ -10,14 +10,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.patrykandpatrick.vico.compose.axis.horizontal.bottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.startAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.column.columnChart
-import com.patrykandpatrick.vico.core.axis.Axis
 import com.patrykandpatrick.vico.core.entry.entryModelOf
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -25,7 +23,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 @Composable
 fun StepsHistory(dialogShownStateFlow: MutableStateFlow<Boolean>) {
     if (dialogShownStateFlow.collectAsState().value) {
-        AlertDialog(onDismissRequest = { dialogShownStateFlow.tryEmit(false) }, modifier = Modifier.fillMaxWidth()) {
+        AlertDialog(
+            onDismissRequest = { dialogShownStateFlow.tryEmit(false) },
+            modifier = Modifier.fillMaxWidth()
+        ) {
             val map = LinkedHashMap<Int, String>().apply {
                 put(0, "02.")
                 put(1, "03.")
@@ -38,7 +39,8 @@ fun StepsHistory(dialogShownStateFlow: MutableStateFlow<Boolean>) {
                 put(8, "10.")
                 put(9, "11.")
             }
-            val chartEntryModel = entryModelOf(20333f, 12367f, 8573f, 162f, 75f, 23132f, 10232, 10232, 10232, 10232)
+            val chartEntryModel =
+                entryModelOf(20333f, 12367f, 8573f, 162f, 75f, 23132f, 10232, 10232, 10232, 10232)
 
             Column(
                 modifier = Modifier
@@ -58,7 +60,9 @@ fun StepsHistory(dialogShownStateFlow: MutableStateFlow<Boolean>) {
                 Chart(
                     chart = columnChart(),
                     model = chartEntryModel,
-                    startAxis = startAxis(valueFormatter = { value, _ -> value.toInt().toString() }),
+                    startAxis = startAxis(valueFormatter = { value, _ ->
+                        value.toInt().toString()
+                    }),
                     bottomAxis = bottomAxis(valueFormatter = { value, _ -> map[value.toInt()].toString() }),
                     modifier = Modifier.fillMaxWidth()
                 )

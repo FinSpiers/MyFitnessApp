@@ -21,10 +21,10 @@ class CurrentWorkoutViewModel @Inject constructor(
     private val sensorRepository: SensorRepository,
     private val stopwatchManager: StopwatchManager
 ) : ViewModel() {
-    var currentWorkout : Workout
+    var currentWorkout: Workout
 
     val currentWorkoutDistanceStateFlow = workoutRepository.currentWorkoutDistanceStateFlow
-    var timerFlow : MutableStateFlow<String>
+    var timerFlow: MutableStateFlow<String>
 
     init {
         runBlocking {

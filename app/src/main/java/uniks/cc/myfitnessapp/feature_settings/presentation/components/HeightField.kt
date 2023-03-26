@@ -17,7 +17,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HeightField(
     height: MutableState<String>,
@@ -43,7 +42,6 @@ fun HeightField(
         textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
         value = if (height.value != "0") height.value else "",
         onValueChange = {
-            /* TODO: Put this validation in viewmodel and just call it here */
             if (it.length <= maxChar && isNumeric(it) && it != "") {
                 height.value = it
                 validateHeight(it.toInt())

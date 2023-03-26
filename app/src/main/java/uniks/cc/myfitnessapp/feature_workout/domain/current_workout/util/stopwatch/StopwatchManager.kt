@@ -6,12 +6,12 @@ import kotlinx.coroutines.flow.StateFlow
 
 class StopwatchManager(
     private val stopwatchStateHolder: StopwatchStateHolder,
-    private val scope : CoroutineScope
+    private val scope: CoroutineScope
 ) {
 
-    private var job : Job? = null
+    private var job: Job? = null
     private val mutableTicker = MutableStateFlow("")
-    val ticker : StateFlow<String> = mutableTicker
+    val ticker: StateFlow<String> = mutableTicker
 
     fun start() {
         if (job == null) {

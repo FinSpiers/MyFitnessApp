@@ -9,11 +9,9 @@ import androidx.work.*
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.Priority
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import uniks.cc.myfitnessapp.core.domain.model.Steps
 import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.domain.repository.SensorRepository
@@ -28,7 +26,6 @@ import uniks.cc.myfitnessapp.feature_workout.data.current_workout.worker.StepCou
 import uniks.cc.myfitnessapp.feature_workout.data.current_workout.worker.WeightWorkoutWorker
 import uniks.cc.myfitnessapp.feature_workout.domain.repository.WorkoutRepository
 import java.time.*
-import java.time.temporal.TemporalUnit
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 

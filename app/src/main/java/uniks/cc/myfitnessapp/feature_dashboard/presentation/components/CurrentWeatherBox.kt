@@ -7,7 +7,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 
@@ -22,7 +21,9 @@ fun CurrentWeatherBox(temperature: Int, resId: Int) {
             Icon(
                 painter = painterResource(id = resId),
                 contentDescription = "current weather",
-                modifier = Modifier.size(32.dp).padding(4.dp)
+                modifier = Modifier
+                    .size(32.dp)
+                    .padding(4.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(text = "$temperature °C")
