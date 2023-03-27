@@ -19,7 +19,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import java.time.LocalDateTime
 
-
 @Composable
 fun BodyMeasurements(
     weight: MutableState<String>,
@@ -32,7 +31,6 @@ fun BodyMeasurements(
     val interactionSource = MutableInteractionSource()
     Column(
         modifier = Modifier
-            //.background(color = MaterialTheme.colorScheme.primaryContainer, shape = MaterialTheme.shapes.large)
             .fillMaxWidth()
             .padding(24.dp)
             .clip(MaterialTheme.shapes.medium)

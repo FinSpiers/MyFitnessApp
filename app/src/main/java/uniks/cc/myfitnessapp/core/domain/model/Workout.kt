@@ -7,7 +7,6 @@ import java.time.Instant
 
 @Entity(tableName = "Workouts")
 data class Workout(
-    // TODO: Add traveled route (list of locations?) and pace per km (list of doubles?) to parameters
     var workoutName: String,
     var timeStamp: Long = Instant.now().epochSecond,
     var duration: String = "00:00:000",
@@ -19,12 +18,12 @@ data class Workout(
     var avgPace: Double? = null,
 
     // Only Weight Activities
-    var repetitions : Int? = null
+    var repetitions: Int? = null
 
 ) {
     @PrimaryKey(autoGenerate = true)
-    var id : Int = 0
-    var imageId : Int = WorkoutMap.map[workoutName]!!
+    var id: Int = 0
+    var imageId: Int = WorkoutMap.map[workoutName]!!
 }
 
 

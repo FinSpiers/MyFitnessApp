@@ -80,15 +80,15 @@ class SettingsViewModel @Inject constructor(
             _birthDateAsTimeStamp = _settingsState.value.birthDateAsTimeStamp
         )
         viewModelScope.launch {
-            for (workout : Workout in workoutRepository.getAllWorkoutsFromDatabase()) {
+            for (workout: Workout in workoutRepository.getAllWorkoutsFromDatabase()) {
                 workoutRepository.deleteWorkoutFromDatabase(workout)
             }
             if (workoutRepository.currentWorkout != null) {
                 workoutRepository.currentWorkout = null
             }
-            val resetRequest : OneTimeWorkRequest = OneTimeWorkRequestBuilder<StepCounterResetWorker>().build()
+            val resetRequest: OneTimeWorkRequest =
+                OneTimeWorkRequestBuilder<StepCounterResetWorker>().build()
             workManager.enqueue(resetRequest)
         }
     }
-
 }

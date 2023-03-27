@@ -33,7 +33,12 @@ fun ResetAppData(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = "Do you want to delete ALL data ?", fontSize = 25.sp, modifier = Modifier.padding(10.dp), textAlign = TextAlign.Center)
+                    Text(
+                        text = "Do you want to delete ALL data ?",
+                        fontSize = 25.sp,
+                        modifier = Modifier.padding(10.dp),
+                        textAlign = TextAlign.Center
+                    )
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceEvenly

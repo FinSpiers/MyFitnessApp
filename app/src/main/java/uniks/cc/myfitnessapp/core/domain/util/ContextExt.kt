@@ -17,14 +17,14 @@ fun Context.hasLocationPermission(): Boolean {
     ) == PackageManager.PERMISSION_GRANTED
 }
 
-fun Context.hasActivityRecognitionPermission() : Boolean {
+fun Context.hasActivityRecognitionPermission(): Boolean {
     return ContextCompat.checkSelfPermission(
         this,
         Manifest.permission.ACTIVITY_RECOGNITION
     ) == PackageManager.PERMISSION_GRANTED
 }
 
-fun Context.hasNotificationPermission() : Boolean {
+fun Context.hasNotificationPermission(): Boolean {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         ContextCompat.checkSelfPermission(
             this,

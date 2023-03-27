@@ -2,5 +2,5 @@ package uniks.cc.myfitnessapp.feature_workout.domain.current_workout.util.stopwa
 
 interface TimestampProvider {
 
-    fun getMilliseconds() : Long
+    fun getMilliseconds(): Long
 }

@@ -7,11 +7,11 @@ import kotlin.reflect.KFunction1
 
 interface CoreRepository {
     var navBarState: NavigationBarState?
-    var isLocationPermissionGranted : Boolean
-    var isActivityRecognitionPermissionGranted : Boolean
-    var isNotificationPermissionGranted : Boolean
-    var onNavigationAction : KFunction1<NavigationEvent, Unit>
-    var context : Context
+    var isLocationPermissionGranted: Boolean
+    var isActivityRecognitionPermissionGranted: Boolean
+    var isNotificationPermissionGranted: Boolean
+    var onNavigationAction: KFunction1<NavigationEvent, Unit>
+    var context: Context
 
     fun checkActivityRecognitionPermission()
 

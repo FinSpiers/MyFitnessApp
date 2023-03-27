@@ -3,9 +3,9 @@ package uniks.cc.myfitnessapp.feature_workout.domain.current_workout.util.stopwa
 class StopwatchStateHolder(
     private val stopwatchStateCalculator: StopwatchStateCalculator,
     private val elapsedTimeCalculator: ElapsedTimeCalculator,
-    private  val timestampMillisecondsFormatter: TimestampMillisecondsFormatter
+    private val timestampMillisecondsFormatter: TimestampMillisecondsFormatter
 ) {
-    var currentState : StopwatchState = StopwatchState.Paused(0)
+    var currentState: StopwatchState = StopwatchState.Paused(0)
 
     fun start() {
         currentState = stopwatchStateCalculator.calculateRunningState(currentState)
@@ -19,8 +19,8 @@ class StopwatchStateHolder(
         currentState = StopwatchState.Paused(0)
     }
 
-    fun getStringRepresentation() : String {
-        val elapsedTime = when(val currentState = currentState) {
+    fun getStringRepresentation(): String {
+        val elapsedTime = when (val currentState = currentState) {
             is StopwatchState.Paused -> currentState.elapsedTime
             is StopwatchState.Running -> elapsedTimeCalculator.calculate(currentState)
         }

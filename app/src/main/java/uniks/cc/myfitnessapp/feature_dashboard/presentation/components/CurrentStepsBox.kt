@@ -4,11 +4,9 @@ import android.icu.number.NumberFormatter
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -18,16 +16,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.github.tehras.charts.piechart.PieChart
 import com.github.tehras.charts.piechart.PieChartData
 import com.github.tehras.charts.piechart.animation.simpleChartAnimation
 import com.github.tehras.charts.piechart.renderer.SimpleSliceDrawer
-import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import kotlinx.coroutines.flow.MutableStateFlow
 import uniks.cc.myfitnessapp.R
-import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
 import java.util.*
 
 @Composable
@@ -55,19 +50,6 @@ fun CurrentStepsBox(steps: Int, stepGoal: Int = 10000, dialogState: MutableState
                 modifier = Modifier.padding(top = 4.dp, start = 8.dp),
                 color = MaterialTheme.colorScheme.onSurface
             )
-            /*
-            Icon(
-                imageVector = Icons.Default.BarChart,
-                contentDescription = "Show steps history",
-                modifier = Modifier
-                    .size(40.dp)
-                    .padding(top = 4.dp, end = 8.dp)
-                    .clickable {
-                        dialogState.value = !dialogState.value
-                        dialogState.tryEmit(dialogState.value)
-                    }
-            )
-             */
         }
         Box(
             contentAlignment = Alignment.Center,
@@ -123,6 +105,5 @@ fun CurrentStepsBox(steps: Int, stepGoal: Int = 10000, dialogState: MutableState
                 color = MaterialTheme.colorScheme.onSurface
             )
         }
-
     }
 }

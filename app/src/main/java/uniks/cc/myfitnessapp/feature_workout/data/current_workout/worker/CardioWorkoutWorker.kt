@@ -26,14 +26,12 @@ import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.domain.util.Constants
 import uniks.cc.myfitnessapp.core.domain.util.hasLocationPermission
 import uniks.cc.myfitnessapp.core.presentation.MainActivity
-import uniks.cc.myfitnessapp.feature_dashboard.presentation.WorkoutEvent
 import uniks.cc.myfitnessapp.feature_workout.domain.current_workout.location_client.LocationClient
 import uniks.cc.myfitnessapp.feature_workout.domain.current_workout.location_client.LocationClientImpl
 import uniks.cc.myfitnessapp.feature_workout.domain.current_workout.util.stopwatch.StopwatchManager
 import uniks.cc.myfitnessapp.feature_workout.domain.repository.WorkoutRepository
 import java.time.Instant
 import java.util.LinkedList
-import java.util.Queue
 
 const val CHANNEL_ID = "CURRENT_WORKOUT"
 
@@ -90,20 +88,35 @@ class CardioWorkoutWorker @AssistedInject constructor(
                         workoutRepository.saveWaypoint(waypoint)
 
                         delay(250)
+<<<<<<< HEAD
                         // TODO Delete
+=======
+>>>>>>> bfa5f609ea683bb7c7a2812012592e705ae9a653
                         Log.e(
                             "DB",
                             workoutRepository.getWaypointsByWorkoutId(currentWorkout.id).toString()
                         )
+<<<<<<< HEAD
 
+=======
+>>>>>>> bfa5f609ea683bb7c7a2812012592e705ae9a653
                         waypointQueue.add(waypoint)
                     }
                     .launchIn(this)
             } else {
+<<<<<<< HEAD
                 workoutRepository.onError(
                     appContext.getString(R.string.warning_no_gps_permission_title),
                     appContext.getString(R.string.warning_no_gps_permission_text)
                 )
+=======
+                try {
+                    Toast.makeText(appContext, "Error on getting GPS signal!", Toast.LENGTH_LONG)
+                        .show()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+>>>>>>> bfa5f609ea683bb7c7a2812012592e705ae9a653
             }
             while (true) {
                 delay(1000)

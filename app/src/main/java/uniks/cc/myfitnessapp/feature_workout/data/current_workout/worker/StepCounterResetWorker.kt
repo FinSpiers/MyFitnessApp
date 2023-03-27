@@ -28,7 +28,7 @@ class StepCounterResetWorker @AssistedInject constructor(
             return try {
                 resetStepCounter()
                 Result.success()
-            } catch (e : Exception) {
+            } catch (e: Exception) {
                 Result.retry()
             }
         }
@@ -40,11 +40,13 @@ class StepCounterResetWorker @AssistedInject constructor(
 
         val yesterDate = TimestampConverter.convertToDate(Instant.now().epochSecond - 24 * 3600)
         val oldSteps = dashBoardRepository.getDailyStepsByDate(yesterDate)
-        val todaySteps : Steps
+        val todaySteps: Steps
         if (oldSteps == null) {
-            todaySteps = Steps(dailyCount = 0, sensorCount = sensorRepository.stepCounterSensorValueStateFlow.value.toLong())
-        }
-        else {
+            todaySteps = Steps(
+                dailyCount = 0,
+                sensorCount = sensorRepository.stepCounterSensorValueStateFlow.value.toLong()
+            )
+        } else {
             todaySteps = Steps(0, oldSteps.sensorCount + oldSteps.dailyCount)
         }
         dashBoardRepository.saveDailySteps(todaySteps)

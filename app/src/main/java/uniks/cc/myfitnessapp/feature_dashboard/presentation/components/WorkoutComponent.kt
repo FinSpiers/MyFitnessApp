@@ -83,8 +83,14 @@ fun WorkoutComponent(
                 horizontalAlignment = Alignment.End,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = TimestampConverter.convertToDate(model.timeStamp), modifier = Modifier.padding(end = 8.dp))
-                Text(text = TimestampConverter.convertToTime(model.timeStamp), modifier = Modifier.padding(end = 8.dp))
+                Text(
+                    text = TimestampConverter.convertToDate(model.timeStamp),
+                    modifier = Modifier.padding(end = 8.dp)
+                )
+                Text(
+                    text = TimestampConverter.convertToTime(model.timeStamp),
+                    modifier = Modifier.padding(end = 8.dp)
+                )
             }
         }
 

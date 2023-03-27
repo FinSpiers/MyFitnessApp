@@ -5,9 +5,7 @@ import android.content.Context
 import android.location.LocationManager
 import android.net.ConnectivityManager
 import androidx.room.Room
-import androidx.work.CoroutineWorker
 import androidx.work.WorkManager
-import androidx.work.WorkerParameters
 import com.google.android.gms.location.ActivityRecognition
 import com.google.android.gms.location.ActivityRecognitionClient
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -18,8 +16,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.withContext
 import uniks.cc.myfitnessapp.core.data.database.MyFitnessDatabase
 import uniks.cc.myfitnessapp.feature_dashboard.data.network.OpenWeatherApiService
 import uniks.cc.myfitnessapp.core.data.repository.CoreRepositoryImpl
@@ -35,7 +31,6 @@ import uniks.cc.myfitnessapp.feature_workout.data.repository.WorkoutRepositoryIm
 import uniks.cc.myfitnessapp.feature_workout.domain.repository.WorkoutRepository
 import uniks.cc.myfitnessapp.feature_settings.data.repository.SettingsRepositoryImpl
 import uniks.cc.myfitnessapp.feature_settings.domain.repository.SettingsRepository
-import uniks.cc.myfitnessapp.feature_workout.data.current_workout.worker.CardioWorkoutWorker
 import uniks.cc.myfitnessapp.feature_workout.domain.current_workout.util.stopwatch.*
 import javax.inject.Singleton
 

@@ -25,7 +25,7 @@ class ActivityTransitionReceiver : HiltBroadcastReceiver() {
     @Inject
     lateinit var workoutRepository: WorkoutRepository
 
-    private val shouldNotify : Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+    private val shouldNotify: Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 
     override fun onReceive(context: Context, intent: Intent?) {
         super.onReceive(context, intent)
@@ -41,7 +41,8 @@ class ActivityTransitionReceiver : HiltBroadcastReceiver() {
                                         WorkoutEvent.StartWorkout(Constants.WORKOUT_WALKING)
                                     )
                                     if (shouldNotify) {
-                                        buildAndShowWorkoutNotification(context,
+                                        buildAndShowWorkoutNotification(
+                                            context,
                                             Constants.WORKOUT_WALKING
                                         )
                                     }
@@ -51,7 +52,8 @@ class ActivityTransitionReceiver : HiltBroadcastReceiver() {
                                         WorkoutEvent.StartWorkout(Constants.WORKOUT_RUNNING)
                                     )
                                     if (shouldNotify) {
-                                        buildAndShowWorkoutNotification(context,
+                                        buildAndShowWorkoutNotification(
+                                            context,
                                             Constants.WORKOUT_RUNNING
                                         )
                                     }
@@ -61,7 +63,8 @@ class ActivityTransitionReceiver : HiltBroadcastReceiver() {
                                         WorkoutEvent.StartWorkout(Constants.WORKOUT_BICYCLING)
                                     )
                                     if (shouldNotify) {
-                                        buildAndShowWorkoutNotification(context,
+                                        buildAndShowWorkoutNotification(
+                                            context,
                                             Constants.WORKOUT_BICYCLING
                                         )
                                     }
@@ -91,7 +94,7 @@ class ActivityTransitionReceiver : HiltBroadcastReceiver() {
 
         val pendingIntent =
             PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-        val iconId = when(workoutName) {
+        val iconId = when (workoutName) {
             Constants.WORKOUT_WALKING -> R.drawable.image_walking
             Constants.WORKOUT_RUNNING -> R.drawable.image_jogging
             else -> R.drawable.image_bicycling

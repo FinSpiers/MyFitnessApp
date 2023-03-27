@@ -29,8 +29,7 @@ class StepCounterSyncWorker @AssistedInject constructor(
             return try {
                 syncStepCounter()
                 Result.success()
-            }
-            catch (e : Exception) {
+            } catch (e: Exception) {
                 return Result.retry()
             }
         }
@@ -44,11 +43,11 @@ class StepCounterSyncWorker @AssistedInject constructor(
         val stepsToday = dashBoardRepository.getDailyStepsByDate(currentDate)
             ?: return
         if (sensorRepository.stepCounterSensorValueStateFlow.value >= stepsToday.sensorCount) {
-            val stepsValue = sensorRepository.stepCounterSensorValueStateFlow.value - stepsToday.sensorCount
+            val stepsValue =
+                sensorRepository.stepCounterSensorValueStateFlow.value - stepsToday.sensorCount
             val syncedSteps = Steps(stepsValue.toInt(), stepsToday.sensorCount, currentDate)
             dashBoardRepository.saveDailySteps(syncedSteps)
-        }
-        else {
+        } else {
             // Device restart happened
             val syncedSteps = Steps(sensorRepository.stepCounterSensorValueStateFlow.value, 0)
         }

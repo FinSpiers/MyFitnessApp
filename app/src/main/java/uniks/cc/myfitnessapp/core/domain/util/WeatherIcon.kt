@@ -3,7 +3,7 @@ package uniks.cc.myfitnessapp.core.domain.util
 import androidx.annotation.DrawableRes
 import uniks.cc.myfitnessapp.R
 
-enum class WeatherIcon(@DrawableRes resId : Int) {
+enum class WeatherIcon(@DrawableRes resId: Int) {
     Clouds(R.drawable.image_weather_clouds),
     Rain(R.drawable.image_weather_rain),
     Snow(R.drawable.image_weather_snow),
