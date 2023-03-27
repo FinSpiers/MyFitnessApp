@@ -43,9 +43,6 @@ class StepCounterSyncWorker @AssistedInject constructor(
         delay(1000)
         val stepsToday = dashBoardRepository.getDailyStepsByDate(currentDate)
             ?: return
-        if (stepsToday.sensorCount.toInt() == 0) {
-            val syncedSteps = Steps(sensorRepository.stepCounterSensorValueStateFlow.value, 0, currentDate)
-        }
         if (sensorRepository.stepCounterSensorValueStateFlow.value >= stepsToday.sensorCount) {
             val stepsValue = sensorRepository.stepCounterSensorValueStateFlow.value - stepsToday.sensorCount
             val syncedSteps = Steps(stepsValue.toInt(), stepsToday.sensorCount, currentDate)

@@ -50,11 +50,10 @@ class CardioWorkoutWorker @AssistedInject constructor(
     lateinit var currentWorkout: Workout
     private var locationClient: LocationClient =
         LocationClientImpl(appContext, fusedLocationProviderClient)
-    private val waypoints = mutableListOf<Waypoint>()
     private lateinit var locationFlow: Flow<Location>
 
-    private var lastLocation: Location? = null//Waypoint? = null
-    private var currentLocation: Location? = null //Waypoint? = null
+    private var lastLocation: Location? = null
+    private var currentLocation: Location? = null
     private var movedDistance = 0
     private var currentPace = 0.0
 
@@ -73,7 +72,7 @@ class CardioWorkoutWorker @AssistedInject constructor(
             startStopwatch()
 
             if (appContext.hasLocationPermission()) {
-                locationFlow = locationClient.getLocationUpdates(6 * 1000)
+                locationFlow = locationClient.getLocationUpdates(10 * 1000)
 
                 locationFlow.catch { e -> e.printStackTrace() }
                     .onEach { location ->
@@ -89,19 +88,22 @@ class CardioWorkoutWorker @AssistedInject constructor(
                             Waypoint(currentWorkout.id, Instant.now().epochSecond, lat, lon)
 
                         workoutRepository.saveWaypoint(waypoint)
+
                         delay(250)
-                        Log.e("DB", workoutRepository.getWaypointsByWorkoutId(currentWorkout.id).toString())
+                        // TODO Delete
+                        Log.e(
+                            "DB",
+                            workoutRepository.getWaypointsByWorkoutId(currentWorkout.id).toString()
+                        )
+
                         waypointQueue.add(waypoint)
-                        waypoints.add(waypoint)
                     }
                     .launchIn(this)
             } else {
-                try {
-                    Toast.makeText(appContext, "Error on getting GPS signal!", Toast.LENGTH_LONG).show()
-                }
-                catch (e : Exception) {
-                    e.printStackTrace()
-                }
+                workoutRepository.onError(
+                    appContext.getString(R.string.warning_no_gps_permission_title),
+                    appContext.getString(R.string.warning_no_gps_permission_text)
+                )
             }
             while (true) {
                 delay(1000)
@@ -124,8 +126,10 @@ class CardioWorkoutWorker @AssistedInject constructor(
             return@coroutineScope Result.success()
 
         } catch (e: Exception) {
-            //e.printStackTrace()
+            e.printStackTrace()
+            workoutRepository.onError("WARNING! CRITICAL ERROR DETECTED!", "Please restart the current workout by clicking here")
             return@coroutineScope Result.failure()
+
         }
 
     }

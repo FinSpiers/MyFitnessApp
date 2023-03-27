@@ -36,8 +36,7 @@ fun CurrentWorkoutScreen(viewModel: CurrentWorkoutViewModel = hiltViewModel()) {
                 onWorkoutAction = viewModel::onWorkoutAction,
                 hasCurrentWorkout = true
             )
-        },
-        topBar = { WarningBox(title = "Motivationsfehler", text = "Keine Motivation gefunden...")}
+        }
     ) {
         Column(
             modifier = Modifier
@@ -46,6 +45,9 @@ fun CurrentWorkoutScreen(viewModel: CurrentWorkoutViewModel = hiltViewModel()) {
                 .padding(start = 4.dp, end = 4.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            if (viewModel.hasError.value) {
+                WarningBox(title = viewModel.errorTitle.value, text = viewModel.errorText.value)
+            }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
