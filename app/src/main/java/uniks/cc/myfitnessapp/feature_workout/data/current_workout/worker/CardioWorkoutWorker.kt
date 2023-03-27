@@ -7,8 +7,8 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.location.Location
+import android.location.LocationManager
 import android.util.Log
-import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
@@ -42,6 +42,7 @@ class CardioWorkoutWorker @AssistedInject constructor(
     val workoutRepository: WorkoutRepository,
     val coreRepository: CoreRepository,
     private val stopwatchManager: StopwatchManager,
+    private val locationManager : LocationManager,
     fusedLocationProviderClient: FusedLocationProviderClient
 ) : CoroutineWorker(appContext, params) {
 
@@ -88,38 +89,23 @@ class CardioWorkoutWorker @AssistedInject constructor(
                         workoutRepository.saveWaypoint(waypoint)
 
                         delay(250)
-<<<<<<< HEAD
                         // TODO Delete
-=======
->>>>>>> bfa5f609ea683bb7c7a2812012592e705ae9a653
                         Log.e(
                             "DB",
                             workoutRepository.getWaypointsByWorkoutId(currentWorkout.id).toString()
                         )
-<<<<<<< HEAD
-
-=======
->>>>>>> bfa5f609ea683bb7c7a2812012592e705ae9a653
                         waypointQueue.add(waypoint)
                     }
                     .launchIn(this)
             } else {
-<<<<<<< HEAD
                 workoutRepository.onError(
                     appContext.getString(R.string.warning_no_gps_permission_title),
                     appContext.getString(R.string.warning_no_gps_permission_text)
                 )
-=======
-                try {
-                    Toast.makeText(appContext, "Error on getting GPS signal!", Toast.LENGTH_LONG)
-                        .show()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
->>>>>>> bfa5f609ea683bb7c7a2812012592e705ae9a653
             }
             while (true) {
                 delay(1000)
+                checkForErrors()
                 calculateDistance()
                 currentWorkout = currentWorkout.apply {
                     duration = stopwatchManager.ticker.value
@@ -140,13 +126,24 @@ class CardioWorkoutWorker @AssistedInject constructor(
 
         } catch (e: Exception) {
             e.printStackTrace()
-            workoutRepository.onError("WARNING! CRITICAL ERROR DETECTED!", "Please restart the current workout by clicking here")
+            workoutRepository.onError(
+                "WARNING! CRITICAL ERROR DETECTED!",
+                "Please restart the current workout by clicking here"
+            )
             return@coroutineScope Result.failure()
 
         }
 
     }
 
+    private fun checkForErrors() {
+        if (!locationManager.isLocationEnabled) {
+            workoutRepository.onError(
+                appContext.getString(R.string.warning_no_gps_signal_title),
+                appContext.getString(R.string.warning_no_gps_signal_title)
+            )
+        }
+    }
 
     override suspend fun getForegroundInfo(): ForegroundInfo {
         val notificationManager =

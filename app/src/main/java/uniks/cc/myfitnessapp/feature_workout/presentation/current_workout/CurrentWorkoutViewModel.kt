@@ -1,13 +1,9 @@
 package uniks.cc.myfitnessapp.feature_workout.presentation.current_workout
 
-import android.util.Log
-import androidx.compose.runtime.mutableStateOf
+
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
@@ -24,7 +20,7 @@ class CurrentWorkoutViewModel @Inject constructor(
     private val coreRepository: CoreRepository,
     private val workoutRepository: WorkoutRepository,
     private val sensorRepository: SensorRepository,
-    private val stopwatchManager: StopwatchManager
+    stopwatchManager: StopwatchManager
 ) : ViewModel() {
     var currentWorkout: Workout
 
