@@ -84,7 +84,7 @@ class ActivityTransitionReceiver : HiltBroadcastReceiver() {
         val channel = NotificationChannel(
             CHANNEL_ID,
             "CurrentWorkout",
-            NotificationManager.IMPORTANCE_DEFAULT
+            NotificationManager.IMPORTANCE_LOW
         )
         notificationManager.createNotificationChannel(channel)
 
@@ -103,7 +103,7 @@ class ActivityTransitionReceiver : HiltBroadcastReceiver() {
             .setSmallIcon(iconId)
             .setContentTitle("Workout detected")
             .setContentText("Automatically started $workoutName workout. Click to see details")
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setPriority(NotificationCompat.PRIORITY_LOW)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .build()
