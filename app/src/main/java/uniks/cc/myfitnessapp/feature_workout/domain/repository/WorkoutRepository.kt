@@ -1,5 +1,7 @@
 package uniks.cc.myfitnessapp.feature_workout.domain.repository
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import uniks.cc.myfitnessapp.core.domain.model.Steps
 import uniks.cc.myfitnessapp.core.domain.model.Waypoint
@@ -13,11 +15,14 @@ interface WorkoutRepository {
     var workouts : List<Workout>
     var currentWorkout: Workout?
     var selectedWorkoutDetail : Workout?
-    val currentWorkoutTimerStateFlow : MutableStateFlow<String>
+    //val currentWorkoutTimerStateFlow : MutableStateFlow<String>
     val currentWorkoutDistanceStateFlow : MutableStateFlow<String>
     var stopwatchManager : StopwatchManager?
 
-    suspend fun getOldStepsValueFromDatabase() : Int
+    var hasError : MutableState<Boolean>
+    var errorTitle : MutableState<String>
+    var errorText : MutableState<String>
+    var onError : (String, String) -> Unit
     suspend fun getAllWorkoutsFromDatabase() : List<Workout>
 
     suspend fun getWorkoutById(workoutId : Int) : Workout?

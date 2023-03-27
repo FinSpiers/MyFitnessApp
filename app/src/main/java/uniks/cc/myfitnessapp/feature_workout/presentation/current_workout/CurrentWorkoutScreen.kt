@@ -23,6 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import uniks.cc.myfitnessapp.core.presentation.components.WorkoutFab
 import uniks.cc.myfitnessapp.feature_workout.domain.current_workout.util.WorkoutMap
 import uniks.cc.myfitnessapp.feature_core.presentation.components.DataBox
+import uniks.cc.myfitnessapp.feature_dashboard.presentation.components.WarningBox
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -44,6 +45,9 @@ fun CurrentWorkoutScreen(viewModel: CurrentWorkoutViewModel = hiltViewModel()) {
                 .padding(start = 4.dp, end = 4.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            if (viewModel.hasError.value) {
+                WarningBox(title = viewModel.errorTitle.value, text = viewModel.errorText.value)
+            }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

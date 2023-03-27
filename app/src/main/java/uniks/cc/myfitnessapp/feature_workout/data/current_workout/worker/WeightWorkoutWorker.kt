@@ -12,6 +12,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import uniks.cc.myfitnessapp.core.domain.model.Workout
+import uniks.cc.myfitnessapp.core.domain.repository.SensorRepository
 import uniks.cc.myfitnessapp.feature_workout.domain.current_workout.util.stopwatch.StopwatchManager
 import uniks.cc.myfitnessapp.feature_workout.domain.current_workout.util.stopwatch.StopwatchStateHolder
 import uniks.cc.myfitnessapp.feature_workout.domain.repository.WorkoutRepository
@@ -21,39 +22,40 @@ class WeightWorkoutWorker @AssistedInject constructor(
     @Assisted val appContext : Context,
     @Assisted val params : WorkerParameters,
     private val workoutRepository: WorkoutRepository,
+    private val sensorRepository: SensorRepository,
     private val stopwatchManager: StopwatchManager,
 ) : CoroutineWorker(appContext, params) {
 
     lateinit var currentWorkout : Workout
 
-    override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
+    override suspend fun doWork(): Result = coroutineScope {
         try {
-            if (Looper.myLooper() == null) {
-                Looper.prepare()
-            }
             val workoutId = params.inputData.getInt("WORKOUT_ID", -1)
             if (workoutId == -1 || workoutRepository.getWorkoutById(workoutId) == null) {
-                return@withContext Result.failure()
+                return@coroutineScope Result.retry()
             }
             currentWorkout = workoutRepository.getWorkoutById(workoutId)!!
-
             stopwatchManager.stopAndReset()
+            sensorRepository.startAccelerometerSensor()
             stopwatchManager.start()
-
-            if (workoutRepository.currentWorkout != null) {
-                delay(500)
-                Looper.loop()
+            while (true) {
+                delay(1000)
+                Log.e("SENSOR", "x: ${sensorRepository.accelerometerSensorValueX}, y: ${sensorRepository.accelerometerSensorValueY}, z: ${sensorRepository.accelerometerSensorValueZ}")
+                // TODO: Write and call function that counts repetitions automatically
+                if (workoutRepository.currentWorkout == null) {
+                    break
+                }
             }
-
             currentWorkout.duration = stopwatchManager.ticker.value
             stopwatchManager.stopAndReset()
+            sensorRepository.stopAccelerometerSensor()
             workoutRepository.addWorkoutToDatabase(currentWorkout)
-            Looper.myLooper()?.quitSafely()
-            return@withContext Result.success()
+            return@coroutineScope Result.success()
         }
         catch (e : Exception) {
             e.printStackTrace()
-            return@withContext Result.retry()
+            sensorRepository.stopAccelerometerSensor()
+            return@coroutineScope Result.retry()
         }
 
     }

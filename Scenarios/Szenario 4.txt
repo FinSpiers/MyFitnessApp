@@ -1,0 +1,4 @@
+Title:	 No location permission granted
+Start:	 Bob hadn’t given the location permission to the app yet. 
+Action: Bob opens up the app.
+Result: The dashboard is shown and displays an error message, that no location permission has not been granted.

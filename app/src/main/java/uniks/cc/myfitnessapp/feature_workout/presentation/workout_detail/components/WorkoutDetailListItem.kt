@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun WorkoutDetailListItem(title : String, value : String, unit : String?) {
+fun WorkoutDetailListItem(title: String, value: String, unit: String?) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -26,8 +26,7 @@ fun WorkoutDetailListItem(title : String, value : String, unit : String?) {
             if (unit != null) {
                 Text(text = value, modifier = Modifier.padding(end = 4.dp))
                 Text(text = unit, modifier = Modifier.padding(end = 8.dp))
-            }
-            else {
+            } else {
                 Text(text = value, modifier = Modifier.padding(end = 8.dp))
             }
 

@@ -17,11 +17,11 @@ import uniks.cc.myfitnessapp.feature_workout.domain.repository.WorkoutRepository
 import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
 import javax.inject.Inject
 
-@OptIn(ExperimentalMaterial3Api::class)
 @AndroidEntryPoint
 class MainActivity @Inject constructor() : ComponentActivity() {
     @Inject
     lateinit var workoutRepository: WorkoutRepository
+
     @Inject
     lateinit var coreRepository: CoreRepository
 
@@ -54,6 +54,5 @@ class MainActivity @Inject constructor() : ComponentActivity() {
                 }
             }
         }
-
     }
 }

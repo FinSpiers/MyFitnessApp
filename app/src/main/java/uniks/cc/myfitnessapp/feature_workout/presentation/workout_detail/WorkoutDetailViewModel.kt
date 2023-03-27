@@ -1,5 +1,6 @@
 package uniks.cc.myfitnessapp.feature_workout.presentation.workout_detail
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.runBlocking
@@ -19,14 +20,25 @@ class WorkoutDetailViewModel @Inject constructor(
     var selectedWorkout: Workout = workoutRepository.selectedWorkoutDetail
         ?: throw NullPointerException("Expression 'workoutRepository.selectedWorkoutDetail' must not be null")
 
-    var waypoints:List<Waypoint>
+    var waypoints: List<Waypoint>
 
     init {
         runBlocking {
             selectedWorkout = workoutRepository.getWorkoutById(selectedWorkout.id)!!
             waypoints = workoutRepository.getWaypointsByWorkoutId(selectedWorkout.id)
+            Log.e("WORKOUT", "Selected workout : ${selectedWorkout.id} with waypoints: $waypoints")
         }
     }
+
+    fun getWaypointsByWorkoutId(id: Int): List<Waypoint> {
+        var res: List<Waypoint>
+        runBlocking {
+            res = workoutRepository.getWaypointsByWorkoutId(id)
+        }
+        return res
+
+    }
+
     fun onNavigationAction(navigationEvent: NavigationEvent) {
         coreRepository.onNavigationAction(navigationEvent)
     }
@@ -35,7 +47,7 @@ class WorkoutDetailViewModel @Inject constructor(
         workoutRepository.onWorkoutAction(workoutEvent)
     }
 
-    fun hasCurrentWorkout() : Boolean {
+    fun hasCurrentWorkout(): Boolean {
         return workoutRepository.currentWorkout != null
     }
 }

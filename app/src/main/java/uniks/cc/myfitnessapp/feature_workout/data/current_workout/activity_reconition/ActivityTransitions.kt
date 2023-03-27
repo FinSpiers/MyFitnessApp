@@ -1,4 +1,4 @@
-package uniks.cc.myfitnessapp.core.domain.util
+package uniks.cc.myfitnessapp.feature_workout.data.current_workout.activity_reconition
 
 import com.google.android.gms.location.ActivityTransition
 import com.google.android.gms.location.ActivityTransitionRequest
@@ -60,22 +60,4 @@ object ActivityTransitions {
     }
 
     fun getActivityTransitionRequest() = ActivityTransitionRequest(getTransitions())
-
-    fun toActivityString(activity: Int): String {
-        return when (activity) {
-            DetectedActivity.STILL -> "STILL"
-            DetectedActivity.WALKING -> "WALKING"
-            DetectedActivity.ON_BICYCLE -> "IN ON_BICYCLE"
-            DetectedActivity.RUNNING -> "RUNNING"
-            else -> "UNKNOWN"
-        }
-    }
-
-    fun toTransitionType(transitionType: Int): String {
-        return when (transitionType) {
-            ActivityTransition.ACTIVITY_TRANSITION_ENTER -> "ENTER"
-            ActivityTransition.ACTIVITY_TRANSITION_EXIT -> "EXIT"
-            else -> "UNKNOWN"
-        }
-    }
 }

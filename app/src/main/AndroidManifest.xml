@@ -53,7 +53,7 @@
             </intent-filter>
         </activity>
         <receiver
-            android:name="uniks.cc.myfitnessapp.core.domain.util.ActivityTransitionReceiver"
+            android:name="uniks.cc.myfitnessapp.feature_workout.data.current_workout.activity_reconition.ActivityTransitionReceiver"
             android:exported="false"
             android:permission="android.permission.ACTIVITY_RECOGNITION" />
     </application>

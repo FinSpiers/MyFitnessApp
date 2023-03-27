@@ -8,7 +8,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import uniks.cc.myfitnessapp.core.domain.model.bottom_navigation.NavItem
-import uniks.cc.myfitnessapp.core.domain.util.Screen
 import kotlin.reflect.KFunction1
 
 @Composable

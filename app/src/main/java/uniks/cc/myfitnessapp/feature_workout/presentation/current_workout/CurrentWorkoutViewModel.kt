@@ -1,8 +1,13 @@
 package uniks.cc.myfitnessapp.feature_workout.presentation.current_workout
 
+import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
@@ -21,14 +26,19 @@ class CurrentWorkoutViewModel @Inject constructor(
     private val sensorRepository: SensorRepository,
     private val stopwatchManager: StopwatchManager
 ) : ViewModel() {
-    var currentWorkout : Workout
+    var currentWorkout: Workout
 
     val currentWorkoutDistanceStateFlow = workoutRepository.currentWorkoutDistanceStateFlow
-    var timerFlow : MutableStateFlow<String>
+    var timerFlow: MutableStateFlow<String>
+
+    val hasError = workoutRepository.hasError
+    var errorTitle = workoutRepository.errorTitle
+    var errorText = workoutRepository.errorText
 
     init {
         runBlocking {
             currentWorkout = workoutRepository.currentWorkout!!
+            workoutRepository.onError = this@CurrentWorkoutViewModel::OnError
         }
         timerFlow = stopwatchManager.ticker as MutableStateFlow<String>
 
@@ -43,6 +53,12 @@ class CurrentWorkoutViewModel @Inject constructor(
             //TODO: TypeBWorkout
             sensorRepository.startAccelerometerSensor()
         }
+    }
+
+    fun OnError(errorTitle : String, errorText : String) {
+        workoutRepository.errorTitle.value = errorTitle
+        workoutRepository.errorText.value = errorText
+        workoutRepository.hasError.value = true
     }
 
     fun onNavigationAction(navigationEvent: NavigationEvent) {

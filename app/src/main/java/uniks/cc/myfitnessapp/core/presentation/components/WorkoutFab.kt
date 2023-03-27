@@ -14,16 +14,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import uniks.cc.myfitnessapp.R
+import uniks.cc.myfitnessapp.core.domain.util.Constants.WORKOUT_BICYCLING
+import uniks.cc.myfitnessapp.core.domain.util.Constants.WORKOUT_PUSH_UPS
+import uniks.cc.myfitnessapp.core.domain.util.Constants.WORKOUT_RUNNING
+import uniks.cc.myfitnessapp.core.domain.util.Constants.WORKOUT_SIT_UPS
+import uniks.cc.myfitnessapp.core.domain.util.Constants.WORKOUT_SQUATS
+import uniks.cc.myfitnessapp.core.domain.util.Constants.WORKOUT_WALKING
 import uniks.cc.myfitnessapp.feature_dashboard.presentation.WorkoutEvent
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationEvent
 import kotlin.reflect.KFunction1
 
-const val WORKOUT_WALKING = "Walking"
-const val WORKOUT_RUNNING = "Running"
-const val WORKOUT_BICYCLING = "Bicycling"
-const val WORKOUT_PUSHUPS = "PushUps"
-const val WORKOUT_SITUPS = "SitUps"
-const val WORKOUT_SQUATS = "Squats"
 
 @Composable
 fun WorkoutFab(
@@ -65,14 +65,14 @@ fun WorkoutFab(
                     isButtonExtended
                 )
                 StartWorkoutListItem(
-                    WORKOUT_PUSHUPS,
+                    WORKOUT_PUSH_UPS,
                     R.drawable.image_push_ups,
                     onNavigationAction,
                     onWorkoutAction,
                     isButtonExtended
                 )
                 StartWorkoutListItem(
-                    WORKOUT_SITUPS,
+                    WORKOUT_SIT_UPS,
                     R.drawable.image_sit_ups,
                     onNavigationAction,
                     onWorkoutAction,
@@ -116,5 +116,4 @@ fun WorkoutFab(
             modifier = Modifier.padding(bottom = 70.dp)
         )
     }
-
 }

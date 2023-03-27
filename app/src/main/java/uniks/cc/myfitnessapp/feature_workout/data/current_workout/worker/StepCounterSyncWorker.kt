@@ -6,6 +6,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.delay
 import uniks.cc.myfitnessapp.core.domain.model.Steps
 import uniks.cc.myfitnessapp.core.domain.repository.SensorRepository
 import uniks.cc.myfitnessapp.core.domain.util.TimestampConverter
@@ -15,7 +16,7 @@ import uniks.cc.myfitnessapp.feature_workout.domain.repository.WorkoutRepository
 import java.time.Instant
 
 @HiltWorker
-class StepCounterResetWorker @AssistedInject constructor(
+class StepCounterSyncWorker @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted workerParams: WorkerParameters,
     private val dashBoardRepository: DashBoardRepository,
@@ -26,29 +27,29 @@ class StepCounterResetWorker @AssistedInject constructor(
     override suspend fun doWork(): Result {
         if (applicationContext.hasActivityRecognitionPermission()) {
             return try {
-                resetStepCounter()
+                syncStepCounter()
                 Result.success()
             } catch (e: Exception) {
-                Result.retry()
+                return Result.retry()
             }
         }
         return Result.failure()
     }
 
-    private suspend fun resetStepCounter() {
+    private suspend fun syncStepCounter() {
         sensorRepository.startStepCounterSensor()
-
-        val yesterDate = TimestampConverter.convertToDate(Instant.now().epochSecond - 24 * 3600)
-        val oldSteps = dashBoardRepository.getDailyStepsByDate(yesterDate)
-        val todaySteps: Steps
-        if (oldSteps == null) {
-            todaySteps = Steps(
-                dailyCount = 0,
-                sensorCount = sensorRepository.stepCounterSensorValueStateFlow.value.toLong()
-            )
+        val currentDate = TimestampConverter.convertToDate(Instant.now().epochSecond)
+        delay(1000)
+        val stepsToday = dashBoardRepository.getDailyStepsByDate(currentDate)
+            ?: return
+        if (sensorRepository.stepCounterSensorValueStateFlow.value >= stepsToday.sensorCount) {
+            val stepsValue =
+                sensorRepository.stepCounterSensorValueStateFlow.value - stepsToday.sensorCount
+            val syncedSteps = Steps(stepsValue.toInt(), stepsToday.sensorCount, currentDate)
+            dashBoardRepository.saveDailySteps(syncedSteps)
         } else {
-            todaySteps = Steps(0, oldSteps.sensorCount + oldSteps.dailyCount)
+            // Device restart happened
+            val syncedSteps = Steps(sensorRepository.stepCounterSensorValueStateFlow.value, 0)
         }
-        dashBoardRepository.saveDailySteps(todaySteps)
     }
 }

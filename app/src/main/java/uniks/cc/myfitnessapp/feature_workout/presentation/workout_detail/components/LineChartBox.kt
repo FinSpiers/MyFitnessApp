@@ -43,7 +43,12 @@ fun LineChartBox(title: String, xDataList: List<String>, yDataList: List<Float>)
         contentAlignment = Alignment.Center
     ) {
 
-        Column(modifier = Modifier.fillMaxSize().padding(8.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Text(
                 text = title,
                 modifier = Modifier.padding(8.dp),

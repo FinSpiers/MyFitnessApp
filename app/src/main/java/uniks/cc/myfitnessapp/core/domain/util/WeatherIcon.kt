@@ -3,7 +3,7 @@ package uniks.cc.myfitnessapp.core.domain.util
 import androidx.annotation.DrawableRes
 import uniks.cc.myfitnessapp.R
 
-enum class WeatherIcon(@DrawableRes resId : Int) {
+enum class WeatherIcon(@DrawableRes resId: Int) {
     Clouds(R.drawable.image_weather_clouds),
     Rain(R.drawable.image_weather_rain),
     Snow(R.drawable.image_weather_snow),
@@ -14,20 +14,5 @@ enum class WeatherIcon(@DrawableRes resId : Int) {
     Clear(R.drawable.image_weather_sunny),
     Drizzle(R.drawable.image_weather_drizzle),
     Unknown(R.drawable.image_weather_extreme),
-}
-
-fun getIcon(apiName : String) : WeatherIcon {
-    return when(apiName) {
-        "Clouds" -> WeatherIcon.Clouds
-        "Rain" -> WeatherIcon.Rain
-        "Snow" -> WeatherIcon.Snow
-        "Extreme" -> WeatherIcon.Extreme
-        "Sun" -> WeatherIcon.Sun
-        "Fog" -> WeatherIcon.Fog
-        "Mist" -> WeatherIcon.Fog
-        "Clear" -> WeatherIcon.Clear
-        "Drizzle" -> WeatherIcon.Drizzle
-        else -> WeatherIcon.Unknown
-    }
 }
 

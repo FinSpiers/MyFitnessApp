@@ -9,15 +9,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import uniks.cc.myfitnessapp.ui.theme.MyFitnessAppTheme
 
 @Composable
 fun DataBox(
     title: String,
     data: String,
-    unit: String) {
+    unit: String
+) {
 
     Box(
         modifier = Modifier
@@ -49,17 +48,5 @@ fun DataBox(
                 textAlign = TextAlign.Center
             )
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DataBoxPreview() {
-    MyFitnessAppTheme {
-        DataBox(
-            title = "Distance",
-            data = 12234.0.toString(),
-            unit = "km"
-        )
     }
 }

@@ -16,10 +16,10 @@ import uniks.cc.myfitnessapp.R
 fun WeatherBox(
     currentTemp: Int,
     isWeatherGood: Boolean,
-    currentWeatherMain : String
+    currentWeatherMain: String
 ) {
-    val resId : Int = when(currentWeatherMain) {
-        "Clear" ->  R.drawable.image_weather_sunny
+    val resId: Int = when (currentWeatherMain) {
+        "Clear" -> R.drawable.image_weather_sunny
         "Clouds" -> R.drawable.image_weather_clouds
         "Rain" -> R.drawable.image_weather_rain
         "Snow" -> R.drawable.image_weather_snow
