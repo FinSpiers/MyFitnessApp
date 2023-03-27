@@ -22,7 +22,9 @@ interface WorkoutRepository {
     var hasError : MutableState<Boolean>
     var errorTitle : MutableState<String>
     var errorText : MutableState<String>
-    var onError : (String, String) -> Unit
+
+    fun clearError()
+    fun onError(errorTitle : String, errorText : String)
     suspend fun getAllWorkoutsFromDatabase() : List<Workout>
 
     suspend fun getWorkoutById(workoutId : Int) : Workout?

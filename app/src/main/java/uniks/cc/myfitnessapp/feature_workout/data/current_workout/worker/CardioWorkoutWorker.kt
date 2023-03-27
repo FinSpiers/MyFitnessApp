@@ -64,6 +64,7 @@ class CardioWorkoutWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result = coroutineScope {
         try {
+            workoutRepository.clearError()
             stopwatchManager.stopAndReset()
 
             val settings = settingsRepository.getSettingsFromDatabase()
@@ -145,7 +146,7 @@ class CardioWorkoutWorker @AssistedInject constructor(
             )
         }
         else {
-            // TODO: Call function to reset error
+            workoutRepository.clearError()
         }
     }
 

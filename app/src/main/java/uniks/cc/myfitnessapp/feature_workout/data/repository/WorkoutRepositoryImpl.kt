@@ -21,8 +21,17 @@ class WorkoutRepositoryImpl(private val workoutDao: WorkoutDao) : WorkoutReposit
     override var hasError = mutableStateOf(false)
     override var errorTitle= mutableStateOf("")
     override var errorText = mutableStateOf("")
-    override var onError: (String, String) -> Unit = {s, s2 -> }
+    override fun clearError() {
+        hasError.value = false
+        errorTitle.value = ""
+        errorText.value = ""
+    }
 
+    override fun onError(errorTitle: String, errorText: String) {
+        hasError.value = true
+        this.errorTitle.value = errorTitle
+        this.errorText.value = errorText
+    }
 
     override suspend fun getAllWorkoutsFromDatabase(): List<Workout> {
         return workoutDao.getAllWorkouts()

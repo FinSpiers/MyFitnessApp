@@ -34,7 +34,7 @@ class CurrentWorkoutViewModel @Inject constructor(
     init {
         runBlocking {
             currentWorkout = workoutRepository.currentWorkout!!
-            workoutRepository.onError = this@CurrentWorkoutViewModel::OnError
+            //workoutRepository.onError = this@CurrentWorkoutViewModel::OnError
         }
         timerFlow = stopwatchManager.ticker as MutableStateFlow<String>
 
@@ -49,12 +49,6 @@ class CurrentWorkoutViewModel @Inject constructor(
             //TODO: TypeBWorkout
             sensorRepository.startAccelerometerSensor()
         }
-    }
-
-    fun OnError(errorTitle : String, errorText : String) {
-        workoutRepository.errorTitle.value = errorTitle
-        workoutRepository.errorText.value = errorText
-        workoutRepository.hasError.value = true
     }
 
     fun onNavigationAction(navigationEvent: NavigationEvent) {
