@@ -212,7 +212,6 @@ class CardioWorkoutWorker @AssistedInject constructor(
                 lastLocation = currentLocation
                 currentLocation = waypoint
             }
-            Log.e("MD", "Current: $currentLocation  Last: $lastLocation")
             val last = lastLocation
             val current = currentLocation
             if (last != null && current != null) {

@@ -21,6 +21,7 @@ import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.Navigati
 import uniks.cc.myfitnessapp.feature_dashboard.domain.repository.DashBoardRepository
 import uniks.cc.myfitnessapp.feature_settings.domain.model.Settings
 import uniks.cc.myfitnessapp.feature_settings.domain.repository.SettingsRepository
+import uniks.cc.myfitnessapp.feature_workout.data.current_workout.calculator.EnergyCalculator
 import uniks.cc.myfitnessapp.feature_workout.data.current_workout.worker.CardioWorkoutWorker
 import uniks.cc.myfitnessapp.feature_workout.data.current_workout.worker.StepCounterResetWorker
 import uniks.cc.myfitnessapp.feature_workout.data.current_workout.worker.StepCounterSyncWorker
@@ -52,12 +53,13 @@ class DashBoardViewModel @Inject constructor(
 
     init {
         workoutRepository.onWorkoutAction = this::onWorkoutAction
+        runBlocking {
+            // Load settings from database
+            settings = settingsRepository.getSettingsFromDatabase()
+        }
         if (coreRepository.isActivityRecognitionPermissionGranted) {
             sensorRepository.startStepCounterSensor()
             viewModelScope.launch {
-                // Load settings from database
-                settings = settingsRepository.getSettingsFromDatabase()
-
                 // Check if
                 if (!settings.initComplete) {
                     val resetRequest: OneTimeWorkRequest =
@@ -198,7 +200,14 @@ class DashBoardViewModel @Inject constructor(
 
             }
             is WorkoutEvent.StopWorkout -> {
+                val currentWorkout = workoutRepository.currentWorkout!!
+                val workoutTimeInSeconds = Instant.now().epochSecond - currentWorkout.timeStamp
+                currentWorkout.kcal = EnergyCalculator.calculateBurnedEnergy(currentWorkout.workoutName, workoutTimeInSeconds.toInt(), if (settings.weight > 0) settings.weight else 70)
+                viewModelScope.launch {
+                    workoutRepository.addWorkoutToDatabase(currentWorkout)
+                }
                 workoutRepository.currentWorkout = null
+
             }
         }
     }

@@ -37,16 +37,18 @@ class WeightWorkoutWorker @AssistedInject constructor(
             stopwatchManager.start()
             while (true) {
                 delay(1000)
-                Log.e("SENSOR", "x: ${sensorRepository.accelerometerSensorValueX}, y: ${sensorRepository.accelerometerSensorValueY}, z: ${sensorRepository.accelerometerSensorValueZ}")
-                // TODO: Write and call function that counts repetitions automatically
+                // Write and call function that counts repetitions automatically
                 if (workoutRepository.currentWorkout == null) {
                     break
                 }
             }
+            currentWorkout = workoutRepository.getWorkoutById(currentWorkout.id)!!
+            delay(250)
             currentWorkout.duration = stopwatchManager.ticker.value
+            //workoutRepository.addWorkoutToDatabase(currentWorkout)
+
             stopwatchManager.stopAndReset()
             sensorRepository.stopAccelerometerSensor()
-            workoutRepository.addWorkoutToDatabase(currentWorkout)
             return@coroutineScope Result.success()
         }
         catch (e : Exception) {

@@ -23,6 +23,11 @@ interface WorkoutRepository {
     var errorTitle : MutableState<String>
     var errorText : MutableState<String>
 
+    fun increaseCurrentWorkoutRepetitions() {
+        if (currentWorkout != null && currentWorkout?.repetitions != null) {
+            currentWorkout?.repetitions = currentWorkout?.repetitions?.plus(1)
+        }
+    }
     fun clearError()
     fun onError(errorTitle : String, errorText : String)
     suspend fun getAllWorkoutsFromDatabase() : List<Workout>

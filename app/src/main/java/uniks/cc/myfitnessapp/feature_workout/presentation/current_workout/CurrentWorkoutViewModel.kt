@@ -2,8 +2,10 @@ package uniks.cc.myfitnessapp.feature_workout.presentation.current_workout
 
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
@@ -34,20 +36,19 @@ class CurrentWorkoutViewModel @Inject constructor(
     init {
         runBlocking {
             currentWorkout = workoutRepository.currentWorkout!!
-            //workoutRepository.onError = this@CurrentWorkoutViewModel::OnError
         }
-        timerFlow = stopwatchManager.ticker as MutableStateFlow<String>
 
-        if (currentWorkout.workoutName in listOf(
-                Constants.WORKOUT_WALKING,
-                Constants.WORKOUT_RUNNING,
-                Constants.WORKOUT_BICYCLING
-            )
-        ) {
-            //TODO: TypeAWorkout
-        } else {
-            //TODO: TypeBWorkout
-            sensorRepository.startAccelerometerSensor()
+        timerFlow = stopwatchManager.ticker as MutableStateFlow<String>
+    }
+
+    fun incrementRepetitions() {
+        if (currentWorkout.repetitions == null) {
+            return
+        }
+        currentWorkout.repetitions = currentWorkout.repetitions!! + 1
+        currentWorkout.duration = timerFlow.value
+        viewModelScope.launch {
+            workoutRepository.addWorkoutToDatabase(currentWorkout)
         }
     }
 
@@ -56,6 +57,12 @@ class CurrentWorkoutViewModel @Inject constructor(
     }
 
     fun onWorkoutAction(workoutEvent: WorkoutEvent) {
+        if (workoutEvent is WorkoutEvent.StopWorkout) {
+            currentWorkout.duration = timerFlow.value
+            viewModelScope.launch {
+                workoutRepository.addWorkoutToDatabase(currentWorkout)
+            }
+        }
         workoutRepository.onWorkoutAction(workoutEvent)
     }
 

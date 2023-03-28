@@ -7,10 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -125,13 +122,21 @@ fun CurrentWorkoutScreen(viewModel: CurrentWorkoutViewModel = hiltViewModel()) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(4.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
                     ) {
+                        Button(
+                            onClick = { viewModel.incrementRepetitions() },
+                        ) {
+                            Text(text = "+1", style = MaterialTheme.typography.titleMedium)
+                        }
                         DataBox(
                             title = "Repetitions",
                             data = (currentWorkout.repetitions).toString(),
                             unit = ""
                         )
+
+
                     }
                 }
             }

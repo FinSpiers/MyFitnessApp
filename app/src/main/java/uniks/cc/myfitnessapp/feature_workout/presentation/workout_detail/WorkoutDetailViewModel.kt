@@ -24,7 +24,7 @@ class WorkoutDetailViewModel @Inject constructor(
 
     init {
         runBlocking {
-            selectedWorkout = workoutRepository.getWorkoutById(selectedWorkout.id)!!
+            //selectedWorkout = workoutRepository.getWorkoutById(selectedWorkout.id)!!
             waypoints = workoutRepository.getWaypointsByWorkoutId(selectedWorkout.id)
             Log.e("WORKOUT", "Selected workout : ${selectedWorkout.id} with waypoints: $waypoints")
         }
