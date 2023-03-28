@@ -37,9 +37,9 @@ fun StepsHistory(steps : List<Steps>,dialogShownStateFlow: MutableStateFlow<Bool
         ) {
             val map = LinkedHashMap<Int, String>()
             for (i in 6 downTo 0) {
-                map[i] = steps[i].date.dropLast(7)
+                map[i] = steps.reversed()[i].date.dropLast(6)
             }
-            val chartEntryModel = entryModelOf(*steps.map { it -> it.dailyCount }.toTypedArray())
+            val chartEntryModel = entryModelOf(*steps.map { it -> it.dailyCount }.reversed().toTypedArray())
 
             Column(
                 modifier = Modifier
