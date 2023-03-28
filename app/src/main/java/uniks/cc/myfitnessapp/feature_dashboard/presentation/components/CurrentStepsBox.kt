@@ -4,10 +4,12 @@ import android.icu.number.NumberFormatter
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -49,6 +51,13 @@ fun CurrentStepsBox(steps: Int, stepGoal: Int = 10000, dialogState: MutableState
                 fontFamily = FontFamily.Serif,
                 modifier = Modifier.padding(top = 4.dp, start = 8.dp),
                 color = MaterialTheme.colorScheme.onSurface
+            )
+            Icon(
+                imageVector = Icons.Default.History,
+                contentDescription = "Show steps history",
+                modifier = Modifier.size(32.dp).padding(8.dp).clickable {
+                    dialogState.tryEmit(!dialogState.value)
+                }
             )
         }
         Box(

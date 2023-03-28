@@ -107,7 +107,7 @@ fun DashBoardScreen(
                         steps = viewModel.stepCounterStateFlow.collectAsState().value - viewModel.getOldStepCount(),
                         dialogState = viewModel.dialogStateFlow
                     )
-                    StepsHistory(viewModel.dialogStateFlow)
+                    StepsHistory(viewModel.getLastSevenDailySteps(), viewModel.dialogStateFlow)
                     Spacer(modifier = Modifier.height(4.dp))
                     RecentWorkouts(
                         viewModel.getAllWorkouts(),

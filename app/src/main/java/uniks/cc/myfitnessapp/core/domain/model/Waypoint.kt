@@ -6,21 +6,14 @@ import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "TraveledRoute"
-    /*,
-    foreignKeys = [ForeignKey(
-        entity = Workout::class,
-        parentColumns = arrayOf("id"),
-        childColumns = arrayOf("workoutId"),
-        onDelete = ForeignKey.CASCADE
-    )]
-
-     */
 )
 data class Waypoint(
     var workoutId: Int,
     var timeStamp: Long,
     var locationLat: Double,
-    var locationLon: Double
+    var locationLon: Double,
+    var currentPace : Double,
+    var altitude : Double
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0

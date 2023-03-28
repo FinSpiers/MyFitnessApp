@@ -41,5 +41,7 @@ interface WorkoutRepository {
 
     suspend fun saveWaypoint(waypoint: Waypoint)
 
+    suspend fun deleteWaypoint(waypoint: Waypoint)
+
 
 }

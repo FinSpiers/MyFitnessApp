@@ -33,6 +33,10 @@ class WorkoutRepositoryImpl(private val workoutDao: WorkoutDao) : WorkoutReposit
         this.errorText.value = errorText
     }
 
+    override suspend fun deleteWaypoint(waypoint: Waypoint) {
+        workoutDao.deleteWaypoint(waypoint)
+    }
+
     override suspend fun getAllWorkoutsFromDatabase(): List<Workout> {
         return workoutDao.getAllWorkouts()
     }
@@ -50,7 +54,9 @@ class WorkoutRepositoryImpl(private val workoutDao: WorkoutDao) : WorkoutReposit
     }
 
     override suspend fun deleteWorkoutFromDatabase(workout: Workout) {
-        return workoutDao.deleteWorkout(workout)
+        val waypoints = workoutDao.getWaypointsByWorkoutId(workout.id)
+        waypoints.forEach { workoutDao.deleteWaypoint(it) }
+        workoutDao.deleteWorkout(workout)
     }
 
     override suspend fun getAllWaypoints(): List<Waypoint> {

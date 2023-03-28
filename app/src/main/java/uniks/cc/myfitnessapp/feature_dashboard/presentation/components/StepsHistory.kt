@@ -16,31 +16,30 @@ import com.patrykandpatrick.vico.compose.axis.horizontal.bottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.startAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.column.columnChart
+import com.patrykandpatrick.vico.compose.style.ChartStyle
+import com.patrykandpatrick.vico.core.chart.column.ColumnChart
+import com.patrykandpatrick.vico.core.entry.ChartEntry
+import com.patrykandpatrick.vico.core.entry.ChartEntryModel
+import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
+import com.patrykandpatrick.vico.core.entry.composed.ComposedChartEntryModelProducer
 import com.patrykandpatrick.vico.core.entry.entryModelOf
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asFlow
+import uniks.cc.myfitnessapp.core.domain.model.Steps
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StepsHistory(dialogShownStateFlow: MutableStateFlow<Boolean>) {
+fun StepsHistory(steps : List<Steps>,dialogShownStateFlow: MutableStateFlow<Boolean>) {
     if (dialogShownStateFlow.collectAsState().value) {
         AlertDialog(
             onDismissRequest = { dialogShownStateFlow.tryEmit(false) },
             modifier = Modifier.fillMaxWidth()
         ) {
-            val map = LinkedHashMap<Int, String>().apply {
-                put(0, "02.")
-                put(1, "03.")
-                put(2, "04.")
-                put(3, "05.")
-                put(4, "06.")
-                put(5, "07.")
-                put(6, "08.")
-                put(7, "09.")
-                put(8, "10.")
-                put(9, "11.")
+            val map = LinkedHashMap<Int, String>()
+            for (i in 6 downTo 0) {
+                map[i] = steps[i].date.dropLast(7)
             }
-            val chartEntryModel =
-                entryModelOf(20333f, 12367f, 8573f, 162f, 75f, 23132f, 10232, 10232, 10232, 10232)
+            val chartEntryModel = entryModelOf(*steps.map { it -> it.dailyCount }.toTypedArray())
 
             Column(
                 modifier = Modifier

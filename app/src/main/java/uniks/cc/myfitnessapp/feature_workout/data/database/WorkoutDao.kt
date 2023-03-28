@@ -25,6 +25,9 @@ interface WorkoutDao {
     @Delete
     suspend fun deleteWorkout(workout: Workout)
 
+    @Delete
+    suspend fun deleteWaypoint(waypoint: Waypoint)
+
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addWaypoint(waypoint: Waypoint)

@@ -2,7 +2,7 @@ package uniks.cc.myfitnessapp.feature_dashboard.data.repository
 
 import uniks.cc.myfitnessapp.core.domain.model.Steps
 import uniks.cc.myfitnessapp.core.domain.util.TimestampConverter
-import uniks.cc.myfitnessapp.feature_dashboard.data.DashboardDao
+import uniks.cc.myfitnessapp.feature_dashboard.data.database.DashboardDao
 import uniks.cc.myfitnessapp.feature_dashboard.data.network.OpenWeatherApiService
 import uniks.cc.myfitnessapp.feature_dashboard.data.network.response.toCurrentWeatherData
 import uniks.cc.myfitnessapp.feature_dashboard.domain.model.CurrentWeatherData
@@ -31,6 +31,17 @@ class DashBoardRepositoryImpl(
 
     override suspend fun getDailyStepsByDate(date: String): Steps? {
         return dashboardDao.getDailyStepsByDate(date)
+    }
+
+    override suspend fun getLastSevenDailyStepsValues(): List<Steps> {
+        val res = mutableListOf<Steps>()
+        for (i in 0..6) {
+            val secondsADay = 24 * 60 * 60
+            val date = TimestampConverter.convertToDate(Instant.now().epochSecond - i * secondsADay)
+            val steps = dashboardDao.getDailyStepsByDate(date)
+            res.add(steps ?: Steps(0, 0, date))
+        }
+        return res
     }
 
     override suspend fun getAllDailySteps(): List<Steps> {

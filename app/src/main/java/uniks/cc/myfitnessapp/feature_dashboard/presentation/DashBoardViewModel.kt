@@ -12,6 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import uniks.cc.myfitnessapp.core.domain.model.Steps
 import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.domain.repository.SensorRepository
@@ -95,6 +96,14 @@ class DashBoardViewModel @Inject constructor(
                 syncRequest
             )
         }
+    }
+
+    fun getLastSevenDailySteps() : List<Steps> {
+        val steps  = mutableListOf<Steps>()
+        runBlocking {
+            steps.addAll(dashBoardRepository.getLastSevenDailyStepsValues())
+        }
+        return steps
     }
 
     fun getOldStepCount(): Int {

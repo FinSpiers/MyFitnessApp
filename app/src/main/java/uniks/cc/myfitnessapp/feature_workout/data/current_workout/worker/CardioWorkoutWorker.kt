@@ -59,6 +59,7 @@ class CardioWorkoutWorker @AssistedInject constructor(
     private var currentLocation: Waypoint? = null
     private var movedDistance = 0
     private var currentPace = 0.0
+    private var avgPace = 0.0
 
     private val waypointQueue = LinkedList<Waypoint>()
 
@@ -84,7 +85,14 @@ class CardioWorkoutWorker @AssistedInject constructor(
                         val lat = location.latitude
                         val lon = location.longitude
                         val waypoint =
-                            Waypoint(currentWorkout.id, Instant.now().epochSecond, lat, lon)
+                            Waypoint(
+                                workoutId = currentWorkout.id,
+                                timeStamp = Instant.now().epochSecond,
+                                locationLat = lat,
+                                locationLon = lon,
+                                currentPace = currentPace,
+                                altitude = location.altitude
+                            )
 
                         workoutRepository.saveWaypoint(waypoint)
                         waypointQueue.add(waypoint)
@@ -97,31 +105,39 @@ class CardioWorkoutWorker @AssistedInject constructor(
                     appContext.getString(R.string.warning_no_gps_permission_text)
                 )
             }
+            val weight = if (settings.weight > 0) settings.weight else 70
             while (true) {
                 delay(1000)
-                var weight = 70
-                if (settings.weight > 0)
-                    weight = settings.weight
-                val calculateBurnedEnergy = EnergyCalculator.calculateBurnedEnergy(
-                    currentWorkout.workoutName,
-                    (Instant.now().epochSecond - currentWorkout.timeStamp).toInt(),
-                    weight
-                )
                 checkForErrors()
                 currentWorkout = currentWorkout.apply {
                     duration = stopwatchManager.ticker.value
                     distance = movedDistance.toDouble()
-                    avgPace = currentPace
-                    kcal = calculateBurnedEnergy
+                    pace = currentPace
+                    avgPace = this@CardioWorkoutWorker.avgPace
+                    kcal = EnergyCalculator.calculateBurnedEnergy(
+                        workoutName = currentWorkout.workoutName,
+                        durationSeconds = (Instant.now().epochSecond - currentWorkout.timeStamp).toInt(),
+                        weight = weight
+                    )
+
                 }
                 if (workoutRepository.currentWorkout == null)
                     break
             }
             calculateDistanceAndCurrentPace()
-
-            locationClient.stopLocationUpdates()
-            currentWorkout.duration = stopwatchManager.ticker.value
+            currentWorkout = currentWorkout.apply {
+                duration = stopwatchManager.ticker.value
+                distance = movedDistance.toDouble()
+                pace = currentPace
+                avgPace = this@CardioWorkoutWorker.avgPace
+                kcal = EnergyCalculator.calculateBurnedEnergy(
+                    workoutName = currentWorkout.workoutName,
+                    durationSeconds = (Instant.now().epochSecond - currentWorkout.timeStamp).toInt(),
+                    weight = weight
+                )
+            }
             workoutRepository.addWorkoutToDatabase(currentWorkout)
+            locationClient.stopLocationUpdates()
             stopwatchManager.stopAndReset()
 
             return@coroutineScope Result.success()
@@ -144,8 +160,7 @@ class CardioWorkoutWorker @AssistedInject constructor(
                 appContext.getString(R.string.warning_no_gps_signal_title),
                 appContext.getString(R.string.warning_no_gps_signal_title)
             )
-        }
-        else {
+        } else {
             workoutRepository.clearError()
         }
     }
@@ -201,14 +216,16 @@ class CardioWorkoutWorker @AssistedInject constructor(
             val last = lastLocation
             val current = currentLocation
             if (last != null && current != null) {
-                movedDistance += last.calculateDistanceTo(current)
-                val timeUsed = current.timeStamp - last.timeStamp // 16
-                currentPace = ((movedDistance.toDouble() / timeUsed.toDouble()) * 3.6)
+                val distance = last.calculateDistanceTo(current)
+                val timeUsed = current.timeStamp - last.timeStamp
+                currentPace = (distance.toDouble() / timeUsed.toDouble()) * 3.6
+
+                movedDistance += distance
+                // Round up to 2 decimals
                 currentPace = (currentPace * 100.0).roundToInt() / 100.0
+                avgPace = (movedDistance.toDouble() / (current.timeStamp - currentWorkout.timeStamp).toDouble()) * 3.6
             }
-            /**
-            pace = distance/time = movedDistance/usedTime = m/s
-             */
+
         }
     }
 }

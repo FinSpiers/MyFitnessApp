@@ -13,5 +13,7 @@ interface DashBoardRepository {
 
     suspend fun getDailyStepsByDate(date: String): Steps?
 
+    suspend fun getLastSevenDailyStepsValues() : List<Steps>
+
     suspend fun getAllDailySteps(): List<Steps>
 }
