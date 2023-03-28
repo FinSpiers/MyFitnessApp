@@ -20,7 +20,7 @@ import com.github.tehras.charts.piechart.animation.simpleChartAnimation
 @Composable
 fun LineChartBox(title: String, xDataList: List<String>, yDataList: List<Float>) {
 
-    if (yDataList.size != xDataList.size) {
+    if ((yDataList.size != xDataList.size) || (yDataList.size < 2)) {
         return
     }
     val points = arrayListOf<LineChartData.Point>()
@@ -68,6 +68,5 @@ fun LineChartBox(title: String, xDataList: List<String>, yDataList: List<Float>)
                 )
             )
         }
-
     }
 }

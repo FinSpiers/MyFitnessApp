@@ -15,7 +15,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import uniks.cc.myfitnessapp.core.domain.model.Waypoint
 import uniks.cc.myfitnessapp.core.domain.util.Constants.WORKOUT_BICYCLING
 import uniks.cc.myfitnessapp.core.domain.util.Constants.WORKOUT_RUNNING
 import uniks.cc.myfitnessapp.core.domain.util.Constants.WORKOUT_WALKING
@@ -141,17 +140,27 @@ fun WorkoutDetailScreen(
                     )
                     Spacer(modifier = Modifier.height(20.dp))
 
+                    val timestamps = arrayListOf<String>()
+                    val paceValues = arrayListOf<Float>()
+                    val altitudeValues = arrayListOf<Float>()
+
+                    for (waypoint in viewModel.getWaypointsByWorkoutId(viewModel.selectedWorkout.id)) {
+                        timestamps.add(TimestampConverter.convertToTime(waypoint.timeStamp))
+                        paceValues.add(waypoint.currentPace.toFloat())
+                        altitudeValues.add(waypoint.altitude.toFloat())
+                    }
+
                     LineChartBox(
-                        "avg Pace",
-                        listOf("1", "2", "3", "4", "5", "6", "7"),
-                        listOf(0f, 20f, 35f, 143f, 21f, 16f, 0f)
+                        "Pace",
+                        timestamps,
+                        paceValues
                     )
                     Spacer(modifier = Modifier.height(20.dp))
 
                     LineChartBox(
                         "Altitude",
-                        listOf("1", "2", "3", "4", "5", "6", "7"),
-                        listOf(110f, 199f, 523f, 2235f, 3232f, 1233f, 110f)
+                        timestamps,
+                        altitudeValues
                     )
                     Spacer(modifier = Modifier.height(80.dp))
                 }

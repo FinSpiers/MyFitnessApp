@@ -10,7 +10,6 @@ import kotlinx.coroutines.runBlocking
 import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.domain.repository.SensorRepository
-import uniks.cc.myfitnessapp.core.domain.util.Constants
 import uniks.cc.myfitnessapp.feature_dashboard.presentation.WorkoutEvent
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationEvent
 import uniks.cc.myfitnessapp.feature_workout.domain.current_workout.util.stopwatch.StopwatchManager
