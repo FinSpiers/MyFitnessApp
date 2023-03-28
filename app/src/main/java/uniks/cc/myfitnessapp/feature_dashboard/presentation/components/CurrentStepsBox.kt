@@ -8,6 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material3.Icon
@@ -53,9 +54,9 @@ fun CurrentStepsBox(steps: Int, stepGoal: Int = 10000, dialogState: MutableState
                 color = MaterialTheme.colorScheme.onSurface
             )
             Icon(
-                imageVector = Icons.Default.History,
+                imageVector = Icons.Default.BarChart,
                 contentDescription = "Show steps history",
-                modifier = Modifier.size(32.dp).padding(8.dp).clickable {
+                modifier = Modifier.size(40.dp).padding(end = 8.dp).clickable {
                     dialogState.tryEmit(!dialogState.value)
                 }
             )
