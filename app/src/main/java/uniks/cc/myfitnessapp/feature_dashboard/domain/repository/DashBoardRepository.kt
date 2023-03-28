@@ -1,7 +1,7 @@
 package uniks.cc.myfitnessapp.feature_dashboard.domain.repository
 
 
-import uniks.cc.myfitnessapp.core.domain.model.Steps
+import uniks.cc.myfitnessapp.feature_dashboard.domain.model.Steps
 import uniks.cc.myfitnessapp.feature_dashboard.domain.model.CurrentWeatherData
 
 interface DashBoardRepository {

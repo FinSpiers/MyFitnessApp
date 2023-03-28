@@ -12,7 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import uniks.cc.myfitnessapp.core.domain.model.Steps
+import uniks.cc.myfitnessapp.feature_dashboard.domain.model.Steps
 import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
 import uniks.cc.myfitnessapp.core.domain.repository.SensorRepository
@@ -27,6 +27,7 @@ import uniks.cc.myfitnessapp.feature_workout.data.current_workout.worker.StepCou
 import uniks.cc.myfitnessapp.feature_workout.data.current_workout.worker.StepCounterSyncWorker
 import uniks.cc.myfitnessapp.feature_workout.data.current_workout.worker.WeightWorkoutWorker
 import uniks.cc.myfitnessapp.feature_workout.domain.repository.WorkoutRepository
+import uniks.cc.myfitnessapp.feature_workout.presentation.WorkoutEvent
 import java.time.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject

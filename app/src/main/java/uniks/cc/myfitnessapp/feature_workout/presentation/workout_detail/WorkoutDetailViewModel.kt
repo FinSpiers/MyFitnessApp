@@ -1,13 +1,12 @@
 package uniks.cc.myfitnessapp.feature_workout.presentation.workout_detail
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.runBlocking
 import uniks.cc.myfitnessapp.core.domain.model.Waypoint
 import uniks.cc.myfitnessapp.core.domain.model.Workout
 import uniks.cc.myfitnessapp.core.domain.repository.CoreRepository
-import uniks.cc.myfitnessapp.feature_dashboard.presentation.WorkoutEvent
+import uniks.cc.myfitnessapp.feature_workout.presentation.WorkoutEvent
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationEvent
 import uniks.cc.myfitnessapp.feature_workout.domain.repository.WorkoutRepository
 import javax.inject.Inject

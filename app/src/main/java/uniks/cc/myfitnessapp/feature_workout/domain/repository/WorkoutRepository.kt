@@ -1,12 +1,10 @@
 package uniks.cc.myfitnessapp.feature_workout.domain.repository
 
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import kotlinx.coroutines.flow.MutableStateFlow
-import uniks.cc.myfitnessapp.core.domain.model.Steps
 import uniks.cc.myfitnessapp.core.domain.model.Waypoint
 import uniks.cc.myfitnessapp.core.domain.model.Workout
-import uniks.cc.myfitnessapp.feature_dashboard.presentation.WorkoutEvent
+import uniks.cc.myfitnessapp.feature_workout.presentation.WorkoutEvent
 import uniks.cc.myfitnessapp.feature_workout.domain.current_workout.util.stopwatch.StopwatchManager
 import kotlin.reflect.KFunction1
 
@@ -30,6 +28,7 @@ interface WorkoutRepository {
     }
     fun clearError()
     fun onError(errorTitle : String, errorText : String)
+
     suspend fun getAllWorkoutsFromDatabase() : List<Workout>
 
     suspend fun getWorkoutById(workoutId : Int) : Workout?

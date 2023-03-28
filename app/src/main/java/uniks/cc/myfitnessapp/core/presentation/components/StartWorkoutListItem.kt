@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import uniks.cc.myfitnessapp.feature_dashboard.presentation.WorkoutEvent
+import uniks.cc.myfitnessapp.feature_workout.presentation.WorkoutEvent
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationEvent
 import kotlin.reflect.KFunction1
 

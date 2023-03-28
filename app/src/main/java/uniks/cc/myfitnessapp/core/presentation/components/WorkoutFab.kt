@@ -20,7 +20,7 @@ import uniks.cc.myfitnessapp.core.domain.util.Constants.WORKOUT_RUNNING
 import uniks.cc.myfitnessapp.core.domain.util.Constants.WORKOUT_SIT_UPS
 import uniks.cc.myfitnessapp.core.domain.util.Constants.WORKOUT_SQUATS
 import uniks.cc.myfitnessapp.core.domain.util.Constants.WORKOUT_WALKING
-import uniks.cc.myfitnessapp.feature_dashboard.presentation.WorkoutEvent
+import uniks.cc.myfitnessapp.feature_workout.presentation.WorkoutEvent
 import uniks.cc.myfitnessapp.core.presentation.navigation.navigationbar.NavigationEvent
 import kotlin.reflect.KFunction1
 

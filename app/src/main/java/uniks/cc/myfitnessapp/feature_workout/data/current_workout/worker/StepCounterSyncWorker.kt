@@ -7,7 +7,7 @@ import androidx.work.WorkerParameters
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.delay
-import uniks.cc.myfitnessapp.core.domain.model.Steps
+import uniks.cc.myfitnessapp.feature_dashboard.domain.model.Steps
 import uniks.cc.myfitnessapp.core.domain.repository.SensorRepository
 import uniks.cc.myfitnessapp.core.domain.util.TimestampConverter
 import uniks.cc.myfitnessapp.core.domain.util.hasActivityRecognitionPermission

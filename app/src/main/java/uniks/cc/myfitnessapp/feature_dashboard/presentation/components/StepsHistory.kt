@@ -16,20 +16,13 @@ import com.patrykandpatrick.vico.compose.axis.horizontal.bottomAxis
 import com.patrykandpatrick.vico.compose.axis.vertical.startAxis
 import com.patrykandpatrick.vico.compose.chart.Chart
 import com.patrykandpatrick.vico.compose.chart.column.columnChart
-import com.patrykandpatrick.vico.compose.style.ChartStyle
-import com.patrykandpatrick.vico.core.chart.column.ColumnChart
-import com.patrykandpatrick.vico.core.entry.ChartEntry
-import com.patrykandpatrick.vico.core.entry.ChartEntryModel
-import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
-import com.patrykandpatrick.vico.core.entry.composed.ComposedChartEntryModelProducer
 import com.patrykandpatrick.vico.core.entry.entryModelOf
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asFlow
-import uniks.cc.myfitnessapp.core.domain.model.Steps
+import uniks.cc.myfitnessapp.feature_dashboard.domain.model.Steps
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StepsHistory(steps : List<Steps>,dialogShownStateFlow: MutableStateFlow<Boolean>) {
+fun StepsHistory(steps : List<Steps>, dialogShownStateFlow: MutableStateFlow<Boolean>) {
     if (dialogShownStateFlow.collectAsState().value) {
         AlertDialog(
             onDismissRequest = { dialogShownStateFlow.tryEmit(false) },

@@ -15,7 +15,7 @@ import uniks.cc.myfitnessapp.R
 import uniks.cc.myfitnessapp.core.domain.util.Constants
 import uniks.cc.myfitnessapp.core.domain.util.HiltBroadcastReceiver
 import uniks.cc.myfitnessapp.core.presentation.MainActivity
-import uniks.cc.myfitnessapp.feature_dashboard.presentation.WorkoutEvent
+import uniks.cc.myfitnessapp.feature_workout.presentation.WorkoutEvent
 import uniks.cc.myfitnessapp.feature_workout.data.current_workout.worker.CHANNEL_ID
 import uniks.cc.myfitnessapp.feature_workout.domain.repository.WorkoutRepository
 import javax.inject.Inject
