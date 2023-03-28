@@ -32,7 +32,6 @@ fun LineChartBox(title: String, xDataList: List<String>, yDataList: List<Float>)
             )
         )
     }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -45,7 +44,7 @@ fun LineChartBox(title: String, xDataList: List<String>, yDataList: List<Float>)
 
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .padding(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -56,9 +55,10 @@ fun LineChartBox(title: String, xDataList: List<String>, yDataList: List<Float>)
                 style = MaterialTheme.typography.headlineSmall
             )
             LineChart(
-                modifier = Modifier.fillMaxSize(0.9f),
+                modifier = Modifier
+                    .fillMaxSize(0.9f),
                 animation = simpleChartAnimation(),
-                xAxisDrawer = SimpleXAxisDrawer(),
+                xAxisDrawer = SimpleXAxisDrawer(labelRatio = 4),
                 yAxisDrawer = SimpleYAxisDrawer(),
                 linesChartData = listOf(
                     LineChartData(
