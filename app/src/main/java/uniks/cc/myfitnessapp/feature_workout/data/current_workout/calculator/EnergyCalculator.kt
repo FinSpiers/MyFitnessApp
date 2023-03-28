@@ -3,7 +3,7 @@ package uniks.cc.myfitnessapp.feature_workout.data.current_workout.calculator
 import uniks.cc.myfitnessapp.core.domain.util.Constants
 
 object EnergyCalculator {
-    fun calculateBurnedEnergy(workoutName : String, durationSeconds : Int, weight : Int = 70) : Int {
+    fun calculateBurnedEnergy(workoutName : String, durationSeconds : Int, weight : Int = 70, repetitions : Int = 1) : Int {
         var factor : Double
         when(workoutName) {
             Constants.WORKOUT_WALKING -> {
@@ -49,7 +49,7 @@ object EnergyCalculator {
                 }
             }
             else -> {
-                factor = when(weight) {
+                factor = repetitions / 2 * when(weight) {
                     in 0..62 -> 11.0
                     in 63..67 -> 13.0
                     in 68..72 -> 14.3

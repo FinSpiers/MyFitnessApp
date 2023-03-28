@@ -100,8 +100,8 @@ class DashBoardViewModel @Inject constructor(
         }
     }
 
-    fun getLastSevenDailySteps() : List<Steps> {
-        val steps  = mutableListOf<Steps>()
+    fun getLastSevenDailySteps(): List<Steps> {
+        val steps = mutableListOf<Steps>()
         runBlocking {
             steps.addAll(dashBoardRepository.getLastSevenDailyStepsValues())
         }
@@ -202,7 +202,18 @@ class DashBoardViewModel @Inject constructor(
             is WorkoutEvent.StopWorkout -> {
                 val currentWorkout = workoutRepository.currentWorkout!!
                 val workoutTimeInSeconds = Instant.now().epochSecond - currentWorkout.timeStamp
-                currentWorkout.kcal = EnergyCalculator.calculateBurnedEnergy(currentWorkout.workoutName, workoutTimeInSeconds.toInt(), if (settings.weight > 0) settings.weight else 70)
+                val rep = if (currentWorkout.workoutName !in listOf(
+                        Constants.WORKOUT_WALKING,
+                        Constants.WORKOUT_RUNNING,
+                        Constants.WORKOUT_BICYCLING
+                    )
+                ) currentWorkout.repetitions!! else 1
+                currentWorkout.kcal = EnergyCalculator.calculateBurnedEnergy(
+                    currentWorkout.workoutName,
+                    workoutTimeInSeconds.toInt(),
+                    if (settings.weight > 0) settings.weight else 70,
+                    rep
+                )
                 viewModelScope.launch {
                     workoutRepository.addWorkoutToDatabase(currentWorkout)
                 }

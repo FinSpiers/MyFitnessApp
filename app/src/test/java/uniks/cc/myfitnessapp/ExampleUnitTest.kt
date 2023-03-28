@@ -1,16 +1,8 @@
 package uniks.cc.myfitnessapp
 
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import org.junit.Test
 
 import org.junit.Assert.*
-import uniks.cc.myfitnessapp.core.domain.model.Waypoint
-import uniks.cc.myfitnessapp.feature_workout.data.current_workout.calculator.DistanceCalculator
-import uniks.cc.myfitnessapp.feature_current_workout.domain.util.*
-import uniks.cc.myfitnessapp.feature_current_workout.domain.util.stopwatch.*
-import java.time.LocalDateTime
 
 /**
  * Example local unit test, which will execute on the development machine (host).

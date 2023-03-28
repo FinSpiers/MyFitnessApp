@@ -75,10 +75,10 @@ class MainActivity @Inject constructor() : ComponentActivity() {
         }
     }
     private fun checkPermissionsAndRun() {
-        // 1
+
         val client = HealthConnectClient.getOrCreate(this)
 
-        // 2
+
         val permissionsSet = setOf(
             Permission.createWritePermission(StepsRecord::class),
             Permission.createReadPermission(StepsRecord::class),
@@ -86,7 +86,7 @@ class MainActivity @Inject constructor() : ComponentActivity() {
             Permission.createReadPermission(ExerciseSessionRecord::class)
         )
 
-        // 3
+
         // Create the permissions launcher.
         val requestPermissionActivityContract = client
             .permissionController
@@ -107,7 +107,7 @@ class MainActivity @Inject constructor() : ComponentActivity() {
             }
         }
 
-        // 4
+
         lifecycleScope.launch {
             val granted = client.permissionController
                 .getGrantedPermissions(permissionsSet)
@@ -126,7 +126,7 @@ class MainActivity @Inject constructor() : ComponentActivity() {
     }
 
     private suspend fun readDailyRecords(client: HealthConnectClient) {
-        // 1
+
         val today = ZonedDateTime.now()
         val startOfDay = today.truncatedTo(ChronoUnit.DAYS)
         val timeRangeFilter = TimeRangeFilter.between(
@@ -134,13 +134,13 @@ class MainActivity @Inject constructor() : ComponentActivity() {
             today.toLocalDateTime()
         )
 
-        // 2
+
         val stepsRecordRequest = ReadRecordsRequest(StepsRecord::class, timeRangeFilter)
         val numberOfStepsToday = client.readRecords(stepsRecordRequest)
             .records
             .sumOf { it.count }
 
-        // 3
+
         val exerciseSessionRecordRequest = ReadRecordsRequest(
             ExerciseSessionRecord::class,
             timeRangeFilter
