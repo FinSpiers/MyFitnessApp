@@ -14,6 +14,7 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
 
+
     <application
         android:name=".MyFitnessApp"
         android:allowBackup="true"
@@ -57,5 +58,9 @@
             android:exported="false"
             android:permission="android.permission.ACTIVITY_RECOGNITION" />
     </application>
+
+    <queries>
+        <package android:name="com.google.android.apps.healthdata" />
+    </queries>
 
 </manifest>
