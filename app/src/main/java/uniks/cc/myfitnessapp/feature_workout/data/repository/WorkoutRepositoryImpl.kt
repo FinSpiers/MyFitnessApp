@@ -16,7 +16,8 @@ class WorkoutRepositoryImpl(private val workoutDao: WorkoutDao) : WorkoutReposit
     override var currentWorkout: Workout? = null
     override var selectedWorkoutDetail: Workout? = null
 
-    override val currentWorkoutDistanceStateFlow: MutableStateFlow<String> = MutableStateFlow("-")
+    override val currentWorkoutDistanceStateFlow: MutableStateFlow<String> = MutableStateFlow("0")
+    override val currentWorkoutPaceStateFlow: MutableStateFlow<String> = MutableStateFlow("0.0")
     override var stopwatchManager: StopwatchManager? = null
     override var hasError = mutableStateOf(false)
     override var errorTitle= mutableStateOf("")

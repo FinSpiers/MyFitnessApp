@@ -155,7 +155,7 @@ fun CurrentWorkoutScreen(viewModel: CurrentWorkoutViewModel = hiltViewModel()) {
                     ) {
                         DataBox(
                             title = "Pace",
-                            data = (currentWorkout.pace).toString(),
+                            data = viewModel.currentWorkoutPaceStateFlow.collectAsState().value,
                             unit = "km/h"
                         )
                     }

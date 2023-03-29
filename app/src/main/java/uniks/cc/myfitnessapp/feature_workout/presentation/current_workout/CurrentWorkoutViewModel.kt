@@ -26,6 +26,7 @@ class CurrentWorkoutViewModel @Inject constructor(
     var currentWorkout: Workout
 
     val currentWorkoutDistanceStateFlow = workoutRepository.currentWorkoutDistanceStateFlow
+    val currentWorkoutPaceStateFlow = workoutRepository.currentWorkoutPaceStateFlow
     var timerFlow: MutableStateFlow<String>
 
     val hasError = workoutRepository.hasError

@@ -15,6 +15,7 @@ interface WorkoutRepository {
     var selectedWorkoutDetail : Workout?
     //val currentWorkoutTimerStateFlow : MutableStateFlow<String>
     val currentWorkoutDistanceStateFlow : MutableStateFlow<String>
+    val currentWorkoutPaceStateFlow : MutableStateFlow<String>
     var stopwatchManager : StopwatchManager?
 
     var hasError : MutableState<Boolean>

@@ -93,7 +93,6 @@ class CardioWorkoutWorker @AssistedInject constructor(
                                 currentPace = currentPace,
                                 altitude = location.altitude
                             )
-
                         workoutRepository.saveWaypoint(waypoint)
                         waypointQueue.add(waypoint)
                         calculateDistanceAndCurrentPace()
@@ -107,7 +106,7 @@ class CardioWorkoutWorker @AssistedInject constructor(
             }
             val weight = if (settings.weight > 0) settings.weight else 70
             while (true) {
-                delay(1000)
+                delay(3000)
                 checkForErrors()
                 currentWorkout = currentWorkout.apply {
                     duration = stopwatchManager.ticker.value
@@ -119,8 +118,9 @@ class CardioWorkoutWorker @AssistedInject constructor(
                         durationSeconds = (Instant.now().epochSecond - currentWorkout.timeStamp).toInt(),
                         weight = weight
                     )
-
                 }
+                workoutRepository.currentWorkoutDistanceStateFlow.emit(currentWorkout.distance.toString())
+                workoutRepository.currentWorkoutPaceStateFlow.emit(currentWorkout.pace.toString())
                 if (workoutRepository.currentWorkout == null)
                     break
             }
@@ -223,6 +223,7 @@ class CardioWorkoutWorker @AssistedInject constructor(
                 // Round up to 2 decimals
                 currentPace = (currentPace * 100.0).roundToInt() / 100.0
                 avgPace = (movedDistance.toDouble() / (current.timeStamp - currentWorkout.timeStamp).toDouble()) * 3.6
+
             }
 
         }
