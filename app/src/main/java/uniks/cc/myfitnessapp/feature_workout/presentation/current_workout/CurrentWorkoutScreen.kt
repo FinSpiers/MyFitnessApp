@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -127,6 +128,7 @@ fun CurrentWorkoutScreen(viewModel: CurrentWorkoutViewModel = hiltViewModel()) {
                     ) {
                         Button(
                             onClick = { viewModel.incrementRepetitions() },
+                            shape = MaterialTheme.shapes.large
                         ) {
                             Text(text = "+1", style = MaterialTheme.typography.titleMedium)
                         }
